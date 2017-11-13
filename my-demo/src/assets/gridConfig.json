@@ -1,0 +1,37 @@
+{
+  "demo":{
+    "totalRowsCount": 2000
+  },
+  "pagination": {
+    "pageSize": 20,               
+    "allowPaging": true,
+    "pageControlLocation": "top",
+    "pageCssClasses": ["pagination-p1", "pagination-v2"],
+    "allowCustomPaging": true,
+    "pageChangeCallback": "callbackFunction"
+  },
+  "sorting": {
+    "allowStorting": true
+  },
+  "readOnly": false,
+  "values": [],
+  "freeze": {
+    "allowedFreezing": true,
+    "freezedRowsFromTopCount": 3,
+    "freezeColumns": [0]
+  },
+  "columnArray": [],
+  "ui": {
+    "gridBgColor": "#f7f7f7",
+    "borderWidth": "1px",
+    "borderColor": "#ddd",
+    "fontSize": "14px",
+    "cellSpacing":"0px",
+    "cellpadding": "0px",
+    "autoResize": true
+  },
+  "runtimeOptions": {
+    "draggableColumns":true
+  }
+
+}
