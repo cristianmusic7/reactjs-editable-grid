@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 // import ReactPaginate from 'react-paginate';
 import { Row } from '@sans/react-grid/packages/react-data-grid/dist/react-data-grid';
 
