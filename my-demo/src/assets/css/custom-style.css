@@ -1,0 +1,26 @@
+/* custome style for ReactGrid table */
+/*react-grid-HeaderCell*/
+.react-grid-HeaderCell{
+  background: #f3f3f3;
+}
+
+.react-grid-Grid,
+.react-grid-Main,
+.react-grid-Row{
+  overflow-y: auto !important;
+}
+.react-grid-Grid,
+.react-grid-Main,
+.react-grid-Canvas,
+.react-grid-Row,
+.react-grid-Cell{
+  background: #fff;
+}
+.react-grid-Cell{
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #ddd;
+}
+
+.react-grid-Cell--locked:last-of-type{
+  border-right: 1px solid #ddd;
+}
