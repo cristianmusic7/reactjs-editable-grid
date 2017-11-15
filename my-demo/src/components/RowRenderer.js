@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ReactPaginate from 'react-paginate';
+// import ReactPaginate from 'react-paginate';
 import { Row } from '@sans/react-grid/packages/react-data-grid/dist/react-data-grid';
 
 export default class RowRenderer extends Component{
@@ -15,7 +15,7 @@ export default class RowRenderer extends Component{
 
   }
   setScrollLeft(scrollBy) {
-    // if you want freeze columns to work, you need to make sure you 
+    // if you want freeze columns to work, you need to make sure you
     // implement this as a pass through
     this.refs.row.setScrollLeft(scrollBy);
   }
