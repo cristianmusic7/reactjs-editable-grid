@@ -62,7 +62,7 @@ const gridConfig = {
   "pagination": {
     "pageSize": 10,               // Number of records to show on a page
     "allowPaging": true,          // If set to true, the component should display pager controls otherwise displays all records
-    "pageControlLocation": "top", // "left", "right", "top", "bottom"
+    "pageControlLocation": "top-right", // "top-left", "top-right", "bottom-left", "bottom-right"
     "pageCssClasses": ["pagination", "pagination-v2"], // CSS classes to be applied to pagination controls
     "allowCustomPaging": true,  //Allows client code to load the records per page. Client will set number of pages.
     "pageChangeCallback": "callbackFunction" //pass page changed event / callback.

@@ -5,7 +5,7 @@
   "pagination": {
     "pageSize": 20,               
     "allowPaging": true,          
-    "pageControlLocation": "top", 
+    "pageControlLocation": "top-left", 
     "pageCssClasses": ["pagination-p1", "pagination-v2"], 
     "allowCustomPaging": true,  
     "pageChangeCallback": "callbackFunction" 

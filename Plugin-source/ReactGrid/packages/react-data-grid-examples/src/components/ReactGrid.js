@@ -1,4 +1,4 @@
-import React, { Component, onInit } from 'react'
+import React, { Component, onInit } from 'react';
 import ReactPaginate from 'react-paginate';
 import RowRenderer from './RowRenderer';
 import HeaderRenderer from './HeaderRenderer';
@@ -20,7 +20,7 @@ const gridConfig = {
   "pagination": {
     "pageSize": 10,               // Number of records to show on a page
     "allowPaging": true,          // If set to true, the component should display pager controls otherwise displays all records
-    "pageControlLocation": "top", // "left", "right", "top", "bottom"
+    "pageControlLocation": "top-right", // "top-left", "top-right", "bottom-left", "bottom-right"
     "pageCssClasses": ["pagination", "pagination-v2"], // CSS classes to be applied to pagination controls
     "allowCustomPaging": true,  //Allows client code to load the records per page. Client will set number of pages.
     "pageChangeCallback": "callbackFunction" //pass page changed event / callback.
@@ -88,7 +88,7 @@ export default class ReactGrid extends Component {
 
   componentWillMount() {
     const config = Object.assign(gridConfig, this.props.config);
-
+    
     this.initFreeze(config);
     this.initColVisibility(config);
     this.initClasses(config);

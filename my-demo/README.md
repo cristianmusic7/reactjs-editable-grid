@@ -47,7 +47,7 @@ const gridConfig = {
 "pagination": {
 "pageSize": 10,               // Number of records to show on a page
 "allowPaging": true,          // If set to true, the component should display pager controls otherwise displays all records
-"pageControlLocation": "top", // "left", "right", "top", "bottom"
+"pageControlLocation": "top-right", // "top-left", "top-right", "bottom-left", "bottom-right"
 "pageCssClasses": ["pagination", "pagination-v2"], // CSS classes to be applied to pagination controls
 "allowCustomPaging": true,  //Allows client code to load the records per page. Client will set number of pages.
 "pageChangeCallback": "callbackFunction" //pass page changed event / callback.
@@ -79,7 +79,7 @@ const gridConfig = {
 
 ```
 
-## Header and footer data
+## Columns Array :Header and footer data
 The cell data can configuration options for the header & footer table cells can be found in this file:
  `~\ReactGrid\packages\react-data-grid-examples\src\assets\data\dataset.json`
 
@@ -92,9 +92,9 @@ id                     | description                                            
 "name"                 | Header Text: By default Field value,                   |
 "alignment"            | Alignment body content                                 |
 "headerAlignment"      | Header Alignment                                       |
-"editItemTemaplate"    | "text": for textbox currently only support text,       |
+"editItemTemaplate"    | "text": for textbox. Currently only support text,       |
                        |for "checkbox, combobox" component is required to be    |
-                        build but that is out of scope. Ref: forum              |
+                        build but new components is out of scope.           |
 "width"                | width                                                  |
 "resizable"            | resizable or not                                       |
 "editable"             | Read Only : Make the column readonly                   |
@@ -111,6 +111,16 @@ id                     | description                                            
 - Q:  The client load just the data shown on current page. Control will pass page changed event / callback.
 - A: For demo purpose I've added the function `pageChangeCallbackHandler` in 'packages/react-data-grid-examples/src/scripts/react-grid-demo.js' & this prints the current page index in console whever pagechage occurs in pagination. ref: https://user-images.githubusercontent.com/3652329/31578087-db568f80-b137-11e7-85df-f4a380c0b693.png
 
-#### Styling header and footer:
-The basic styling can be done using the config options from JSON file for advanced stying stylesheet should be used. For header and footer styling update the stylesheet `~..\src\assets\css\custom-style.css`
+#### Styling header, footer & table:
+The basic styling can be done using the config options from JSON file for advanced stying stylesheet should be used. For header, footer & table styling update the stylesheet `~..\src\assets\css\custom-style.css` or add a new stylesheet
 
+
+#### Production Build
+The demo can be optimized & built using the build command:
+
+```sh
+$ cd ~/my-demo
+$ npm run build
+```
+
+the built is generated in `build` folder.
