@@ -28,7 +28,7 @@ class DraggableContainer extends Component {
     let rowsCount = grid.props.rowsCount;
     let columns = grid.props.columns;
     let rows = this.getRows(rowsCount, rowGetter);
-    return (<div>
+    return (<div class="draggable-wrap">
       {grid}
       <RowDragLayer rowSelection={grid.props.rowSelection} rows={rows} columns={isColumnsImmutable(columns) ? columns.toArray() : columns} />
     </div>);

@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, onInit } from 'react';
 import ReactPaginate from 'react-paginate';
 import RowRenderer from './RowRenderer';
+import HeaderRenderer from './HeaderRenderer';
+import PropTypes from 'prop-types';
 
 import faker from 'faker';
 import  ReactDataGrid from '@sans/react-grid/packages/react-data-grid/dist/react-data-grid';
@@ -16,7 +18,7 @@ const gridConfig = {
   "pagination": {
     "pageSize": 10,               // Number of records to show on a page
     "allowPaging": true,          // If set to true, the component should display pager controls otherwise displays all records
-    "pageControlLocation": "top", // "left", "right", "top", "bottom"
+    "pageControlLocation": "top-right", // "top-left", "top-right", "bottom-left", "bottom-right"
     "pageCssClasses": ["pagination", "pagination-v2"], // CSS classes to be applied to pagination controls
     "allowCustomPaging": true,  //Allows client code to load the records per page. Client will set number of pages.
     "pageChangeCallback": "callbackFunction" //pass page changed event / callback.
@@ -46,6 +48,8 @@ const gridConfig = {
     "draggableColumns":true // Allow Drag and Drop of Columns.
   }
 }
+
+
 
 
 export default class ReactGrid extends Component {
@@ -82,7 +86,7 @@ export default class ReactGrid extends Component {
 
   componentWillMount() {
     const config = Object.assign(gridConfig, this.props.config);
-
+    
     this.initFreeze(config);
     this.initColVisibility(config);
     this.initClasses(config);
@@ -112,7 +116,6 @@ export default class ReactGrid extends Component {
     if(freeze.allowedFreezing){
        freeze.freezeColumns.map((item,i)=>{
         this.freezeColByIndex(item,config);
-        return null;
        })
     }else {
       this.unfreezeAllCols(config);
@@ -122,12 +125,10 @@ export default class ReactGrid extends Component {
     if(freeze.allowedFreezing){
         freeze.freezeColumns.map((item,i)=>{
          this.freezeColByIndex(item,config);
-         return null;
         })
      }else {
        this.unfreezeAllCols(config);
      }
-
   }
 
   // inits Visible
@@ -143,7 +144,6 @@ export default class ReactGrid extends Component {
       }else{
         item.width = 0;
       }
-       return null;
      })
   }
   
@@ -154,7 +154,6 @@ export default class ReactGrid extends Component {
     // handling column visibility
      values.map((item,i)=>{
       item.columnClass = !!columnArray[i] ? columnArray[i].columnClass : '';
-      return null;
      })
   }
 
@@ -170,7 +169,6 @@ export default class ReactGrid extends Component {
     config.columnArray.map((item,i)=>{
      // set locked false to unfreeze column
      item.locked = false;
-      return item;
     })
   }
 
@@ -180,27 +178,27 @@ export default class ReactGrid extends Component {
 
     clonedColumns.map((item,i)=>{
       item.sortable = !!config.sorting.allowStorting? true : false;
-      item.editable = !!config.readOnly ? false : !!item.editable;
-      return item;
+      item.editable = !!config.readOnly ? false : !!item.editable
     })
     return clonedColumns;
   }
 
   // handleGridRowsUpdated
   handleGridRowsUpdated({ fromRow, toRow, updated }) {
+    let rowToUpdate, updatedRow;
     let dynamicRows = this.state.dynamicRows.slice();
 
     for (let i = fromRow; i <= toRow; i++) {
-      let rowToUpdate = dynamicRows[i];
-      let updatedRow = React.addons.update(rowToUpdate, {$merge: updated});
+       rowToUpdate = dynamicRows[i];
+       updatedRow = {...rowToUpdate, ...updated};
       dynamicRows[i] = updatedRow;
     }
 
     let rows = this.state.rows.slice();
     let currentPageStartIndex = this.state.currentPage * gridConfig.pagination.pageSize;
     for (let i = fromRow; i <= toRow; i++) {
-      let rowToUpdate = rows[i+currentPageStartIndex];
-      let updatedRow = React.addons.update(rowToUpdate, {$merge: updated});
+       rowToUpdate = rows[i+currentPageStartIndex];
+       updatedRow = {...rowToUpdate, ...updated};
       rows[i+currentPageStartIndex] = updatedRow;
     }
 
@@ -240,6 +238,17 @@ export default class ReactGrid extends Component {
   }
 
   getFixedRowAt(index) {
+      index = index;
+
+      // if(index===9){
+      //   return this.state.dynamicRows[index];
+      // }
+
+      // if (index < this.state.indexOffset || index > this.getSize() + this.state.indexOffset ) {
+      //   return undefined;
+      // }
+
+
       return this.state.rows[index];
   }
 
@@ -257,7 +266,6 @@ export default class ReactGrid extends Component {
     let cn = "";
     config.pagination.pageCssClasses.map((item)=>{
       cn = cn + item + " "
-      return item;
     })
     return cn;
   }
