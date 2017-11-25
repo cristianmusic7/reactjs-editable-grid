@@ -1,8 +1,15 @@
 import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
 import { HeaderCell } from 'react-data-grid';
 
 class DraggableHeaderCell extends React.Component {
+  setScrollLeft(scrollLeft) {
+    let node = ReactDOM.findDOMNode(this);
+    node.style.webkitTransform = `translate3d(${scrollLeft}px, 0px, 0px)`;
+    node.style.transform = `translate3d(${scrollLeft}px, 0px, 0px)`;
+  }
+
   render() {
     const {
       connectDragSource,

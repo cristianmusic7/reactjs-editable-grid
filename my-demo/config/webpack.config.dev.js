@@ -88,6 +88,10 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+      
+      // Avoid bundling react and react-dom twice
+      'react': path.join(paths.appNodeModules, 'react'),
+      'react-dom': path.join(paths.appNodeModules, 'react-dom'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -187,6 +191,11 @@ module.exports = {
                 },
               },
             ],
+          },
+          {
+            test: /\.js$/,
+            use: ["source-map-loader"],
+            enforce: "pre"
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
