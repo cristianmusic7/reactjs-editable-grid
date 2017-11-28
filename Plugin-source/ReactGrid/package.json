@@ -1,13 +1,12 @@
 {
-  "name": "@sans/react-grid",
-  "version": "0.2.0",
+  "name": "@knd/react-grid",
+  "version": "0.2.3",
   "description": "Data grid for React",
   "main": "src/index.js",
   "scripts": {
     "pretest": "npm run eslint",
     "test": "./node_modules/.bin/karma start ./config/karma.js --singleRun true --release true",
     "dev-test": "./node_modules/.bin/karma start ./config/karma.dev.js --singleRun false --debug true",
-    "postinstall": "lerna bootstrap",
     "build": "webpack --config ./config/webpack.config.prod.js --release true",
     "start": "node webpack-dev-server.js",
     "beforepublish": "lerna run beforepublish",
@@ -15,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/adazzle/react-data-grid.git"
+    "url": "https://github.com/dedywahyudi/reactjs-editable-grid/tree/master/Plugin-source/ReactGrid"
   },
   "keywords": [
     "react",
@@ -114,7 +113,7 @@
   "author": "topcoder",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/adazzle/react-data-grid/issues"
+    "url": "https://github.com/dedywahyudi/reactjs-editable-grid/issues"
   },
-  "homepage": "https://github.com/adazzle/react-data-grid"
+  "homepage": "https://github.com/dedywahyudi/reactjs-editable-grid/tree/master/Plugin-source/ReactGrid"
 }
