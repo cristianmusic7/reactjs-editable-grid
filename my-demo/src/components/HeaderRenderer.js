@@ -1,6 +1,6 @@
 import React, { Component, onInit } from 'react'
 import ReactPaginate from 'react-paginate';
-import { HeaderRow } from '@sans/react-grid/packages/react-data-grid/dist/react-data-grid';
+import { HeaderRow } from '@knd/react-grid/packages/react-data-grid/dist/react-data-grid';
 
 export default class HeaderRenderer extends Component{
   constructor(props) {

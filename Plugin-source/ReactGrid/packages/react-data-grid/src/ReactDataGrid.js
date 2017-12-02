@@ -192,7 +192,7 @@ const ReactDataGrid = React.createClass({
             this.props.onCellSelected(selected);
           }
         });
-      } else if (rowIdx === -1 && idx === -1) {
+      } else if (rowIdx === -1 || idx === -1) {
         // When it's outside of the grid, set rowIdx anyway
         this.setState({selected: { idx, rowIdx }});
       }
@@ -888,6 +888,16 @@ const ReactDataGrid = React.createClass({
     }
   },
 
+  renderContextMenu(): ReactElement {
+    const {contextMenu} = this.props;
+    const contextMenuProps = {rowIdx: this.state.selected.rowIdx, idx: this.state.selected.idx};
+    if (React.isValidElement(contextMenu)) {
+      return React.cloneElement(contextMenu, contextMenuProps);
+    } else if (isFunction(contextMenu)) {
+      return <contextMenu {...contextMenuProps}/>;
+    }
+  },
+
   render() {
     let cellMetaData = {
       rowKey: this.props.rowKey,
@@ -917,6 +927,7 @@ const ReactDataGrid = React.createClass({
     };
 
     let toolbar = this.renderToolbar();
+    let contextMenu = this.renderContextMenu();
     let containerWidth = this.props.minWidth || this.DOMMetrics.gridWidth();
     let gridWidth = containerWidth - this.state.scrollOffset;
 
@@ -961,9 +972,10 @@ const ReactDataGrid = React.createClass({
             rowScrollTimeout={this.props.rowScrollTimeout}
             contextMenu={this.props.contextMenu}
             overScan={this.props.overScan} />
-          </div>
         </div>
-      );
+        {contextMenu}
+      </div>
+    );
   }
 });
 

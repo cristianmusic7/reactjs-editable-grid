@@ -16,11 +16,11 @@ $ npm start
 The plugin configuration options can be found in `gridConfig.json` `~/packages/react-data-grid-examples/src/assets/gridConfig.json`
 This file contains all the options required to configure the plugin.
 
-## Header and footer data
-The cell data can configuration options for the header & footer table cells can be found in this file:
+### Header and footer data
+The configuration options for the header & footer table cells can be found in this file:
  `~\ReactGrid\packages\react-data-grid-examples\src\assets\data\dataset.json`
 
-The basic JSON field are as follows: 
+The basic JSON fields are as follows: 
 
 ```json
 id                     | description                                            |
@@ -36,6 +36,8 @@ id                     | description                                            
 "resizable"            | resizable or not                                       |
 "editable"             | Read Only : Make the column readonly                   |
 "visible"              | Visible : true  / false                                |
+"draggable"            | Draggable: whether column can be dragged               |
+"locked"               | Freeze: set true to freeze column from scrolling       |
 "footerText"           | Footer Text                                            |
 "columnClass"          | Column Class                                           |
 "footerStyle"          |  Footer Style : CSS Classes                            |
@@ -50,6 +52,61 @@ id                     | description                                            
 
 #### Styling header and footer:
 The basic styling can be done using the config options from JSON file for advanced stying stylesheet should be used. For header and footer styling update the stylesheet `~\ReactGrid\packages\react-data-grid-examples\src\sassets\css\custom-style.css`
+
+### Context Menu Configuration
+To display context menu for cells or column headers, define the component for the menu.
+
+First import the ContextMenu and MenuItem from `react-data-grid-addons`:
+```javascript
+const { Menu: { ContextMenu, MenuItem } } = require('@knd/react-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
+```
+
+Then implement the context menu component with the `render` function returning the context menu structure. For example:
+
+```jsx
+export default class GridContextMenu extends React.Component {
+  
+  //...
+
+  render() {
+    const showColumnMenu = this.props.rowIdx === -1 && this.props.idx >= 0;
+    const showRowMenu = this.props.idx === 0 && this.props.rowIdx >= 0;
+    const isColumnDraggable = !!this.props.columnGetter(this.props.idx).draggable;
+    const isColumnFrozen = !!this.props.columnGetter(this.props.idx).locked;
+    
+    return ((showColumnMenu || showRowMenu) &&
+      <ContextMenu>
+        { showColumnMenu && 
+          <MenuItem data={{idx: this.props.idx, value: !isColumnFrozen}} onClick={this.onFreezeColumn}>
+            <input type="checkbox" checked={isColumnFrozen} readOnly={true}/>
+            Frozen column
+          </MenuItem> }
+        { showColumnMenu && 
+          <MenuItem data={{idx: this.props.idx, value: !isColumnDraggable}} onClick={this.onSetColumnDraggable}>
+            <input type="checkbox" checked={isColumnDraggable} readOnly={true}/>
+            Draggable column
+          </MenuItem> }
+        { showRowMenu && <MenuItem data={{rowIdx: this.props.rowIdx - 1}} disabled={this.props.rowIdx <= 0} onClick={this.onFreezeRows}>Freeze rows above</MenuItem> }
+        { showRowMenu && <MenuItem data={{rowIdx: -1}} onClick={this.onFreezeRows}>Unfreeze all rows</MenuItem> }
+      </ContextMenu>
+    );
+  }
+```
+
+Then when creating the `react-data-grid` component, set its `contextMenu` prop to the instance of the context menu component defined above. For example:
+
+```jsx
+    <ReactDataGrid
+        ...
+        contextMenu={<GridContextMenu onFreezeColumn={this.onFreezeColumn} onFreezeRows={this.onFreezeRows}
+            columnGetter={this.columnGetter} onSetColumnDraggable={this.onSetColumnDraggable} />}
+```
+
+The props `rowIdx` and `idx` in the menu component are automatically updated with the clicked cell row and column index respectively when the menu is shown. These props can be used to customize menu items depending on the clicked cell/column header.
+
+When column header is clicked the `this.props.rowIdx` will be equal `-1`.
+
+For more details regarding configuration and styling of menu items please see the Readme for [react-contextmenu](https://github.com/vkbansal/react-contextmenu) package.
 
 
 ## Plugin Demo

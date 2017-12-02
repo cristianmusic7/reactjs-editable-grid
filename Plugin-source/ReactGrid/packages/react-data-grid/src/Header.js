@@ -32,13 +32,31 @@ const Header = React.createClass({
     onHeaderDrop: PropTypes.func,
     draggableHeaderCell: PropTypes.func,
     getValidFilterValues: PropTypes.func,
-    cellMetaData: PropTypes.shape(cellMetaDataShape)
+    cellMetaData: PropTypes.shape(cellMetaDataShape),
+    contextMenu: PropTypes.element    
   },
 
-  getInitialState(): {resizing: any} {
-    return {resizing: null};
+  getInitialState(): {resizing: any, ContextMenuContainer: any} {
+    return {
+      resizing: null,
+      ContextMenuContainer: this.getContextMenuContainer()
+    };
   },
 
+  hasContextMenu() {
+    return this.props.contextMenu && React.isValidElement(this.props.contextMenu);
+  },
+
+  getContextMenuContainer() {
+    if (this.hasContextMenu()) {
+      const plugins = this.props.window ? this.props.window.ReactDataGridPlugins : window.ReactDataGridPlugins;      
+      if (!plugins) {
+        throw new Error('You need to include ReactDataGrid UiPlugins in order to initialise context menu');
+      }
+      return plugins.Menu.ContextMenuTrigger;
+    }
+  },
+  
   componentWillReceiveProps() {
     this.setState({resizing: null});
   },
@@ -126,6 +144,7 @@ const Header = React.createClass({
         onSort={this.props.onSort}
         onScroll={this.props.onScroll}
         getValidFilterValues={this.props.getValidFilterValues}
+        cellMetaData={this.props.cellMetaData}
         />);
     });
     return headerRows;
@@ -199,11 +218,17 @@ const Header = React.createClass({
     });
     let headerRows = this.getHeaderRows();
 
-    return (
+    let content = (
       <div {...this.getKnownDivProps()} style={this.getStyle()} className={className} onClick={this.onHeaderClick}>
         {headerRows}
       </div>
     );
+
+    if (this.hasContextMenu()) {
+      const ContextMenuContainer = this.state.ContextMenuContainer;
+      content = (<ContextMenuContainer id="reactDataGridContextMenu" holdToDisplay={-1}>{content}</ContextMenuContainer>);
+    }
+    return content;
   }
 });
 

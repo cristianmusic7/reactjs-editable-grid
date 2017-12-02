@@ -22,9 +22,9 @@ let MetricsComputatorMixin = {
     let s = this._DOMMetrics;
 
     for (let name in metrics) {
-      if (s.metrics[name] !== undefined) {
-        throw new Error('DOM metric ' + name + ' is already defined');
-      }
+      //if (s.metrics[name] !== undefined) {
+      //  throw new Error('DOM metric ' + name + ' is already defined');
+      //}
       s.metrics[name] = {component, computator: metrics[name].bind(component)};
       getters[name] = this.getMetricImpl.bind(null, name);
     }

@@ -1,4 +1,4 @@
-.react-context-menu {
+.react-contextmenu {
     min-width: 160px;
     padding: 5px 0;
     margin: 2px 0 0;
@@ -11,13 +11,19 @@
     border: 1px solid rgba(0,0,0,.15);
     border-radius: .25rem;
     outline: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 250ms ease !important;
+    z-index: 1000;
 }
 
-.react-context-menu-link {
-    display: inline-block;
-    width: 100%;
+.react-contextmenu.react-contextmenu--visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.react-contextmenu-item {
     padding: 3px 20px;
-    clear: both;
     font-weight: 400;
     line-height: 1.5;
     color: #373a3c;
@@ -25,23 +31,50 @@
     white-space: nowrap;
     background: 0 0;
     border: 0;
+	cursor: pointer;
 }
 
-.react-context-menu-link.active,
-.react-context-menu-link:hover {
+.react-contextmenu-item.react-contextmenu-item--active,
+.react-contextmenu-item.react-contextmenu-item--selected {
     color: #fff;
-    background-color: #0275d8;
-    border-color: #0275d8;
+    background-color: #20a0ff;
+    border-color: #20a0ff;
     text-decoration: none;
 }
 
-.react-context-menu-item.submenu > a {
-    padding-right: 27px;
+.react-contextmenu-item.react-contextmenu-item--disabled,
+.react-contextmenu-item.react-contextmenu-item--disabled:hover {
+    color: #9c9c9c;
+    background-color: transparent;
+    border-color: rgba(0,0,0,.15);
 }
 
-.react-context-menu-item.submenu > a:after {
+.react-contextmenu-item--divider {
+    margin-bottom: 3px;
+    padding: 2px 0;
+    border-bottom: 1px solid rgba(0,0,0,.15);
+    cursor: inherit;
+}
+.react-contextmenu-item--divider:hover {
+    background-color: transparent;
+    border-color: rgba(0,0,0,.15);
+}
+
+.react-contextmenu-item.react-contextmenu-submenu {
+	padding: 0;
+}
+
+.react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item {
+}
+
+.react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item:after {
     content: "▶";
     display: inline-block;
     position: absolute;
     right: 7px;
+}
+
+.react-contextmenu-item>input[type="checkbox"] {
+    margin: -2px 5px 0 0;
+    vertical-align: middle;
 }

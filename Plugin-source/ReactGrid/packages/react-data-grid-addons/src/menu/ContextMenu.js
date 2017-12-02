@@ -4,7 +4,7 @@ import {ContextMenu} from 'react-contextmenu';
 class ReactDataGridContextMenu extends React.Component {
   render() {
     return (
-      <ContextMenu identifier="reactDataGridContextMenu">
+      <ContextMenu id="reactDataGridContextMenu">
         {this.props.children}
       </ContextMenu>
     );

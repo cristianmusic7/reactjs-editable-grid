@@ -21,6 +21,10 @@
   border-bottom: 1px solid #ddd;
 }
 
+.react-grid-Cell--locked {
+  background-color: #f7f7f7;
+}
+
 .react-grid-Cell--locked:last-of-type{
   border-right: 1px solid #ddd;
 }
