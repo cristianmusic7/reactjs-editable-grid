@@ -88,6 +88,9 @@ module.exports = {
     let columnIndex = -1;
     while (remainingScroll >= 0) {
       columnIndex++;
+      if (columnIndex >= ColumnUtils.getSize(this.props.columnMetrics.columns)) {
+        break;
+      }
       remainingScroll -= ColumnUtils.getColumn(this.props.columnMetrics.columns, columnIndex).width;
     }
     return columnIndex;

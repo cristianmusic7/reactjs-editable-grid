@@ -22,6 +22,7 @@ function getPlugins() {
 
 const config = {
   debug: !RELEASE,
+  devtool: 'cheap-module-source-map',
   externals: {
     react: {
       root: 'React',

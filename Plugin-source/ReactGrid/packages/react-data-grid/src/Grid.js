@@ -104,6 +104,7 @@ const Grid = React.createClass({
           onScroll={this.onHeaderScroll}
           getValidFilterValues={this.props.getValidFilterValues}
           cellMetaData={this.props.cellMetaData}
+          contextMenu={this.props.contextMenu}
           />
 
             {this.props.rowsCount >= 1 || (this.props.rowsCount === 0 && !this.props.emptyRowsView) ?

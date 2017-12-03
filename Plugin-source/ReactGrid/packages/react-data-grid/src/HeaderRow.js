@@ -9,6 +9,8 @@ const SortableHeaderCell    = require('./cells/headerCells/SortableHeaderCell');
 const FilterableHeaderCell  = require('./cells/headerCells/FilterableHeaderCell');
 const HeaderCellType = require('./HeaderCellType');
 const createObjectWithProperties = require('./createObjectWithProperties');
+const getInnermostDecoratedInstance = require('./getInnermostDecoratedInstance');
+const cellMetaDataShape    = require('./PropTypeShapes/CellMetaDataShape');
 require('../../../themes/react-data-grid-header.css');
 
 import PropTypes from 'prop-types';
@@ -44,7 +46,8 @@ const HeaderRow = createReactClass({
     onScroll: PropTypes.func,
     rowType: PropTypes.string,
     draggableHeaderCell: PropTypes.func,
-    onHeaderDrop: PropTypes.func
+    onHeaderDrop: PropTypes.func,
+    cellMetaData: PropTypes.shape(cellMetaDataShape)
   },
 
   mixins: [ColumnUtilsMixin],
@@ -126,18 +129,25 @@ const HeaderRow = createReactClass({
         _renderer = <div></div>;
       }
       let HeaderCell = column.draggable ? this.props.draggableHeaderCell : BaseHeaderCell;
+      const onHeaderContextMenu = () => {
+        let meta = this.props.cellMetaData;
+        if (meta != null && meta.onCellContextMenu && typeof (meta.onCellContextMenu) === 'function') {
+          meta.onCellContextMenu({ rowIdx: -1, idx: i });
+        }
+      }
       let cell = (
-        <HeaderCell
-          ref={(node) => this.cells[i] = node}
-          key={i}
-          height={this.props.height}
-          column={column}
-          renderer={_renderer}
-          resizing={this.props.resizing === column}
-          onResize={this.props.onColumnResize}
-          onResizeEnd={this.props.onColumnResizeEnd}
-          onHeaderDrop={this.props.onHeaderDrop}
-          />
+        <div key={i} onContextMenu={onHeaderContextMenu}>
+          <HeaderCell
+            ref={(node) => this.cells[i] = getInnermostDecoratedInstance(node)}
+            height={this.props.height}
+            column={column}
+            renderer={_renderer}
+            resizing={this.props.resizing === column}
+            onResize={this.props.onColumnResize}
+            onResizeEnd={this.props.onColumnResizeEnd}
+            onHeaderDrop={this.props.onHeaderDrop}
+            />
+        </div>
       );
       if (column.locked) {
         lockedCells.push(cell);
