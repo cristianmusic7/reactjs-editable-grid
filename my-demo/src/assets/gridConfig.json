@@ -11,7 +11,7 @@
     "pageChangeCallback": "callbackFunction" 
   },
   "sorting": {
-    "allowStorting": true 
+    "allowStorting": false 
   },
   "readOnly": false,  
   "values": [], 

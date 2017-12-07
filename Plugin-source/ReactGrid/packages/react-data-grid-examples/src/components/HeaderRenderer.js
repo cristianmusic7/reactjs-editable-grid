@@ -13,7 +13,8 @@ export default class HeaderRenderer extends Component{
 
 
   render() {
-    return ( <div className={this.props.columnClass} > <HeaderRow ref = "row" { ...this.props } />
+    return ( <div className={this.props.columnClass} > 
+    <HeaderRow ref = "row" { ...this.props } />
       </div> );
   }
 }

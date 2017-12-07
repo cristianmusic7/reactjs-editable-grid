@@ -58,7 +58,7 @@ To display context menu for cells or column headers, define the component for th
 
 First import the ContextMenu and MenuItem from `react-data-grid-addons`:
 ```javascript
-const { Menu: { ContextMenu, MenuItem } } = require('@knd/react-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
+const { Menu: { ContextMenu, MenuItem } } = require('@sans/react-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
 ```
 
 Then implement the context menu component with the `render` function returning the context menu structure. For example:

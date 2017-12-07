@@ -6,8 +6,9 @@ import GridContextMenu from './GridContextMenu';
 import PropTypes from 'prop-types';
 
 import faker from 'faker';
-import  ReactDataGrid from '@knd/react-grid/packages/react-data-grid/dist/react-data-grid';
-const { DraggableHeader: { DraggableContainer}} = require('@knd/react-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
+import  ReactDataGrid from '@sans/react-data-grid/packages/react-data-grid/dist/react-data-grid';
+const { DraggableHeader: { DraggableContainer}
+} = require('@sans/react-data-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
 require('../assets/css/ReactGrid.css');
 require('../assets/css/custom-style.css');
 require('../assets/css/react-context-menu.css');

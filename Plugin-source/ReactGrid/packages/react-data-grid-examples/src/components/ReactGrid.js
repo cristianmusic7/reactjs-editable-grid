@@ -2,6 +2,7 @@ import React, { Component, onInit } from 'react';
 import ReactPaginate from 'react-paginate';
 import RowRenderer from './RowRenderer';
 import HeaderRenderer from './HeaderRenderer';
+import GridContextMenu from './GridContextMenu';
 import PropTypes from 'prop-types';
 
 import faker from 'faker';
@@ -12,6 +13,7 @@ DraggableHeader: { DraggableContainer}
 const { AutoComplete: AutoCompleteEditor, DropDownEditor } = Editors;
 require('../assets/css/ReactGrid.css');
 require('../assets/css/custom-style.css');
+require('../assets/css/react-context-menu.css');
 
 faker.locale = 'en_US';
 
@@ -354,7 +356,7 @@ export default class ReactGrid extends Component {
   };
 
   rowGetter = (i) => {
-    debugger;
+    // debugger;
           return i > 3 ? this.state.rows[i] : '';
       };
 
@@ -362,6 +364,29 @@ export default class ReactGrid extends Component {
     debugger;
           return i <= 3 ? this.state.rows[i] : null;
       };
+
+  onFreezeColumn = (col, value) => {
+    const columns = this.state.columns.splice(0);
+    columns[col].locked = value;
+    this.setState({ columns });
+  }
+
+  onFreezeRows = (row) => {
+    const configCopy = Object.assign({}, this.state.config);
+    configCopy.freeze.freezedRowsFromTopCount = row + 1;
+    this.setState({ configCopy });
+  }
+
+  onSetColumnDraggable = (col, value) => {
+    const columns = this.state.columns.splice(0);
+    columns[col].draggable = value;
+    this.setState({ columns });
+  }
+
+  columnGetter = (i) => {
+    const {columns} = this.state;
+    return 0 <= i && i < columns.length ? columns[i] : {};
+  }
 
   render() {
 
@@ -416,6 +441,8 @@ export default class ReactGrid extends Component {
               rowScrollTimeout={200}
               rowRenderer={RowRenderer}
               freezedRowsFromTopCount = {config.freeze.allowedFreezing ? config.freeze.freezedRowsFromTopCount : 0}
+              contextMenu={<GridContextMenu onFreezeColumn={this.onFreezeColumn} onFreezeRows={this.onFreezeRows}
+                columnGetter={this.columnGetter} onSetColumnDraggable={this.onSetColumnDraggable} />}
             />
           </DraggableContainer>
         </div>

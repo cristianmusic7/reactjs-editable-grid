@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-const { Menu: { ContextMenu, MenuItem } } = require('@sans/react-data-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
+const { Menu: { ContextMenu, MenuItem } } = require('react-data-grid-addons');
 
 export default class GridContextMenu extends React.Component {
   static propTypes = {
@@ -40,6 +40,7 @@ export default class GridContextMenu extends React.Component {
 
 
   render() {
+    // debugger;
     const showColumnMenu = this.props.rowIdx === -1 && this.props.idx >= 0;
     const showRowMenu = this.props.idx === 0 && this.props.rowIdx >= 0;
     const isColumnDraggable = !!this.props.columnGetter(this.props.idx).draggable;

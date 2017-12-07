@@ -15,7 +15,8 @@
   "author": "Adazzle",
   "license": "MIT",
   "dependencies": {
-    "react-data-grid": "^2.0.60"
+    "react-data-grid": "^2.0.60",
+    "react-contextmenu": "^1.1.0"
   },
   "devDependencies": {
     "jquery": "^2.1.1",
