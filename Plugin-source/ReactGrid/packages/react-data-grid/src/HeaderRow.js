@@ -129,10 +129,15 @@ const HeaderRow = createReactClass({
         _renderer = <div></div>;
       }
       let HeaderCell = column.draggable ? this.props.draggableHeaderCell : BaseHeaderCell;
-      const onHeaderContextMenu = () => {
+      const onHeaderContextMenu = (e) => {
         let meta = this.props.cellMetaData;
         if (meta != null && meta.onCellContextMenu && typeof (meta.onCellContextMenu) === 'function') {
-          meta.onCellContextMenu({ rowIdx: -1, idx: i });
+          if(e.target.classList.contains('arrow-handle')){
+              meta.onCellContextMenu({ rowIdx: -1, idx: i });
+          }else{
+              e.preventDefault();
+              e.stopPropagation();
+          }
         }
       }
       let cell = (

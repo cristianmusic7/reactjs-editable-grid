@@ -14,6 +14,20 @@ function simpleCellRenderer(objArgs: {column: {name: string}}): ReactElement {
 }
 
 
+function onArrowClick(e){
+  e.stopPropagation();
+
+
+  // if clicked on the arrow button
+  let headerCells = document.getElementsByClassName('is-open');
+  for(let i =0;i<headerCells.length;i++){
+    let el = headerCells[i];
+    el.classList.remove('is-open');
+  }
+  
+  let headerCell = e.target.closest('.react-grid-HeaderCell');
+  headerCell.classList.add('is-open');
+}
 
 function bodyClickHandler(e){
   let headerCells = document.getElementsByClassName('is-open');
@@ -87,6 +101,7 @@ const HeaderCell = React.createClass({
     return {
       width: this.props.column.width,
       left: this.props.column.left,
+      opacity: this.props.column.width === 0 ? 0: 1,
       display: 'inline-block',
       position: 'absolute',
       height: this.props.height,
@@ -102,18 +117,36 @@ const HeaderCell = React.createClass({
     node.style.transform = `translate3d(${scrollLeft}px, 0px, 0px)`;
   },
   disableDefaultContext() {
-    document.removeEventListener('contextmenu', this.handleMouseDown);
-    document.addEventListener('contextmenu', this.handleMouseDown);
+debugger;
+    //bind event with arrow
+    document.removeEventListener('click', this.handleArrowClick);
+    document.addEventListener('click', this.handleArrowClick);
+
   },
 
-  handleMouseDown(e) {
+  handleArrowClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
     const body = document.querySelector('body');
+    body.removeEventListener('click', bodyClickHandler);
     body.addEventListener('click', bodyClickHandler);
 
-    if(e.target.classList.contains('react-grid-HeaderCell') || e.target.parentElement.classList.contains('react-grid-HeaderCell')){
+    let headerCells = document.getElementsByClassName('is-open');
+    for(let i =0;i<headerCells.length;i++){
+      let el = headerCells[i];
+      el.classList.remove('is-open');
+    }
+    
+    let headerCell = e.target.closest('.react-grid-HeaderCell');
+    !!headerCell ? headerCell.classList.add('is-open') : '';
+
+    if(e.target.classList.contains('arrow-handle') || 
+    e.target.parentElement.classList.contains('arrow-handle')){
       e.preventDefault();
       e.stopPropagation();
-      if(e.button === 2){
+
+      //  click event handling
         let headerCells = document.getElementsByClassName('is-open');
         for(let i =0;i<headerCells.length;i++){
           let el = headerCells[i];
@@ -122,8 +155,17 @@ const HeaderCell = React.createClass({
     
         let headerCell = e.target.closest('.react-grid-HeaderCell');
         headerCell.classList.add('is-open');
-      }
+
+
     }
+
+    //bind event to the arrow
+    // const tEl = e.target;
+    // const arrow = tEl.querySelector('.arrow-handle');
+    // if(!!arrow){
+    //   arrow.removeEventListener('click', onArrowClick);
+    //   arrow.addEventListener('click', onArrowClick);
+    // }
   },
 
 
@@ -165,8 +207,8 @@ const HeaderCell = React.createClass({
     return (
       <div className={className} style={this.getStyle()}>
         {cell}
+        <span className="arrow-handle"></span>
         {resizeHandle}
-        {contextDropDown}
       </div>
     );
   }

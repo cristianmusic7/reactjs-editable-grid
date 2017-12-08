@@ -208,6 +208,7 @@ const ReactDataGrid = React.createClass({
   },
 
   onCellContextMenu: function(cell: SelectedType) {
+    // debugger;
     this.onSelect({rowIdx: cell.rowIdx, idx: cell.idx, contextMenuDisplayed: this.props.contextMenu});
     if (this.props.contextMenu) {
       document.addEventListener('click', this.onContextMenuHide);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // import ReactPaginate from 'react-paginate';
-import { Row } from '@knd/react-grid/packages/react-data-grid/dist/react-data-grid';
+import { Row } from '@sans/react-data-grid/packages/react-data-grid/dist/react-data-grid';
 
 export default class RowRenderer extends Component{
   constructor(props) {

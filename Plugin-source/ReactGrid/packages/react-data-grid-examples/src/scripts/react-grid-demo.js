@@ -41,6 +41,7 @@ export default class ReactGridDemo extends Component{
       rows[i] = this.createFakeRowObjectData(i);
     }
     rows.push({
+      sno: rows.length,
       id: 'id_' + rows.length,
       avatar: faker.name.firstName(),
       invisible: faker.company.bs(),
@@ -70,6 +71,7 @@ export default class ReactGridDemo extends Component{
 
   createFakeRowObjectData(index) {
     return {
+      sno: index,
       id: 'id_' + index,
       avatar: faker.name.firstName(),
       invisible: faker.company.bs(),

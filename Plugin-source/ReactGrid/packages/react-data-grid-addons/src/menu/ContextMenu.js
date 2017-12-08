@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {ContextMenu} from 'react-contextmenu';
+import {ContextMenu} from '@sans/react-contextmenu';
 
 class ReactDataGridContextMenu extends React.Component {
   render() {

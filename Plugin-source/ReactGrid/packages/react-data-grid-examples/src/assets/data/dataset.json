@@ -2,6 +2,21 @@
   "columns": [
 
     {
+      "key": "sno",
+      "isIndexColumn": true,
+      "name": "",
+      "alignment": "left",
+      "headerAlignment": "left",
+      "editItemTemaplate": "text",
+      "width": 48,
+      "resizable": false,
+      "editable": false,
+      "visible": true,
+      "footerText": "",
+      "columnClass": "col-class-id",
+      "footerStyle": "footer-class-id"
+    },
+    {
       "key": "id",
       "name": "ID",
       "alignment": "left",
