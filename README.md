@@ -29,9 +29,9 @@ Then run `my-demo` dev web server:
 npm start
 ```
 
-##React​ ​JS​ ​Grid​ ​Enhancements
+## React​ ​JS​ ​Grid​ ​Enhancements
 
-##Requirement​ ​1
+## Requirement​ ​1
 
 In order to add editable ComboBox or Checkbox columns you have to add the itemType property to the column data config on the "dataset.json" file: 
 
@@ -41,7 +41,7 @@ In order to add editable ComboBox or Checkbox columns you have to add the itemTy
 "itemType": "Custom" for the custom edit type created for requirement 2.
 ```
 
-##Requirement​ ​2
+## Requirement​ ​2
 
 For this requirement a custom edit type was created, in order to give an example of how this can be done. 
 
@@ -53,7 +53,7 @@ Both are imported on the ReactGrid component and are added to all the columns wi
 
 In order to create your own custom edit type you can use this file as a template and edit the code and the render function to include your html and returning values.
 
-##Requirement​ ​4
+## Requirement​ ​4
 
 Functionality implemented to perform separately the generating of the fake data and the render of it, with react data grid.
 
@@ -71,9 +71,9 @@ The time that it takes to render depends of the proccesing power of the computer
 Related to the generating of data the time it takes is related with both number of columns and rows, it takes for time performing the scripts in relation with how large are those numbers.
 
 
-##Files Added/Updated:
+## Files Added/Updated:
 
-###Demo:
+### Demo:
 
 -App.js --- Code functionality implemented to perform separately the generating of the fake data and the render of it.
 
@@ -83,7 +83,7 @@ Related to the generating of data the time it takes is related with both number 
 
 -Components/CustomEditorFormatter.js --- File declaring what is displayed when you double clicked the cell and show the inputs on the "edition" mode.
 
-###Plugin Source
+### Plugin Source
 
 -Packages/react-data-grid/src/editors/CheckboxEditor --- File that is imported on the reactData.js, it declares the checkboxEditor, file originally bundled on the library, updated some lines in order to fix some warnings.
 
