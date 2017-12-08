@@ -90,3 +90,35 @@
   }
 
 
+ .data-handling{
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid red;
+    margin: 20px 15px 10px;
+    float: left;
+    clear: both;
+}
+
+ .data-handling h4{
+  margin: 0;
+}
+
+ .data-handling select{
+  margin: 0 7px;
+}
+
+.perf-options,.perf-time{
+  display: none;
+}
+
+.show-options .perf-options{
+  display: inline;
+}
+
+.show-options .perf-time{
+  display: block;
+}
+
+.state-info{
+  padding-left: 15px;
+}

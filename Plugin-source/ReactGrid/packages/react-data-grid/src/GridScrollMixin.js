@@ -9,7 +9,7 @@ module.exports = {
   },
 
   componentDidUpdate() {
-    this._onScroll();
+    //this._onScroll();
   },
 
   componentWillMount() {

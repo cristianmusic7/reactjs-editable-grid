@@ -12,6 +12,17 @@ faker.locale = 'en_US';
 let gridConfig = require('./assets/gridConfig.json');
 const data = require('./assets/data/dataset.json');
 
+//Default options for generating columns and rows.
+const generateRowOptions = [20,50,100,200,500,1000,2000];
+const generateColOptions = [10,20,25,40,50,60,80,100];
+const defaultRows = 200;
+const defaultCols = 50;
+
+//Flag variable that enables the visibility of the performance tests info
+//Change this to true in order to see the performance test info and options.
+const performanceTest = false;
+
+
 // ReactGridDemo component
 // This component uses the ReactGrid component
 export default class ReactGridDemo extends Component{
@@ -21,14 +32,41 @@ export default class ReactGridDemo extends Component{
 
     this.state = {
       columnsFetched: false,
-      rowsFetched: false
+      rowsFetched: false,
+      loadingGrid: false,
+      renderTime: 0
     }
+
+    this.isrendering = false;
+    this.isloading = false;
+    this.isGeneratingData = false;
+    this.startRenderTime = 0;
+    this.renderDisabled = true;
+    this.generateRowValue = defaultRows;
+    this.generateColValue = defaultCols;
   }
 
   componentWillMount() {
-    gridConfig.values = this.createRows(gridConfig.demo.totalRowsCount-1 || 500);
-    gridConfig.pagination.pageChangeCallback = this.pageChangeCallbackHandler;
-    this.getColumns();
+    gridConfig.pagination.pageChangeCallback = this.pageChangeCallbackHandler || gridConfig.demo.totalRowsCount-1;
+  }
+
+  componentDidUpdate(){
+    var _this = this;
+    window.requestAnimationFrame(function() {
+        if(_this.isrendering){           
+          _this.isrendering = false;
+          _this.isloading = false;
+          _this.setState({"renderTime" : Date.now() - _this.startRenderTime});
+          _this.startRenderTime = 0;
+        }else if(_this.isloading){
+          window.setTimeout(()=>{
+            _this.isrendering = true;
+            _this.getColumns();            
+          });          
+        }else if(_this.isGeneratingData){
+          _this.isGeneratingData = false;
+        }
+    });
   }
 
   createRows(numberOfRows) {
@@ -36,25 +74,6 @@ export default class ReactGridDemo extends Component{
     for (let i = 0; i < numberOfRows; i++) {
       rows[i] = this.createFakeRowObjectData(i);
     }
-    rows.push({
-      sno: rows.length,
-      id: 'id_' + rows.length,
-      avatar: faker.name.firstName(),
-      invisible: faker.company.bs(),
-      county: faker.address.county(),
-      email: faker.internet.email(),
-      title: faker.name.prefix(),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      street: faker.address.streetName(),
-      zipCode: faker.address.zipCode(),
-      date: faker.date.past().toLocaleDateString(),
-      bs: faker.company.bs(),
-      catchPhrase: faker.company.catchPhrase(),
-      companyName: faker.company.companyName(),
-      words: faker.lorem.words(),
-      sentence: faker.lorem.sentence()
-    })
     //suimulate delay
     // window.setTimeout(()=>{
       this.setState({
@@ -65,143 +84,70 @@ export default class ReactGridDemo extends Component{
     return rows;
   }
 
+  //Create fake data for testing according with itemTypes and the data provided.
   createFakeRowObjectData(index) {
-    return {
-      sno: index,
-      
-      id: 'id_' + index,
-      avatar: faker.name.firstName(),
-      invisible: faker.company.bs(),
-      county: faker.address.county(),
-      email: faker.internet.email(),
-      title: faker.name.prefix(),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      street: faker.address.streetName(),
-      zipCode: faker.address.zipCode(),
-      date: faker.date.past().toLocaleDateString(),
-      bs: faker.company.bs(),
-      catchPhrase: faker.company.catchPhrase(),
-      companyName: faker.company.companyName(),
-      words: faker.lorem.words(),
-      sentence: faker.lorem.sentence(),
+    let row = {};
+    row.sno = index;
 
-      id1: 'id_' + index,
-      avatar1: faker.name.firstName(),
-      invisible1: faker.company.bs(),
-      county1: faker.address.county(),
-      email1: faker.internet.email(),
-      title1: faker.name.prefix(),
-      firstName1: faker.name.firstName(),
-      lastName1: faker.name.lastName(),
-      street1: faker.address.streetName(),
-      zipCode1: faker.address.zipCode(),
-      date1: faker.date.past().toLocaleDateString(),
-      bs1: faker.company.bs(),
-      catchPhrase1: faker.company.catchPhrase(),
-      companyName1: faker.company.companyName(),
-      words1: faker.lorem.words(),
-      sentence1: faker.lorem.sentence(),
+    let colNumber = this.generateColValue || data.columns.length;
+    for (let i = 0; i < colNumber; i++) {
+      let idxKey = data.columns[i].key;
 
-      id2: 'id_' + index,
-      avatar2: faker.name.firstName(),
-      invisible2: faker.company.bs(),
-      county2: faker.address.county(),
-      email2: faker.internet.email(),
-      title2: faker.name.prefix(),
-      firstName2: faker.name.firstName(),
-      lastName2: faker.name.lastName(),
-      street2: faker.address.streetName(),
-      zipCode2: faker.address.zipCode(),
-      date2: faker.date.past().toLocaleDateString(),
-      bs2: faker.company.bs(),
-      catchPhrase2: faker.company.catchPhrase(),
-      companyName2: faker.company.companyName(),
-      words2: faker.lorem.words(),
-      sentence2: faker.lorem.sentence(),
-
-      
-      id3: 'id_' + index,
-      avatar3: faker.name.firstName(),
-      invisible3: faker.company.bs(),
-      county3: faker.address.county(),
-      email3: faker.internet.email(),
-      title3: faker.name.prefix(),
-      firstName3: faker.name.firstName(),
-      lastName3: faker.name.lastName(),
-      street3: faker.address.streetName(),
-      zipCode3: faker.address.zipCode(),
-      date3: faker.date.past().toLocaleDateString(),
-      bs3: faker.company.bs(),
-      catchPhrase3: faker.company.catchPhrase(),
-      companyName3: faker.company.companyName(),
-      words3: faker.lorem.words(),
-      sentence3: faker.lorem.sentence(),
-
-      
-      id4: 'id_' + index,
-      avatar4: faker.name.firstName(),
-      invisible4: faker.company.bs(),
-      county4: faker.address.county(),
-      email4: faker.internet.email(),
-      title4: faker.name.prefix(),
-      firstName4: faker.name.firstName(),
-      lastName4: faker.name.lastName(),
-      street4: faker.address.streetName(),
-      zipCode4: faker.address.zipCode(),
-      date4: faker.date.past().toLocaleDateString(),
-      bs4: faker.company.bs(),
-      catchPhrase4: faker.company.catchPhrase(),
-      companyName4: faker.company.companyName(),
-      words4: faker.lorem.words(),
-      sentence4: faker.lorem.sentence(),
-
-      
-      id5: 'id_' + index,
-      avatar5: faker.name.firstName(),
-      invisible5: faker.company.bs(),
-      county5: faker.address.county(),
-      email5: faker.internet.email(),
-      title5: faker.name.prefix(),
-      firstName5: faker.name.firstName(),
-      lastName5: faker.name.lastName(),
-      street5: faker.address.streetName(),
-      zipCode5: faker.address.zipCode(),
-      date5: faker.date.past().toLocaleDateString(),
-      bs5: faker.company.bs(),
-      catchPhrase5: faker.company.catchPhrase(),
-      companyName5: faker.company.companyName(),
-      words5: faker.lorem.words(),
-      sentence5: faker.lorem.sentence(),
-
-      
-      id6: 'id_' + index,
-      avatar6: faker.name.firstName(),
-      invisible6: faker.company.bs(),
-      county6: faker.address.county(),
-      email6: faker.internet.email(),
-      title6: faker.name.prefix(),
-      firstName6: faker.name.firstName(),
-      lastName6: faker.name.lastName(),
-      street6: faker.address.streetName(),
-      zipCode6: faker.address.zipCode(),
-      date6: faker.date.past().toLocaleDateString(),
-      bs6: faker.company.bs(),
-      catchPhrase6: faker.company.catchPhrase(),
-      companyName6: faker.company.companyName(),
-      words6: faker.lorem.words(),
-      sentence6: faker.lorem.sentence()
-
-
+      if(data.columns[i].itemType === "CheckBox"){
+        row[idxKey] = [true,false][Math.round(Math.random())];
+      }else if(data.columns[i].itemType === "Custom"){
+        row[idxKey] = {option:data.columns[i].values[Math.floor((Math.random() * data.columns[i].values.length-1) + 1)],name:faker.name.firstName()};
+      }else if(idxKey.startsWith("id")){
+        row[idxKey] = 'id_' + index;
+      }else if(idxKey.startsWith("avatar")){
+        row[idxKey] = faker.name.firstName();
+      }else if(idxKey.startsWith("invisible")){
+        row[idxKey] = faker.company.bs();
+      }else if(idxKey.startsWith("county")){
+        row[idxKey] = faker.address.county();
+      }else if(idxKey.startsWith("email")){
+        row[idxKey] = faker.internet.email();
+      }else if(idxKey.startsWith("title")){
+        row[idxKey] = faker.name.prefix();
+      }else if(idxKey.startsWith("day")){
+        row[idxKey] = data.columns[i].values[Math.floor((Math.random() * data.columns[i].values.length-1) + 1)];
+      }else if(idxKey.startsWith("firstName")){
+        row[idxKey] = faker.name.firstName();
+      }else if(idxKey.startsWith("lastName")){
+        row[idxKey] = faker.name.lastName();
+      }else if(idxKey.startsWith("street")){
+        row[idxKey] = faker.address.streetName();
+      }else if(idxKey.startsWith("zipCode")){
+        row[idxKey] = faker.address.zipCode();
+      }else if(idxKey.startsWith("date")){
+        row[idxKey] = faker.date.past().toLocaleDateString();
+      }else if(idxKey.startsWith("bs")){
+        row[idxKey] = faker.company.bs();
+      }else if(idxKey.startsWith("catchPhrase")){
+        row[idxKey] = faker.company.catchPhrase();
+      }else if(idxKey.startsWith("companyName")){
+        row[idxKey] = faker.company.companyName();
+      }else if(idxKey.startsWith("words")){
+        row[idxKey] = faker.lorem.words();
+      }else if(idxKey.startsWith("sentence")){
+        row[idxKey] = faker.lorem.sentence();
+      }
     };
+
+    return row;
   }
 
   getColumns() {
-    gridConfig.columnArray = data.columns;
+    gridConfig.columnArray = data.columns.slice();
+
+    if(this.generateColValue){
+      gridConfig.columnArray.splice(this.generateColValue,data.columns.length - this.generateColValue);
+    }    
+  
     this.setState({"columnsFetched" : true});
   }
 
-  fetchPromise() {
+ fetchPromise() {
     return new Promise((resolve) => {
       const data = require('./assets/data/dataset.json');
       resolve(data);
@@ -252,21 +198,94 @@ export default class ReactGridDemo extends Component{
     console.log('current page is: ' + object.selected);
   }
 
+  generateData = (event) => {
+    this.isGeneratingData = true;
+    let dtStart = Date.now();
+    gridConfig.values = this.createRows(this.generateRowValue);  
+    let dtEnd = Date.now();
+    this.generateTime = dtEnd - dtStart;
+    this.renderDisabled = false;
+  };
+
+  renderGrid = (event) => {
+    this.startRenderTime = Date.now();
+    this.isloading = true;
+    this.setState({"columnsFetched" : false}); 
+    this.renderDisabled = true;
+    this.isGeneratingData = false;
+  };
+
+  generateRowChange = (event) => {   
+    this.generateRowValue = event.currentTarget.value;
+  };
+
+  generateColChange = (event) => {   
+    this.generateColValue = event.currentTarget.value;
+  };
+
+  renderOptions = (options) => {
+    let htmlOptions = [];
+    options.forEach(function(number) {
+        htmlOptions.push(<option key={number} value={number}>{number}</option>);
+    }, this);
+    return htmlOptions;
+  }
+
   render() {
     return (
     <div className="demo">
       <header className="demo-header">
         ReactGrid Component Demo
       </header>
+      <div className={performanceTest? 'show-options':''}>
+        <div className="data-handling">
+          <h4>Generate Data</h4>          
+          <div className="perf-options">
+            Number of Rows   
+            <select ref={(node) => this.select = node} defaultValue={defaultRows} onChange={this.generateRowChange} >
+              {this.renderOptions(generateRowOptions)}
+            </select>
+            Columns to Generate
+            <select ref={(node) => this.select2 = node} defaultValue={defaultCols} onChange={this.generateColChange} >
+              {this.renderOptions(generateColOptions)}
+            </select>
+          </div> 
+          <button ref={(node) => this.generateButton = node} onClick={this.generateData}>Generate Data</button> 
+          <div className="perf-time">
+            Time Taken to Generate Data: {this.generateTime? this.generateTime + ' ms':''} 
+          </div>                   
+        </div>
+        <div className="data-handling">
+          <h4>Render Data</h4>
+          <button onClick={this.renderGrid} disabled={this.renderDisabled}>Render Grid</button>
+          <div className="perf-time">
+            Time Taken to Render Data: {this.state.renderTime? this.state.renderTime+ ' ms':''}
+          </div>   
+        </div>
+      </div>
       <div className="datagrid-wrap">
         {      
+          !!this.isGeneratingData
+          ? (
+          <div className="state-info">Data Generated</div>
+          ) 
+          :(<div></div>)
+        }
+        {      
+          !!this.isloading
+          ? (
+          <div className="state-info">Loading...</div>
+          ) 
+          :(<div></div>)
+        }
+        {
           !!this.state.columnsFetched && !!this.state.rowsFetched
           ? (
           <ReactGrid 
             config = {gridConfig}
           />
           ) 
-          :(<div>Loading...</div>)
+          :(<div></div>)
         }
       </div>
     </div>
