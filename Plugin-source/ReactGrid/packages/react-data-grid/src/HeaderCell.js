@@ -15,6 +15,9 @@ function simpleCellRenderer(objArgs: {column: {name: string}}): ReactElement {
 
 
 function onArrowClick(e){
+  e.stopPropagation();
+
+
   // if clicked on the arrow button
   let headerCells = document.getElementsByClassName('is-open');
   for(let i =0;i<headerCells.length;i++){
@@ -114,7 +117,7 @@ const HeaderCell = React.createClass({
     node.style.transform = `translate3d(${scrollLeft}px, 0px, 0px)`;
   },
   disableDefaultContext() {
-
+debugger;
     //bind event with arrow
     document.removeEventListener('click', this.handleArrowClick);
     document.addEventListener('click', this.handleArrowClick);

@@ -3,6 +3,10 @@
   background-color: #f9f9f9;
 }
 
+.react-grid-Row .react-grid-Cell--locked{
+  background-color: #f9f9f9;
+}
+
 .react-grid-Row:hover .rdg-row-index {
   display: none;
 }

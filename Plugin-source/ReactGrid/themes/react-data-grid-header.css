@@ -36,6 +36,7 @@
   right: 5px;
   top: 19px;
   border: 1px solid #666;
+  cursor: pointer;
   display: none;
 }
 .react-grid-HeaderCell .arrow-handle:after{

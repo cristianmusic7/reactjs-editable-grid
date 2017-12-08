@@ -3,6 +3,7 @@
 
     {
       "key": "sno",
+      "isIndexColumn": true,
       "name": "",
       "alignment": "left",
       "headerAlignment": "left",

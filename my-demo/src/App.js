@@ -68,6 +68,7 @@ export default class ReactGridDemo extends Component{
   createFakeRowObjectData(index) {
     return {
       sno: index,
+      
       id: 'id_' + index,
       avatar: faker.name.firstName(),
       invisible: faker.company.bs(),

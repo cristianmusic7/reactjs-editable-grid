@@ -110,10 +110,17 @@ const Cell = React.createClass({
     }
   },
 
-  onCellContextMenu() {
+  onCellContextMenu(e) {
+    const isArrowElement = e.target.classList.contains('row-arrow-handle');
     let meta = this.props.cellMetaData;
-    if (meta != null && meta.onCellContextMenu && typeof (meta.onCellContextMenu) === 'function') {
+    if (meta != null && meta.onCellContextMenu && typeof (meta.onCellContextMenu) === 'function' ) {
       meta.onCellContextMenu({ rowIdx: this.props.rowIdx, idx: this.props.idx });
+    }
+    if (!isArrowElement) {
+      // setting rowIdx: -1 hides row context menu & setting idx: -1 hides header context menu.
+      meta.onCellContextMenu({ rowIdx: this.props.rowIdx, idx: this.props.idx });
+      e.preventDefault();
+      e.stopPropagation();
     }
   },
 
@@ -507,12 +514,15 @@ const Cell = React.createClass({
     let events = this.getEvents();
     const tooltip = this.props.tooltip ? (<span className="cell-tooltip-text">{this.props.tooltip}</span>) : null;
 
+    let rowArrow = !!this.props.column.isIndexColumn ? (<span className="row-arrow-handle"></span>) : null;
 
     return (
       <div {...this.getKnownDivProps() } className={className} style={style} {...events} ref={(node) => { this.node = node; }}>
         {cellContent}
         {dragHandle}
         {tooltip}
+        {rowArrow}
+
       </div>
     );
   }
