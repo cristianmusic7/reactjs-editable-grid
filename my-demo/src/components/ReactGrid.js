@@ -3,16 +3,19 @@ import ReactPaginate from 'react-paginate';
 import RowRenderer from './RowRenderer';
 import HeaderRenderer from './HeaderRenderer';
 import GridContextMenu from './GridContextMenu';
+import CustomEditor from './CustomEditor';
+import CustomEditorFormatter from './CustomEditorFormatter';
 import PropTypes from 'prop-types';
 
 import faker from 'faker';
+import update from 'immutability-helper';
 import  ReactDataGrid from '@sans/react-data-grid/packages/react-data-grid/dist/react-data-grid';
-const { DraggableHeader: { DraggableContainer}
-} = require('@sans/react-data-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
+const { DraggableHeader: { DraggableContainer},Editors,Formatters} = require('@sans/react-data-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
+const { DropDownEditor,CheckboxEditor } = Editors;
+const { DropDownFormatter } = Formatters;
 require('../assets/css/ReactGrid.css');
 require('../assets/css/custom-style.css');
 require('../assets/css/react-context-menu.css');
-
 
 faker.locale = 'en_US';
 
@@ -52,9 +55,6 @@ const gridConfig = {
   }
 }
 
-
-
-
 export default class ReactGrid extends Component {
 
   constructor(props) {
@@ -76,6 +76,7 @@ export default class ReactGrid extends Component {
     this.initClasses = this.initClasses.bind(this);
     this.onHeaderDrop = this.onHeaderDrop.bind(this);
     this.rowGetter = this.rowGetter.bind(this);
+    this.handleCheckBox = this.handleCheckBox.bind(this);
 
     this.state = {
       columns: [],
@@ -100,15 +101,13 @@ export default class ReactGrid extends Component {
       rows: config.values.concat(),
       dynamicRows: config.values.concat()
     });
-    window.setTimeout(()=>{
+    //window.setTimeout(()=>{
 
       this.setState({
-        columns: this.getColumns()
+        columns: this.getColumns(config)
       });
-    })
+    //})
   }
-
-
 
   // inits Freeze
   initFreeze(config) {
@@ -175,13 +174,35 @@ export default class ReactGrid extends Component {
     })
   }
 
-  getColumns() {
-    const {config} = this.state;
+  handleCheckBox(rowIdx,key, dependentValues, e) {
+    e.preventDefault();
+    let updated = {};
+    updated[key] = !e.currentTarget.children[0].checked;
+    this.rowsUpdated({ fromRow:rowIdx, toRow:rowIdx, updated });
+  }
+
+  handleCustomCheckBox(rowIdx,key, dependentValues, e) {
+    console.log(rowIdx,key, dependentValues, e.currentTarget,"CustomCheck");
+  }
+
+  getColumns(config) {
+    //const {config} = this.state;
     let clonedColumns = config.columnArray.slice();
+
 
     clonedColumns.map((item,i)=>{
       item.sortable = !!config.sorting.allowStorting? true : false;
-      item.editable = !!config.readOnly ? false : !!item.editable
+      item.editable = !!config.readOnly ? false : !!item.editable;
+      //Set colums data values depending of the itemType defined on the config file.
+      if(item.itemType === "Combo"){
+        item.editor = <DropDownEditor options={item.values}/>;
+      }else if(item.itemType === "CheckBox"){
+        item.formatter = <CheckboxEditor/> ;
+        item.onCellChange = this.handleCheckBox;
+      }else if(item.itemType === "Custom"){
+        item.editor = <CustomEditor options={item.values}/>;
+         item.formatter = <CustomEditorFormatter/>;
+      }
     })
     return clonedColumns;
   }
@@ -235,7 +256,6 @@ export default class ReactGrid extends Component {
       if (index < this.state.indexOffset || index > this.getSize() + this.state.indexOffset ) {
         return undefined;
       }
-
 
       return this.state.dynamicRows[index];
   }
@@ -387,6 +407,30 @@ export default class ReactGrid extends Component {
     const {columns} = this.state;
     return 0 <= i && i < columns.length ? columns[i] : {};
   }
+  
+  rowsUpdated = ({ fromRow, toRow, updated }) => {
+    let dynamicRows = this.state.dynamicRows.slice();
+
+    for (let i = fromRow; i <= toRow; i++) {
+      let rowToUpdate = dynamicRows[i];
+      let updatedRow = update(rowToUpdate, {$merge: updated});
+      dynamicRows[i] = updatedRow;
+    }
+
+    let rows = this.state.rows.slice();
+    let currentPageStartIndex = this.state.currentPage * gridConfig.pagination.pageSize;
+    for (let i = fromRow; i <= toRow; i++) {
+       let rowToUpdate = rows[i+currentPageStartIndex];
+       let updatedRow = {...rowToUpdate, ...updated};
+      rows[i+currentPageStartIndex] = updatedRow;
+    }
+
+    this.setState({ 
+      rows: rows,
+      dynamicRows: dynamicRows
+    });
+  };
+
 
   render() {
 
@@ -433,7 +477,6 @@ export default class ReactGrid extends Component {
               rowGetter={this.getRowAt}
               rowGetterFixed={this.getFixedRowAt}
               rowsCount={this.getSize(config.pagination.allowPaging)}
-              onGridRowsUpdated={this.handleGridRowsUpdated}
               onGridSort = { this.handleGridSort }
               enableRowSelect={false}
               rowHeight={50}
@@ -443,6 +486,7 @@ export default class ReactGrid extends Component {
               freezedRowsFromTopCount = {config.freeze.allowedFreezing ? config.freeze.freezedRowsFromTopCount : 0}
               contextMenu={<GridContextMenu onFreezeColumn={this.onFreezeColumn} onFreezeRows={this.onFreezeRows}
                 columnGetter={this.columnGetter} onSetColumnDraggable={this.onSetColumnDraggable} />}
+              onGridRowsUpdated = {this.rowsUpdated}
             />
           </DraggableContainer>
         </div>

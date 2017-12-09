@@ -43,11 +43,28 @@
       "footerText": "av_footer",
       "columnClass": "col-class",
       "footerStyle": "footer-class",
-      "draggable": true
+      "draggable": true,
+      "itemType": "CheckBox"
     },
     {
-      "key": "county",
-      "name": "County",
+      "key": "formal",
+      "name": "Formal Name",
+      "alignment": "left",
+      "headerAlignment": "left",
+      "editItemTemaplate": "text",
+      "width": 200,
+      "resizable": true,
+      "visible": true,
+      "footerText": "lorem footer",
+      "columnClass": "col-class",
+      "footerStyle": "footer-class",
+      "draggable": true,
+      "itemType": "Custom",
+      "values": ["Dr.", "Mr.", "Mrs.", "Miss", "Ms."]
+    },
+    {
+      "key": "day",
+      "name": "Day",
       "alignment": "left",
       "headerAlignment": "left",
       "editItemTemaplate": "text",
@@ -55,25 +72,12 @@
       "resizable": true,
       "editable": true,
       "visible": true,
-      "footerText": "lorem footer",
-      "columnClass": "col-class",
-      "footerStyle": "footer-class",
-      "draggable": true
-    },
-    {
-      "key": "title",
-      "name": "Title",
-      "alignment": "left",
-      "headerAlignment": "left",
-      "editItemTemaplate": "text",
-      "width": 80,
-      "resizable": true,
-      "editable": true,
-      "visible": true,
       "footerText": "title_F",
       "columnClass": "col-class",
       "footerStyle": "footer-class",
-      "draggable": true
+      "draggable": true,      
+      "itemType": "Combo",
+      "values": ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday","Saturday"]
     },
     {
       "key": "firstName",
