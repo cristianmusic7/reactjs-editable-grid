@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-const { editors: { EditorBase } } = require('@lunarkid/react-data-grid/packages/react-data-grid/dist/react-data-grid.js');
+const { editors: { EditorBase } } = require('@lunarkid/react-data-grid/packages/react-data-grid/dist/react-data-grid');
 
 //Custom styles of your component
 require('../assets/css/react-data-grid-custom.css');
