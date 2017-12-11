@@ -1,5 +1,5 @@
 {
-  "name": "@sans/react-data-grid",
+  "name": "@lunarkid/react-data-grid",
   "version": "2.0.76",
   "description": "Data grid for React",
   "main": "src/index.js",
@@ -35,7 +35,7 @@
     "object-assign": "^2.0.0",
     "prop-types": "^15.6.0",
     "react": "^15.4.2",
-    "react-contextmenu": "^1.0.1",
+    "react-contextmenu": "^1.6.3",
     "react-data-grid": "^2.0.78",
     "react-data-grid-addons": "^2.0.78",
     "react-dnd": "^2.1.4",
