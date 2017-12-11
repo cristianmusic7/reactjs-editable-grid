@@ -7,7 +7,7 @@
 		exports["ReactDataGrid"] = factory(require("react"), require("react-dom"));
 	else
 		root["ReactDataGrid"] = factory(root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_4__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -61,15 +61,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDom = __webpack_require__(3);
+	var _reactDom = __webpack_require__(4);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _ExampleList = __webpack_require__(474);
+	var _ExampleList = __webpack_require__(421);
 
 	var _ExampleList2 = _interopRequireDefault(_ExampleList);
 
-	var _scripts = __webpack_require__(479);
+	var _scripts = __webpack_require__(426);
 
 	var _scripts2 = _interopRequireDefault(_scripts);
 
@@ -88,14 +88,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /***/ (function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
 
 /***/ }),
 
-/***/ 474:
+/***/ 421:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -153,14 +153,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 
-/***/ 479:
+/***/ 426:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 	// Import all example JS scripts.
-	var req = __webpack_require__(1469);
+	var req = __webpack_require__(1416);
 
 	function getFriendlyName(input) {
 	  var words = input.split('-').map(function (w) {
@@ -188,7 +188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 
-/***/ 1469:
+/***/ 1416:
 /***/ (function(module, exports) {
 
 	function webpackContext(req) {
@@ -197,7 +197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	webpackContext.keys = function() { return []; };
 	webpackContext.resolve = webpackContext;
 	module.exports = webpackContext;
-	webpackContext.id = 1469;
+	webpackContext.id = 1416;
 
 
 /***/ })
