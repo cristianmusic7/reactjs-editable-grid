@@ -7,7 +7,7 @@
 		exports["ReactDataGrid"] = factory(require("react"), require("react-dom"));
 	else
 		root["ReactDataGrid"] = factory(root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_4__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -77,7 +77,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(233);
+	module.exports = __webpack_require__(134);
 
 
 /***/ }),
@@ -89,6 +89,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -117,20 +123,113 @@ return /******/ (function(modules) { // webpackBootstrap
 	} else {
 	  // By explicitly using `prop-types` you are opting into new production behavior.
 	  // http://fb.me/prop-types-in-prod
-	  module.exports = __webpack_require__(51)();
+	  module.exports = __webpack_require__(153)();
 	}
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
+	'use strict';
+
+	module.exports = {
+	  getColumn: function getColumn(columns, idx) {
+	    if (Array.isArray(columns)) {
+	      return columns[idx];
+	    } else if (typeof Immutable !== 'undefined') {
+	      return columns.get(idx);
+	    }
+	  },
+	  spliceColumn: function spliceColumn(metrics, idx, column) {
+	    if (Array.isArray(metrics.columns)) {
+	      metrics.columns.splice(idx, 1, column);
+	    } else if (typeof Immutable !== 'undefined') {
+	      metrics.columns = metrics.columns.splice(idx, 1, column);
+	    }
+	    return metrics;
+	  },
+	  getSize: function getSize(columns) {
+	    if (Array.isArray(columns)) {
+	      return columns.length;
+	    } else if (typeof Immutable !== 'undefined') {
+	      return columns.size;
+	    }
+	  },
+
+
+	  // Logic extented to allow for functions to be passed down in column.editable
+	  // this allows us to deicde whether we can be edting from a cell level
+	  canEdit: function canEdit(col, rowData, enableCellSelect) {
+	    if (!col) return false;
+	    if (col.editable != null && typeof col.editable === 'function') {
+	      return enableCellSelect === true && col.editable(rowData);
+	    }
+	    return enableCellSelect === true && (!!col.editor || !!col.editable);
+	  },
+	  getValue: function getValue(column, property) {
+	    var value = void 0;
+	    if (column.toJSON && column.get) {
+	      value = column.get(property);
+	    } else {
+	      value = column[property];
+	    }
+	    return value;
+	  }
+	};
 
 /***/ }),
-/* 5 */,
-/* 6 */,
-/* 7 */
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2015 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+
+	function classNames() {
+		var classes = '';
+		var arg;
+
+		for (var i = 0; i < arguments.length; i++) {
+			arg = arguments[i];
+			if (!arg) {
+				continue;
+			}
+
+			if ('string' === typeof arg || 'number' === typeof arg) {
+				classes += ' ' + arg;
+			} else if (Object.prototype.toString.call(arg) === '[object Array]') {
+				classes += ' ' + classNames.apply(null, arg);
+			} else if ('object' === typeof arg) {
+				for (var key in arg) {
+					if (!arg.hasOwnProperty(key) || !arg[key]) {
+						continue;
+					}
+					classes += ' ' + key;
+				}
+			}
+		}
+		return classes.substr(1);
+	}
+
+	// safely export classNames for node / browserify
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	}
+
+	// safely export classNames for RequireJS
+	if (true) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
+			return classNames;
+		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	}
+
+
+/***/ }),
+/* 7 */,
+/* 8 */
 /***/ (function(module, exports) {
 
 	/*
@@ -186,7 +285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/*
@@ -438,108 +537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 9 */,
 /* 10 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	module.exports = {
-	  getColumn: function getColumn(columns, idx) {
-	    if (Array.isArray(columns)) {
-	      return columns[idx];
-	    } else if (typeof Immutable !== 'undefined') {
-	      return columns.get(idx);
-	    }
-	  },
-	  spliceColumn: function spliceColumn(metrics, idx, column) {
-	    if (Array.isArray(metrics.columns)) {
-	      metrics.columns.splice(idx, 1, column);
-	    } else if (typeof Immutable !== 'undefined') {
-	      metrics.columns = metrics.columns.splice(idx, 1, column);
-	    }
-	    return metrics;
-	  },
-	  getSize: function getSize(columns) {
-	    if (Array.isArray(columns)) {
-	      return columns.length;
-	    } else if (typeof Immutable !== 'undefined') {
-	      return columns.size;
-	    }
-	  },
-
-
-	  // Logic extented to allow for functions to be passed down in column.editable
-	  // this allows us to deicde whether we can be edting from a cell level
-	  canEdit: function canEdit(col, rowData, enableCellSelect) {
-	    if (!col) return false;
-	    if (col.editable != null && typeof col.editable === 'function') {
-	      return enableCellSelect === true && col.editable(rowData);
-	    }
-	    return enableCellSelect === true && (!!col.editor || !!col.editable);
-	  },
-	  getValue: function getValue(column, property) {
-	    var value = void 0;
-	    if (column.toJSON && column.get) {
-	      value = column.get(property);
-	    } else {
-	      value = column[property];
-	    }
-	    return value;
-	  }
-	};
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2015 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-
-	function classNames() {
-		var classes = '';
-		var arg;
-
-		for (var i = 0; i < arguments.length; i++) {
-			arg = arguments[i];
-			if (!arg) {
-				continue;
-			}
-
-			if ('string' === typeof arg || 'number' === typeof arg) {
-				classes += ' ' + arg;
-			} else if (Object.prototype.toString.call(arg) === '[object Array]') {
-				classes += ' ' + classNames.apply(null, arg);
-			} else if ('object' === typeof arg) {
-				for (var key in arg) {
-					if (!arg.hasOwnProperty(key) || !arg[key]) {
-						continue;
-					}
-					classes += ' ' + key;
-				}
-			}
-		}
-		return classes.substr(1);
-	}
-
-	// safely export classNames for node / browserify
-	if (typeof module !== 'undefined' && module.exports) {
-		module.exports = classNames;
-	}
-
-	// safely export classNames for RequireJS
-	if (true) {
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
-			return classNames;
-		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}
-
-
-/***/ }),
-/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -559,7 +557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -576,18 +574,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ExcelColumnShape;
 
 /***/ }),
-/* 14 */,
-/* 15 */,
-/* 16 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(249);
+	var content = __webpack_require__(149);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
+	var update = __webpack_require__(9)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -604,7 +600,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 17 */
+/* 13 */,
+/* 14 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -635,16 +632,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = createObjectWithProperties;
 
 /***/ }),
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */
+/* 15 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -682,7 +670,385 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getScrollbarSize;
 
 /***/ }),
-/* 28 */
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var shallowCloneObject = __webpack_require__(21);
+	var sameColumn = __webpack_require__(105);
+	var ColumnUtils = __webpack_require__(5);
+	var getScrollbarSize = __webpack_require__(15);
+	var isColumnsImmutable = __webpack_require__(57);
+
+	function setColumnWidths(columns, totalWidth) {
+	  return columns.map(function (column) {
+	    var colInfo = Object.assign({}, column);
+	    if (column.width) {
+	      if (/^([0-9]+)%$/.exec(column.width.toString())) {
+	        colInfo.width = Math.floor(column.width / 100 * totalWidth);
+	      }
+	    }
+	    return colInfo;
+	  });
+	}
+
+	function setDefferedColumnWidths(columns, unallocatedWidth, minColumnWidth) {
+	  var defferedColumns = columns.filter(function (c) {
+	    return !c.width;
+	  });
+	  return columns.map(function (column) {
+	    if (!column.width && column.width !== 0) {
+	      if (unallocatedWidth <= 0) {
+	        column.width = minColumnWidth;
+	      } else {
+	        var columnWidth = Math.floor(unallocatedWidth / ColumnUtils.getSize(defferedColumns));
+	        if (columnWidth < minColumnWidth) {
+	          column.width = minColumnWidth;
+	        } else {
+	          column.width = columnWidth;
+	        }
+	      }
+	    }
+	    return column;
+	  });
+	}
+
+	function setColumnOffsets(columns) {
+	  var left = 0;
+	  return columns.map(function (column) {
+	    column.left = left;
+	    left += column.width;
+	    return column;
+	  });
+	}
+
+	/**
+	 * Update column metrics calculation.
+	 *
+	 * @param {ColumnMetricsType} metrics
+	 */
+	function recalculate(metrics) {
+	  // compute width for columns which specify width
+	  var columns = setColumnWidths(metrics.columns, metrics.totalWidth);
+
+	  var unallocatedWidth = columns.filter(function (c) {
+	    return c.width;
+	  }).reduce(function (w, column) {
+	    return w - column.width;
+	  }, metrics.totalWidth);
+	  unallocatedWidth -= getScrollbarSize();
+
+	  var width = columns.filter(function (c) {
+	    return c.width;
+	  }).reduce(function (w, column) {
+	    return w + column.width;
+	  }, 0);
+
+	  // compute width for columns which doesn't specify width
+	  columns = setDefferedColumnWidths(columns, unallocatedWidth, metrics.minColumnWidth);
+
+	  // compute left offset
+	  columns = setColumnOffsets(columns);
+
+	  return {
+	    columns: columns,
+	    width: width,
+	    totalWidth: metrics.totalWidth,
+	    minColumnWidth: metrics.minColumnWidth
+	  };
+	}
+
+	/**
+	 * Update column metrics calculation by resizing a column.
+	 *
+	 * @param {ColumnMetricsType} metrics
+	 * @param {Column} column
+	 * @param {number} width
+	 */
+	function resizeColumn(metrics, index, width) {
+	  var column = ColumnUtils.getColumn(metrics.columns, index);
+	  var metricsClone = shallowCloneObject(metrics);
+	  metricsClone.columns = metrics.columns.slice(0);
+
+	  var updatedColumn = shallowCloneObject(column);
+	  updatedColumn.width = Math.max(width, metricsClone.minColumnWidth);
+
+	  metricsClone = ColumnUtils.spliceColumn(metricsClone, index, updatedColumn);
+
+	  return recalculate(metricsClone);
+	}
+
+	function areColumnsImmutable(prevColumns, nextColumns) {
+	  return isColumnsImmutable(prevColumns) && isColumnsImmutable(nextColumns);
+	}
+
+	function compareEachColumn(prevColumns, nextColumns, isSameColumn) {
+	  var i = void 0;
+	  var len = void 0;
+	  var column = void 0;
+	  var prevColumnsByKey = {};
+	  var nextColumnsByKey = {};
+
+	  if (ColumnUtils.getSize(prevColumns) !== ColumnUtils.getSize(nextColumns)) {
+	    return false;
+	  }
+
+	  for (i = 0, len = ColumnUtils.getSize(prevColumns); i < len; i++) {
+	    column = prevColumns[i];
+	    prevColumnsByKey[column.key] = column;
+	  }
+
+	  for (i = 0, len = ColumnUtils.getSize(nextColumns); i < len; i++) {
+	    column = nextColumns[i];
+	    nextColumnsByKey[column.key] = column;
+	    var prevColumn = prevColumnsByKey[column.key];
+	    if (prevColumn === undefined || !isSameColumn(prevColumn, column)) {
+	      return false;
+	    }
+	  }
+
+	  for (i = 0, len = ColumnUtils.getSize(prevColumns); i < len; i++) {
+	    column = prevColumns[i];
+	    var nextColumn = nextColumnsByKey[column.key];
+	    if (nextColumn === undefined) {
+	      return false;
+	    }
+	  }
+	  return true;
+	}
+
+	function sameColumns(prevColumns, nextColumns, isSameColumn) {
+	  if (areColumnsImmutable(prevColumns, nextColumns)) {
+	    return prevColumns === nextColumns;
+	  }
+
+	  return compareEachColumn(prevColumns, nextColumns, isSameColumn);
+	}
+
+	module.exports = { recalculate: recalculate, resizeColumn: resizeColumn, sameColumn: sameColumn, sameColumns: sameColumns };
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var shallowCloneObject = __webpack_require__(21);
+
+	var contextTypes = {
+	  metricsComputator: React.PropTypes.object
+	};
+
+	var MetricsComputatorMixin = {
+
+	  childContextTypes: contextTypes,
+
+	  getChildContext: function getChildContext() {
+	    return { metricsComputator: this };
+	  },
+	  getMetricImpl: function getMetricImpl(name) {
+	    return this._DOMMetrics.metrics[name].value;
+	  },
+	  registerMetricsImpl: function registerMetricsImpl(component, metrics) {
+	    var getters = {};
+	    var s = this._DOMMetrics;
+
+	    for (var name in metrics) {
+	      //if (s.metrics[name] !== undefined) {
+	      //  throw new Error('DOM metric ' + name + ' is already defined');
+	      //}
+	      s.metrics[name] = { component: component, computator: metrics[name].bind(component) };
+	      getters[name] = this.getMetricImpl.bind(null, name);
+	    }
+
+	    if (s.components.indexOf(component) === -1) {
+	      s.components.push(component);
+	    }
+
+	    return getters;
+	  },
+	  unregisterMetricsFor: function unregisterMetricsFor(component) {
+	    var s = this._DOMMetrics;
+	    var idx = s.components.indexOf(component);
+
+	    if (idx > -1) {
+	      s.components.splice(idx, 1);
+
+	      var name = void 0;
+	      var metricsToDelete = {};
+
+	      for (name in s.metrics) {
+	        if (s.metrics[name].component === component) {
+	          metricsToDelete[name] = true;
+	        }
+	      }
+
+	      for (name in metricsToDelete) {
+	        if (metricsToDelete.hasOwnProperty(name)) {
+	          delete s.metrics[name];
+	        }
+	      }
+	    }
+	  },
+	  updateMetrics: function updateMetrics() {
+	    var s = this._DOMMetrics;
+
+	    var needUpdate = false;
+
+	    for (var name in s.metrics) {
+	      if (!s.metrics.hasOwnProperty(name)) continue;
+
+	      var newMetric = s.metrics[name].computator();
+	      if (newMetric !== s.metrics[name].value) {
+	        needUpdate = true;
+	      }
+	      s.metrics[name].value = newMetric;
+	    }
+
+	    if (needUpdate) {
+	      for (var i = 0, len = s.components.length; i < len; i++) {
+	        if (s.components[i].metricsUpdated) {
+	          s.components[i].metricsUpdated();
+	        }
+	      }
+	    }
+	  },
+	  componentWillMount: function componentWillMount() {
+	    this._DOMMetrics = {
+	      metrics: {},
+	      components: []
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    if (window.addEventListener) {
+	      window.addEventListener('resize', this.updateMetrics);
+	    } else {
+	      window.attachEvent('resize', this.updateMetrics);
+	    }
+	    this.updateMetrics();
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    window.removeEventListener('resize', this.updateMetrics);
+	  }
+	};
+
+	var MetricsMixin = {
+
+	  contextTypes: contextTypes,
+
+	  componentWillMount: function componentWillMount() {
+	    if (this.DOMMetrics) {
+	      this._DOMMetricsDefs = shallowCloneObject(this.DOMMetrics);
+
+	      this.DOMMetrics = {};
+	      for (var name in this._DOMMetricsDefs) {
+	        if (!this._DOMMetricsDefs.hasOwnProperty(name)) continue;
+
+	        this.DOMMetrics[name] = function () {};
+	      }
+	    }
+	  },
+	  componentDidMount: function componentDidMount() {
+	    if (this.DOMMetrics) {
+	      this.DOMMetrics = this.registerMetrics(this._DOMMetricsDefs);
+	    }
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    if (!this.registerMetricsImpl) {
+	      return this.context.metricsComputator.unregisterMetricsFor(this);
+	    }
+	    if (this.hasOwnProperty('DOMMetrics')) {
+	      delete this.DOMMetrics;
+	    }
+	  },
+	  registerMetrics: function registerMetrics(metrics) {
+	    if (this.registerMetricsImpl) {
+	      return this.registerMetricsImpl(this, metrics);
+	    }
+
+	    return this.context.metricsComputator.registerMetricsImpl(this, metrics);
+	  },
+	  getMetric: function getMetric(name) {
+	    if (this.getMetricImpl) {
+	      return this.getMetricImpl(name);
+	    }
+
+	    return this.context.metricsComputator.getMetricImpl(name);
+	  }
+	};
+
+	module.exports = {
+	  MetricsComputatorMixin: MetricsComputatorMixin,
+	  MetricsMixin: MetricsMixin
+	};
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	function shallowCloneObject(obj) {
+	  var result = {};
+	  for (var k in obj) {
+	    if (obj.hasOwnProperty(k)) {
+	      result[k] = obj[k];
+	    }
+	  }
+	  return result;
+	}
+
+	module.exports = shallowCloneObject;
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	var isFunction = function isFunction(functionToCheck) {
+	  var getType = {};
+	  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+	};
+
+	module.exports = isFunction;
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(147);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(9)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../node_modules/css-loader/index.js!./react-data-grid-core.css", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js!./react-data-grid-core.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -5666,19 +6032,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	}));
 
 /***/ }),
+/* 28 */,
 /* 29 */,
 /* 30 */,
-/* 31 */,
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(65);
+	var content = __webpack_require__(150);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
+	var update = __webpack_require__(9)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -5695,610 +6061,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 33 */,
-/* 34 */,
-/* 35 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var shallowCloneObject = __webpack_require__(37);
-	var sameColumn = __webpack_require__(204);
-	var ColumnUtils = __webpack_require__(10);
-	var getScrollbarSize = __webpack_require__(27);
-	var isColumnsImmutable = __webpack_require__(110);
-
-	function setColumnWidths(columns, totalWidth) {
-	  return columns.map(function (column) {
-	    var colInfo = Object.assign({}, column);
-	    if (column.width) {
-	      if (/^([0-9]+)%$/.exec(column.width.toString())) {
-	        colInfo.width = Math.floor(column.width / 100 * totalWidth);
-	      }
-	    }
-	    return colInfo;
-	  });
-	}
-
-	function setDefferedColumnWidths(columns, unallocatedWidth, minColumnWidth) {
-	  var defferedColumns = columns.filter(function (c) {
-	    return !c.width;
-	  });
-	  return columns.map(function (column) {
-	    if (!column.width && column.width !== 0) {
-	      if (unallocatedWidth <= 0) {
-	        column.width = minColumnWidth;
-	      } else {
-	        var columnWidth = Math.floor(unallocatedWidth / ColumnUtils.getSize(defferedColumns));
-	        if (columnWidth < minColumnWidth) {
-	          column.width = minColumnWidth;
-	        } else {
-	          column.width = columnWidth;
-	        }
-	      }
-	    }
-	    return column;
-	  });
-	}
-
-	function setColumnOffsets(columns) {
-	  var left = 0;
-	  return columns.map(function (column) {
-	    column.left = left;
-	    left += column.width;
-	    return column;
-	  });
-	}
-
-	/**
-	 * Update column metrics calculation.
-	 *
-	 * @param {ColumnMetricsType} metrics
-	 */
-	function recalculate(metrics) {
-	  // compute width for columns which specify width
-	  var columns = setColumnWidths(metrics.columns, metrics.totalWidth);
-
-	  var unallocatedWidth = columns.filter(function (c) {
-	    return c.width;
-	  }).reduce(function (w, column) {
-	    return w - column.width;
-	  }, metrics.totalWidth);
-	  unallocatedWidth -= getScrollbarSize();
-
-	  var width = columns.filter(function (c) {
-	    return c.width;
-	  }).reduce(function (w, column) {
-	    return w + column.width;
-	  }, 0);
-
-	  // compute width for columns which doesn't specify width
-	  columns = setDefferedColumnWidths(columns, unallocatedWidth, metrics.minColumnWidth);
-
-	  // compute left offset
-	  columns = setColumnOffsets(columns);
-
-	  return {
-	    columns: columns,
-	    width: width,
-	    totalWidth: metrics.totalWidth,
-	    minColumnWidth: metrics.minColumnWidth
-	  };
-	}
-
-	/**
-	 * Update column metrics calculation by resizing a column.
-	 *
-	 * @param {ColumnMetricsType} metrics
-	 * @param {Column} column
-	 * @param {number} width
-	 */
-	function resizeColumn(metrics, index, width) {
-	  var column = ColumnUtils.getColumn(metrics.columns, index);
-	  var metricsClone = shallowCloneObject(metrics);
-	  metricsClone.columns = metrics.columns.slice(0);
-
-	  var updatedColumn = shallowCloneObject(column);
-	  updatedColumn.width = Math.max(width, metricsClone.minColumnWidth);
-
-	  metricsClone = ColumnUtils.spliceColumn(metricsClone, index, updatedColumn);
-
-	  return recalculate(metricsClone);
-	}
-
-	function areColumnsImmutable(prevColumns, nextColumns) {
-	  return isColumnsImmutable(prevColumns) && isColumnsImmutable(nextColumns);
-	}
-
-	function compareEachColumn(prevColumns, nextColumns, isSameColumn) {
-	  var i = void 0;
-	  var len = void 0;
-	  var column = void 0;
-	  var prevColumnsByKey = {};
-	  var nextColumnsByKey = {};
-
-	  if (ColumnUtils.getSize(prevColumns) !== ColumnUtils.getSize(nextColumns)) {
-	    return false;
-	  }
-
-	  for (i = 0, len = ColumnUtils.getSize(prevColumns); i < len; i++) {
-	    column = prevColumns[i];
-	    prevColumnsByKey[column.key] = column;
-	  }
-
-	  for (i = 0, len = ColumnUtils.getSize(nextColumns); i < len; i++) {
-	    column = nextColumns[i];
-	    nextColumnsByKey[column.key] = column;
-	    var prevColumn = prevColumnsByKey[column.key];
-	    if (prevColumn === undefined || !isSameColumn(prevColumn, column)) {
-	      return false;
-	    }
-	  }
-
-	  for (i = 0, len = ColumnUtils.getSize(prevColumns); i < len; i++) {
-	    column = prevColumns[i];
-	    var nextColumn = nextColumnsByKey[column.key];
-	    if (nextColumn === undefined) {
-	      return false;
-	    }
-	  }
-	  return true;
-	}
-
-	function sameColumns(prevColumns, nextColumns, isSameColumn) {
-	  if (areColumnsImmutable(prevColumns, nextColumns)) {
-	    return prevColumns === nextColumns;
-	  }
-
-	  return compareEachColumn(prevColumns, nextColumns, isSameColumn);
-	}
-
-	module.exports = { recalculate: recalculate, resizeColumn: resizeColumn, sameColumn: sameColumn, sameColumns: sameColumns };
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(2);
-	var shallowCloneObject = __webpack_require__(37);
-
-	var contextTypes = {
-	  metricsComputator: React.PropTypes.object
-	};
-
-	var MetricsComputatorMixin = {
-
-	  childContextTypes: contextTypes,
-
-	  getChildContext: function getChildContext() {
-	    return { metricsComputator: this };
-	  },
-	  getMetricImpl: function getMetricImpl(name) {
-	    return this._DOMMetrics.metrics[name].value;
-	  },
-	  registerMetricsImpl: function registerMetricsImpl(component, metrics) {
-	    var getters = {};
-	    var s = this._DOMMetrics;
-
-	    for (var name in metrics) {
-	      //if (s.metrics[name] !== undefined) {
-	      //  throw new Error('DOM metric ' + name + ' is already defined');
-	      //}
-	      s.metrics[name] = { component: component, computator: metrics[name].bind(component) };
-	      getters[name] = this.getMetricImpl.bind(null, name);
-	    }
-
-	    if (s.components.indexOf(component) === -1) {
-	      s.components.push(component);
-	    }
-
-	    return getters;
-	  },
-	  unregisterMetricsFor: function unregisterMetricsFor(component) {
-	    var s = this._DOMMetrics;
-	    var idx = s.components.indexOf(component);
-
-	    if (idx > -1) {
-	      s.components.splice(idx, 1);
-
-	      var name = void 0;
-	      var metricsToDelete = {};
-
-	      for (name in s.metrics) {
-	        if (s.metrics[name].component === component) {
-	          metricsToDelete[name] = true;
-	        }
-	      }
-
-	      for (name in metricsToDelete) {
-	        if (metricsToDelete.hasOwnProperty(name)) {
-	          delete s.metrics[name];
-	        }
-	      }
-	    }
-	  },
-	  updateMetrics: function updateMetrics() {
-	    var s = this._DOMMetrics;
-
-	    var needUpdate = false;
-
-	    for (var name in s.metrics) {
-	      if (!s.metrics.hasOwnProperty(name)) continue;
-
-	      var newMetric = s.metrics[name].computator();
-	      if (newMetric !== s.metrics[name].value) {
-	        needUpdate = true;
-	      }
-	      s.metrics[name].value = newMetric;
-	    }
-
-	    if (needUpdate) {
-	      for (var i = 0, len = s.components.length; i < len; i++) {
-	        if (s.components[i].metricsUpdated) {
-	          s.components[i].metricsUpdated();
-	        }
-	      }
-	    }
-	  },
-	  componentWillMount: function componentWillMount() {
-	    this._DOMMetrics = {
-	      metrics: {},
-	      components: []
-	    };
-	  },
-	  componentDidMount: function componentDidMount() {
-	    if (window.addEventListener) {
-	      window.addEventListener('resize', this.updateMetrics);
-	    } else {
-	      window.attachEvent('resize', this.updateMetrics);
-	    }
-	    this.updateMetrics();
-	  },
-	  componentWillUnmount: function componentWillUnmount() {
-	    window.removeEventListener('resize', this.updateMetrics);
-	  }
-	};
-
-	var MetricsMixin = {
-
-	  contextTypes: contextTypes,
-
-	  componentWillMount: function componentWillMount() {
-	    if (this.DOMMetrics) {
-	      this._DOMMetricsDefs = shallowCloneObject(this.DOMMetrics);
-
-	      this.DOMMetrics = {};
-	      for (var name in this._DOMMetricsDefs) {
-	        if (!this._DOMMetricsDefs.hasOwnProperty(name)) continue;
-
-	        this.DOMMetrics[name] = function () {};
-	      }
-	    }
-	  },
-	  componentDidMount: function componentDidMount() {
-	    if (this.DOMMetrics) {
-	      this.DOMMetrics = this.registerMetrics(this._DOMMetricsDefs);
-	    }
-	  },
-	  componentWillUnmount: function componentWillUnmount() {
-	    if (!this.registerMetricsImpl) {
-	      return this.context.metricsComputator.unregisterMetricsFor(this);
-	    }
-	    if (this.hasOwnProperty('DOMMetrics')) {
-	      delete this.DOMMetrics;
-	    }
-	  },
-	  registerMetrics: function registerMetrics(metrics) {
-	    if (this.registerMetricsImpl) {
-	      return this.registerMetricsImpl(this, metrics);
-	    }
-
-	    return this.context.metricsComputator.registerMetricsImpl(this, metrics);
-	  },
-	  getMetric: function getMetric(name) {
-	    if (this.getMetricImpl) {
-	      return this.getMetricImpl(name);
-	    }
-
-	    return this.context.metricsComputator.getMetricImpl(name);
-	  }
-	};
-
-	module.exports = {
-	  MetricsComputatorMixin: MetricsComputatorMixin,
-	  MetricsMixin: MetricsMixin
-	};
-
-/***/ }),
-/* 37 */
-/***/ (function(module, exports) {
-
-	"use strict";
-
-	function shallowCloneObject(obj) {
-	  var result = {};
-	  for (var k in obj) {
-	    if (obj.hasOwnProperty(k)) {
-	      result[k] = obj[k];
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = shallowCloneObject;
-
-/***/ }),
-/* 38 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	var isFunction = function isFunction(functionToCheck) {
-	  var getType = {};
-	  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
-	};
-
-	module.exports = isFunction;
-
-/***/ }),
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 *
-	 * This source code is licensed under the MIT license found in the
-	 * LICENSE file in the root directory of this source tree.
-	 */
-
-	'use strict';
-
-	var emptyFunction = __webpack_require__(53);
-	var invariant = __webpack_require__(54);
-	var ReactPropTypesSecret = __webpack_require__(52);
-
-	module.exports = function() {
-	  function shim(props, propName, componentName, location, propFullName, secret) {
-	    if (secret === ReactPropTypesSecret) {
-	      // It is still safe when called from React.
-	      return;
-	    }
-	    invariant(
-	      false,
-	      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
-	      'Use PropTypes.checkPropTypes() to call them. ' +
-	      'Read more at http://fb.me/use-check-prop-types'
-	    );
-	  };
-	  shim.isRequired = shim;
-	  function getShim() {
-	    return shim;
-	  };
-	  // Important!
-	  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
-	  var ReactPropTypes = {
-	    array: shim,
-	    bool: shim,
-	    func: shim,
-	    number: shim,
-	    object: shim,
-	    string: shim,
-	    symbol: shim,
-
-	    any: shim,
-	    arrayOf: getShim,
-	    element: shim,
-	    instanceOf: getShim,
-	    node: shim,
-	    objectOf: getShim,
-	    oneOf: getShim,
-	    oneOfType: getShim,
-	    shape: getShim,
-	    exact: getShim
-	  };
-
-	  ReactPropTypes.checkPropTypes = emptyFunction;
-	  ReactPropTypes.PropTypes = ReactPropTypes;
-
-	  return ReactPropTypes;
-	};
-
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 *
-	 * This source code is licensed under the MIT license found in the
-	 * LICENSE file in the root directory of this source tree.
-	 */
-
-	'use strict';
-
-	var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-
-	module.exports = ReactPropTypesSecret;
-
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports) {
-
-	"use strict";
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 *
-	 * This source code is licensed under the MIT license found in the
-	 * LICENSE file in the root directory of this source tree.
-	 *
-	 * 
-	 */
-
-	function makeEmptyFunction(arg) {
-	  return function () {
-	    return arg;
-	  };
-	}
-
-	/**
-	 * This function accepts and discards inputs; it has no side effects. This is
-	 * primarily useful idiomatically for overridable function endpoints which
-	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
-	 */
-	var emptyFunction = function emptyFunction() {};
-
-	emptyFunction.thatReturns = makeEmptyFunction;
-	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-	emptyFunction.thatReturnsThis = function () {
-	  return this;
-	};
-	emptyFunction.thatReturnsArgument = function (arg) {
-	  return arg;
-	};
-
-	module.exports = emptyFunction;
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 *
-	 * This source code is licensed under the MIT license found in the
-	 * LICENSE file in the root directory of this source tree.
-	 *
-	 */
-
-	'use strict';
-
-	/**
-	 * Use invariant() to assert state which your program assumes to be true.
-	 *
-	 * Provide sprintf-style format (only %s is supported) and arguments
-	 * to provide information about what broke and what you were
-	 * expecting.
-	 *
-	 * The invariant message will be stripped in production, but the invariant
-	 * will remain to ensure logic does not differ in production.
-	 */
-
-	var validateFormat = function validateFormat(format) {};
-
-	if (false) {
-	  validateFormat = function validateFormat(format) {
-	    if (format === undefined) {
-	      throw new Error('invariant requires an error message argument');
-	    }
-	  };
-	}
-
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  validateFormat(format);
-
-	  if (!condition) {
-	    var error;
-	    if (format === undefined) {
-	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-	    } else {
-	      var args = [a, b, c, d, e, f];
-	      var argIndex = 0;
-	      error = new Error(format.replace(/%s/g, function () {
-	        return args[argIndex++];
-	      }));
-	      error.name = 'Invariant Violation';
-	    }
-
-	    error.framesToPop = 1; // we don't care about invariant's own frame
-	    throw error;
-	  }
-	}
-
-	module.exports = invariant;
-
-/***/ }),
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(64);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js!./react-data-grid-cell.css", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js!./react-data-grid-cell.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(246);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js!./react-data-grid-core.css", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js!./react-data-grid-core.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ }),
-/* 60 */,
-/* 61 */,
-/* 62 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _keyMirror = __webpack_require__(270);
+	var _keyMirror = __webpack_require__(152);
 
 	var _keyMirror2 = _interopRequireDefault(_keyMirror);
 
@@ -6323,31 +6091,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = constants;
 
 /***/ }),
-/* 63 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _OverflowCell = __webpack_require__(217);
+	var _OverflowCell = __webpack_require__(118);
 
 	var _OverflowCell2 = _interopRequireDefault(_OverflowCell);
 
-	var _RowComparer = __webpack_require__(101);
+	var _RowComparer = __webpack_require__(48);
 
 	var _RowComparer2 = _interopRequireDefault(_RowComparer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var React = __webpack_require__(2);
-	var joinClasses = __webpack_require__(11);
-	var Cell = __webpack_require__(96);
-	var ColumnUtilsMixin = __webpack_require__(10);
-	var cellMetaDataShape = __webpack_require__(12);
+	var joinClasses = __webpack_require__(6);
+	var Cell = __webpack_require__(43);
+	var ColumnUtilsMixin = __webpack_require__(5);
+	var cellMetaDataShape = __webpack_require__(10);
 	var PropTypes = React.PropTypes;
-	var createObjectWithProperties = __webpack_require__(17);
-	__webpack_require__(32);
+	var createObjectWithProperties = __webpack_require__(14);
+	__webpack_require__(31);
 
 	var CellExpander = React.createClass({
 	  displayName: 'CellExpander',
@@ -6563,36 +6331,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Row;
 
 /***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(7)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".react-grid-Cell{background-color:#fff;padding-left:8px;padding-right:8px;border-right:1px solid #eee;border-bottom:1px solid #ddd}.react-grid-Cell:focus{outline:2px solid #66afe9;outline-offset:-2px}.react-grid-Cell--locked:focus{z-index:100}.react-grid-Cell:focus .drag-handle{position:absolute;bottom:-5px;right:-4px;background:#66afe9;width:8px;height:8px;border:1px solid #fff;border-right:0;border-bottom:0;z-index:8;cursor:crosshair;cursor:-webkit-grab}.react-grid-Cell:not(.editing) .react-grid-Cell__value{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.react-grid-Cell:not(.editing):not(.rdg-child-cell) .react-grid-Cell__value{position:relative;top:50%;transform:translateY(-50%)}.react-grid-Cell .row-arrow-handle{position:absolute;border-radius:2px;z-index:10;width:12px;height:12px;background-size:7px 4px;right:5px;top:19px;border:1px solid #666;cursor:pointer;display:none}.react-grid-Cell .row-arrow-handle:after{content:\"\";border-left:3px solid transparent;border-right:3px solid transparent;border-top:4px solid #2f2f2f;border-bottom:none;width:0;height:0;position:absolute;top:3px;left:2px}.react-grid-Cell:hover .react-grid-Cell .row-arrow-handle,.react-grid-Cell:hover .row-arrow-handle{display:block}.rdg-child-cell .react-grid-Cell__value{line-height:35px}.react-grid-Cell.readonly{background-color:#000}.react-grid-Cell.copied{background:rgba(0,0,255,.2)!important}.react-grid-Cell--locked:last-of-type{border-right:1px solid #ddd;box-shadow:none}.react-grid-Cell:hover:focus .drag-handle .glyphicon-arrow-down{display:\"block\"}.react-grid-Cell.is-dragged-over-down{border-right:1px dashed #000;border-left:1px dashed #000;border-bottom:1px dashed #000}.react-grid-Cell.is-dragged-over-up{border-right:1px dashed #000;border-left:1px dashed #000;border-top:1px dashed #000}.react-grid-Cell.is-dragged-over-up .drag-handle{top:-5px}.react-grid-Cell:hover{background:#eee}.react-grid-cell .form-control-feedback{color:#a94442;position:absolute;top:0;right:10px;z-index:1000000;display:block;width:34px;height:34px}.react-grid-Cell.was-dragged-over{border-right:1px dashed #000;border-left:1px dashed #000}.react-grid-Cell:hover:focus .drag-handle{position:absolute;bottom:-8px;right:-7px;background:#fff;width:16px;height:16px;border:1px solid #66afe9;z-index:8;cursor:crosshair;cursor:-webkit-grab}.react-grid-Row.row-selected .react-grid-Cell{background-color:#dbecfa}.react-grid-Cell.editing{padding:0;overflow:visible!important}.react-grid-Cell--locked.editing{z-index:100}.react-grid-Cell.editing .has-error input{border:2px solid red!important;border-radius:2px!important}.react-grid-Cell__value ul{margin-top:0;margin-bottom:0;display:inline-block}.react-grid-Cell__value .btn-sm{padding:0}.cell-tooltip{position:relative;display:inline-block}.cell-tooltip .cell-tooltip-text{visibility:hidden;width:150px;background-color:#000;color:#fff;text-align:center;border-radius:6px;padding:5px 0;position:absolute;z-index:1;bottom:-150%;left:50%;margin-left:-60px;opacity:1s}.cell-tooltip:hover .cell-tooltip-text{visibility:visible;opacity:.8}.cell-tooltip .cell-tooltip-text:after{content:\" \";position:absolute;bottom:100%;left:50%;margin-left:-5px;border-width:5px;border-style:solid;border-color:transparent transparent #000}.react-grid-Canvas.opaque .react-grid-Cell.cell-tooltip:hover .cell-tooltip-text{visibility:hidden}.rdg-cell-expand{top:0;right:20px;position:absolute;cursor:pointer}.rdg-child-row-action-cross-last:before,.rdg-child-row-action-cross:before,rdg-child-row-action-cross-last:after,rdg-child-row-action-cross:after{content:\"\";position:absolute;background:grey;height:50%}.rdg-child-row-action-cross:before{left:21px;width:1px;height:35px}.rdg-child-row-action-cross-last:before{left:21px;width:1px}.rdg-child-row-action-cross-last:after,.rdg-child-row-action-cross:after{top:50%;left:20px;height:1px;width:15px;content:\"\";position:absolute;background:grey}.rdg-child-row-action-cross:hover{background:red}.rdg-child-row-btn{position:absolute;cursor:pointer;border:1px solid grey;border-radius:14px;z-index:3;background:#fff}.rdg-child-row-btn div{font-size:12px;text-align:center;line-height:19px;color:grey;height:20px;width:20px;position:absolute;top:60%;left:53%;margin-top:-10px;margin-left:-10px}.rdg-empty-child-row:hover .glyphicon-plus-sign,.rdg-empty-child-row:hover a{color:green}.rdg-child-row-btn .glyphicon-remove-sign:hover{color:red}.last-column .cell-tooltip-text{right:100%;left:0!important}.react-grid-Main .fixed-grid-rows{display:block;background-color:#c5c;z-index:10;position:absolute;left:0;right:15px;top:0;height:200px}.react-grid-Viewport{outline:none}.react-grid-Main .fixed-grid-rows .react-grid-Viewport{height:auto;overflow:hidden}.react-grid-Main .fixed-grid-rows .react-grid-Canvas{height:auto;overflow:hidden!important}.react-grid-Main .fixed-grid-rows .react-grid-Row{background:#f7f7f7}.react-grid-Main .fixed-grid-rows .grid-rows{position:relative;padding-top:1px;outline:none}.react-grid-Main .fixed-grid-rows .react-grid-Cell{background-color:#f7f7f7}.react-grid-Main .grid-rows .react-grid-Viewport{height:600px!important;overflow:visible!important;padding-bottom:80px}.react-grid-Main .grid-rows .react-grid-Viewport .react-grid-Canvas{height:600px!important}.react-grid-Header{box-shadow:0 0 4px 0 #ddd;background:#f9f9f9;z-index:11}", ""]);
-
-	// exports
-
-
-/***/ }),
-/* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(7)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".react-grid-Row .react-grid-Cell--locked,.react-grid-Row.row-context-menu .react-grid-Cell,.react-grid-Row:hover .react-grid-Cell{background-color:#f9f9f9}.react-grid-Row:hover .rdg-row-index{display:none}.react-grid-Row:hover .rdg-actions-checkbox{display:block}.react-grid-Row:hover .rdg-drag-row-handle{cursor:move;cursor:grab;cursor:-moz-grab;cursor:-webkit-grab;width:12px;height:30px;margin-left:0;background-image:url(\"data:image/svg+xml;base64, PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjlweCIgaGVpZ2h0PSIyOXB4IiB2aWV3Qm94PSIwIDAgOSAyOSIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMzkgKDMxNjY3KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5kcmFnIGljb248L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZGVmcz48L2RlZnM+CiAgICA8ZyBpZD0iQWN0dWFsaXNhdGlvbi12MiIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPGcgaWQ9IkRlc2t0b3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xNS4wMDAwMDAsIC0yNjIuMDAwMDAwKSIgZmlsbD0iI0Q4RDhEOCI+CiAgICAgICAgICAgIDxnIGlkPSJJbnRlcmFjdGlvbnMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE1LjAwMDAwMCwgMjU4LjAwMDAwMCkiPgogICAgICAgICAgICAgICAgPGcgaWQ9IlJvdy1Db250cm9scyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsIDIuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICAgICAgPGcgaWQ9ImRyYWctaWNvbiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsIDIuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSIyIiBjeT0iMiIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSI3IiBjeT0iMiIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSIyIiBjeT0iNyIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSI3IiBjeT0iNyIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSIyIiBjeT0iMTIiIHI9IjIiPjwvY2lyY2xlPgogICAgICAgICAgICAgICAgICAgICAgICA8Y2lyY2xlIGlkPSJPdmFsLTMwIiBjeD0iNyIgY3k9IjEyIiByPSIyIj48L2NpcmNsZT4KICAgICAgICAgICAgICAgICAgICAgICAgPGNpcmNsZSBpZD0iT3ZhbC0zMCIgY3g9IjIiIGN5PSIxNyIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSI3IiBjeT0iMTciIHI9IjIiPjwvY2lyY2xlPgogICAgICAgICAgICAgICAgICAgICAgICA8Y2lyY2xlIGlkPSJPdmFsLTMwIiBjeD0iMiIgY3k9IjIyIiByPSIyIj48L2NpcmNsZT4KICAgICAgICAgICAgICAgICAgICAgICAgPGNpcmNsZSBpZD0iT3ZhbC0zMCIgY3g9IjciIGN5PSIyMiIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSIyIiBjeT0iMjciIHI9IjIiPjwvY2lyY2xlPgogICAgICAgICAgICAgICAgICAgICAgICA8Y2lyY2xlIGlkPSJPdmFsLTMwIiBjeD0iNyIgY3k9IjI3IiByPSIyIj48L2NpcmNsZT4KICAgICAgICAgICAgICAgICAgICA8L2c+CiAgICAgICAgICAgICAgICA8L2c+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==\");background-repeat:no-repeat}.react-grid-Row.row-selected,.react-grid-Row .row-selected{background-color:#dbecfa}.react-grid-row-group .row-expand-icon:hover{color:#777}.react-grid-row-index{padding:0 18px}.rdg-row-index{display:block;text-align:center}.rdg-row-actions-cell{padding:0}.rdg-actions-checkbox{display:none;text-align:center}.rdg-actions-checkbox.selected{display:block}.rdg-dragging{cursor:-webkit-grabbing;cursor:-moz-grabbing;cursor:grabbing}.rdg-dragged-row{border-bottom:1px solid #000}", ""]);
-
-	// exports
-
-
-/***/ }),
-/* 66 */,
-/* 67 */
+/* 34 */
 /***/ (function(module, exports) {
 
 	/**
@@ -6647,25 +6386,1377 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ }),
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(145);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(9)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../node_modules/css-loader/index.js!./react-data-grid-cell.css", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js!./react-data-grid-cell.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _underscore = __webpack_require__(78);
+
+	var _underscore2 = _interopRequireDefault(_underscore);
+
+	var _CellExpand = __webpack_require__(103);
+
+	var _CellExpand2 = _interopRequireDefault(_CellExpand);
+
+	var _ChildRowDeleteButton = __webpack_require__(104);
+
+	var _ChildRowDeleteButton2 = _interopRequireDefault(_ChildRowDeleteButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var React = __webpack_require__(2);
+	var joinClasses = __webpack_require__(6);
+	var EditorContainer = __webpack_require__(127);
+	var ExcelColumn = __webpack_require__(11);
+	var isFunction = __webpack_require__(22);
+	var CellMetaDataShape = __webpack_require__(10);
+	var SimpleCellFormatter = __webpack_require__(55);
+	var ColumnUtils = __webpack_require__(5);
+	var createObjectWithProperties = __webpack_require__(14);
+
+	__webpack_require__(39);
+
+	// The list of the propTypes that we want to include in the Cell div
+	var knownDivPropertyKeys = ['height', 'tabIndex', 'value'];
+
+	var Cell = React.createClass({
+	  displayName: 'Cell',
+
+
+	  propTypes: {
+	    rowIdx: React.PropTypes.number.isRequired,
+	    idx: React.PropTypes.number.isRequired,
+	    selected: React.PropTypes.shape({
+	      idx: React.PropTypes.number.isRequired
+	    }),
+	    selectedColumn: React.PropTypes.object,
+	    height: React.PropTypes.number,
+	    tabIndex: React.PropTypes.number,
+	    column: React.PropTypes.shape(ExcelColumn).isRequired,
+	    value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object, React.PropTypes.bool]),
+	    isExpanded: React.PropTypes.bool,
+	    isRowSelected: React.PropTypes.bool,
+	    cellMetaData: React.PropTypes.shape(CellMetaDataShape).isRequired,
+	    handleDragStart: React.PropTypes.func,
+	    className: React.PropTypes.string,
+	    cellControls: React.PropTypes.any,
+	    rowData: React.PropTypes.object.isRequired,
+	    forceUpdate: React.PropTypes.bool,
+	    expandableOptions: React.PropTypes.object.isRequired,
+	    isScrolling: React.PropTypes.bool.isRequired,
+	    tooltip: React.PropTypes.string,
+	    isCellValueChanging: React.PropTypes.func
+	  },
+
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      tabIndex: -1,
+	      isExpanded: false,
+	      value: '',
+	      isCellValueChanging: function isCellValueChanging(value, nextValue) {
+	        return value !== nextValue;
+	      }
+	    };
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      isCellValueChanging: false,
+	      isLockChanging: false
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.checkFocus();
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    this.setState({
+	      isCellValueChanging: this.props.isCellValueChanging(this.props.value, nextProps.value),
+	      isLockChanging: this.props.column.locked !== nextProps.column.locked
+	    });
+	  },
+	  componentDidUpdate: function componentDidUpdate() {
+	    this.checkFocus();
+	    var dragged = this.props.cellMetaData.dragged;
+	    if (dragged && dragged.complete === true) {
+	      this.props.cellMetaData.handleTerminateDrag();
+	    }
+	    if (this.state.isCellValueChanging && this.props.selectedColumn != null) {
+	      this.applyUpdateClass();
+	    }
+	    if (this.state.isLockChanging && !this.props.column.locked) {
+	      this.removeScroll();
+	    }
+	  },
+	  shouldComponentUpdate: function shouldComponentUpdate(nextProps) {
+	    var shouldUpdate = this.props.column.width !== nextProps.column.width || this.props.column.left !== nextProps.column.left || this.props.column.cellClass !== nextProps.column.cellClass || this.props.height !== nextProps.height || this.props.rowIdx !== nextProps.rowIdx || this.isCellSelectionChanging(nextProps) || this.isDraggedCellChanging(nextProps) || this.isCopyCellChanging(nextProps) || this.props.isRowSelected !== nextProps.isRowSelected || this.isSelected() || this.props.isCellValueChanging(this.props.value, nextProps.value) || this.props.forceUpdate === true || this.props.className !== nextProps.className || this.props.expandableOptions !== nextProps.expandableOptions || this.hasChangedDependentValues(nextProps) || this.props.column.locked !== nextProps.column.locked;
+	    return shouldUpdate;
+	  },
+	  onCellClick: function onCellClick(e) {
+	    var meta = this.props.cellMetaData;
+	    if (meta != null && meta.onCellClick && typeof meta.onCellClick === 'function') {
+	      meta.onCellClick({ rowIdx: this.props.rowIdx, idx: this.props.idx }, e);
+	    }
+	  },
+	  onCellContextMenu: function onCellContextMenu(e) {
+	    var isArrowElement = e.target.classList.contains('row-arrow-handle');
+	    var meta = this.props.cellMetaData;
+	    if (meta != null && meta.onCellContextMenu && typeof meta.onCellContextMenu === 'function') {
+	      meta.onCellContextMenu({ rowIdx: this.props.rowIdx, idx: this.props.idx });
+	    }
+	    if (!isArrowElement) {
+	      // setting rowIdx: -1 hides row context menu & setting idx: -1 hides header context menu.
+	      meta.onCellContextMenu({ rowIdx: this.props.rowIdx, idx: this.props.idx });
+	      e.preventDefault();
+	      e.stopPropagation();
+	    }
+	  },
+	  onCellDoubleClick: function onCellDoubleClick(e) {
+	    var meta = this.props.cellMetaData;
+	    if (meta != null && meta.onCellDoubleClick && typeof meta.onCellDoubleClick === 'function') {
+	      meta.onCellDoubleClick({ rowIdx: this.props.rowIdx, idx: this.props.idx }, e);
+	    }
+	  },
+	  onCellExpand: function onCellExpand(e) {
+	    e.stopPropagation();
+	    var meta = this.props.cellMetaData;
+	    if (meta != null && meta.onCellExpand != null) {
+	      meta.onCellExpand({ rowIdx: this.props.rowIdx, idx: this.props.idx, rowData: this.props.rowData, expandArgs: this.props.expandableOptions });
+	    }
+	  },
+	  onCellKeyDown: function onCellKeyDown(e) {
+	    if (this.canExpand() && e.key === 'Enter') {
+	      this.onCellExpand(e);
+	    }
+	  },
+	  onDeleteSubRow: function onDeleteSubRow() {
+	    var meta = this.props.cellMetaData;
+	    if (meta != null && meta.onDeleteSubRow != null) {
+	      meta.onDeleteSubRow({ rowIdx: this.props.rowIdx, idx: this.props.idx, rowData: this.props.rowData, expandArgs: this.props.expandableOptions });
+	    }
+	  },
+	  onDragHandleDoubleClick: function onDragHandleDoubleClick(e) {
+	    e.stopPropagation();
+	    var meta = this.props.cellMetaData;
+	    if (meta != null && meta.onDragHandleDoubleClick && typeof meta.onDragHandleDoubleClick === 'function') {
+	      meta.onDragHandleDoubleClick({ rowIdx: this.props.rowIdx, idx: this.props.idx, rowData: this.getRowData(), e: e });
+	    }
+	  },
+	  onDragOver: function onDragOver(e) {
+	    e.preventDefault();
+	  },
+	  getStyle: function getStyle() {
+	    var style = {
+	      position: 'absolute',
+	      width: this.props.column.width,
+	      height: this.props.height,
+	      left: this.props.column.left,
+	      contain: 'layout'
+	    };
+	    return style;
+	  },
+	  getFormatter: function getFormatter() {
+	    var col = this.props.column;
+	    if (this.isActive()) {
+	      return React.createElement(EditorContainer, { rowData: this.getRowData(), rowIdx: this.props.rowIdx, value: this.props.value, idx: this.props.idx, cellMetaData: this.props.cellMetaData, column: col, height: this.props.height });
+	    }
+
+	    return this.props.column.formatter;
+	  },
+	  getRowData: function getRowData() {
+	    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
+
+	    return props.rowData.toJSON ? props.rowData.toJSON() : props.rowData;
+	  },
+	  getFormatterDependencies: function getFormatterDependencies() {
+	    // convention based method to get corresponding Id or Name of any Name or Id property
+	    if (typeof this.props.column.getRowMetaData === 'function') {
+	      return this.props.column.getRowMetaData(this.getRowData(), this.props.column);
+	    }
+	  },
+	  getCellClass: function getCellClass() {
+	    var className = joinClasses(this.props.column.cellClass, 'react-grid-Cell', this.props.className, this.props.column.locked ? 'react-grid-Cell--locked' : null);
+	    var extraClasses = joinClasses({
+	      'row-selected': this.props.isRowSelected,
+	      editing: this.isActive(),
+	      copied: this.isCopied() || this.wasDraggedOver() || this.isDraggedOverUpwards() || this.isDraggedOverDownwards(),
+	      'is-dragged-over-up': this.isDraggedOverUpwards(),
+	      'is-dragged-over-down': this.isDraggedOverDownwards(),
+	      'was-dragged-over': this.wasDraggedOver(),
+	      'cell-tooltip': this.props.tooltip ? true : false,
+	      'rdg-child-cell': this.props.expandableOptions && this.props.expandableOptions.subRowDetails && this.props.expandableOptions.treeDepth > 0,
+	      'last-column': this.props.column.isLastColumn
+	    });
+	    return joinClasses(className, extraClasses);
+	  },
+	  getUpdateCellClass: function getUpdateCellClass() {
+	    return this.props.column.getUpdateCellClass ? this.props.column.getUpdateCellClass(this.props.selectedColumn, this.props.column, this.state.isCellValueChanging) : '';
+	  },
+	  isColumnSelected: function isColumnSelected() {
+	    var meta = this.props.cellMetaData;
+	    if (meta == null) {
+	      return false;
+	    }
+
+	    return meta.selected && meta.selected.idx === this.props.idx;
+	  },
+	  isSelected: function isSelected() {
+	    var meta = this.props.cellMetaData;
+	    if (meta == null) {
+	      return false;
+	    }
+
+	    return meta.selected && meta.selected.rowIdx === this.props.rowIdx && meta.selected.idx === this.props.idx;
+	  },
+	  isActive: function isActive() {
+	    var meta = this.props.cellMetaData;
+	    if (meta == null) {
+	      return false;
+	    }
+	    return this.isSelected() && meta.selected.active === true;
+	  },
+	  isCellSelectionChanging: function isCellSelectionChanging(nextProps) {
+	    var meta = this.props.cellMetaData;
+	    if (meta == null) {
+	      return false;
+	    }
+	    var nextSelected = nextProps.cellMetaData.selected;
+	    if (meta.selected && nextSelected) {
+	      return this.props.idx === nextSelected.idx || this.props.idx === meta.selected.idx;
+	    }
+
+	    return true;
+	  },
+	  isCellSelectEnabled: function isCellSelectEnabled() {
+	    var meta = this.props.cellMetaData;
+	    if (meta == null) {
+	      return false;
+	    }
+	    return meta.enableCellSelect;
+	  },
+	  hasChangedDependentValues: function hasChangedDependentValues(nextProps) {
+	    var currentColumn = this.props.column;
+	    var hasChangedDependentValues = false;
+
+	    if (currentColumn.getRowMetaData) {
+	      var currentRowMetaData = currentColumn.getRowMetaData(this.getRowData(), currentColumn);
+	      var nextColumn = nextProps.column;
+	      var nextRowMetaData = nextColumn.getRowMetaData(this.getRowData(nextProps), nextColumn);
+
+	      hasChangedDependentValues = !_underscore2['default'].isEqual(currentRowMetaData, nextRowMetaData);
+	    }
+
+	    return hasChangedDependentValues;
+	  },
+	  applyUpdateClass: function applyUpdateClass() {
+	    var updateCellClass = this.getUpdateCellClass();
+	    // -> removing the class
+	    if (updateCellClass != null && updateCellClass !== '') {
+	      var cellDOMNode = this.node;
+	      if (cellDOMNode.classList) {
+	        cellDOMNode.classList.remove(updateCellClass);
+	        // -> and re-adding the class
+	        cellDOMNode.classList.add(updateCellClass);
+	      } else if (cellDOMNode.className.indexOf(updateCellClass) === -1) {
+	        // IE9 doesn't support classList, nor (I think) altering element.className
+	        // without replacing it wholesale.
+	        cellDOMNode.className = cellDOMNode.className + ' ' + updateCellClass;
+	      }
+	    }
+	  },
+	  setScrollLeft: function setScrollLeft(scrollLeft) {
+	    var node = this.node;
+	    if (node) {
+	      var transform = 'translate3d(' + scrollLeft + 'px, 0px, 0px)';
+	      node.style.webkitTransform = transform;
+	      node.style.transform = transform;
+	    }
+	  },
+	  removeScroll: function removeScroll() {
+	    var node = this.node;
+	    if (node) {
+	      node.style.webkitTransform = null;
+	      node.style.transform = null;
+	    }
+	  },
+	  isCopied: function isCopied() {
+	    var copied = this.props.cellMetaData.copied;
+	    return copied && copied.rowIdx === this.props.rowIdx && copied.idx === this.props.idx;
+	  },
+	  isDraggedOver: function isDraggedOver() {
+	    var dragged = this.props.cellMetaData.dragged;
+	    return dragged && dragged.overRowIdx === this.props.rowIdx && dragged.idx === this.props.idx;
+	  },
+	  wasDraggedOver: function wasDraggedOver() {
+	    var dragged = this.props.cellMetaData.dragged;
+	    return dragged && (dragged.overRowIdx < this.props.rowIdx && this.props.rowIdx < dragged.rowIdx || dragged.overRowIdx > this.props.rowIdx && this.props.rowIdx > dragged.rowIdx) && dragged.idx === this.props.idx;
+	  },
+	  isDraggedCellChanging: function isDraggedCellChanging(nextProps) {
+	    var isChanging = void 0;
+	    var dragged = this.props.cellMetaData.dragged;
+	    var nextDragged = nextProps.cellMetaData.dragged;
+	    if (dragged) {
+	      isChanging = nextDragged && this.props.idx === nextDragged.idx || dragged && this.props.idx === dragged.idx;
+	      return isChanging;
+	    }
+
+	    return false;
+	  },
+	  isCopyCellChanging: function isCopyCellChanging(nextProps) {
+	    var isChanging = void 0;
+	    var copied = this.props.cellMetaData.copied;
+	    var nextCopied = nextProps.cellMetaData.copied;
+	    if (copied) {
+	      isChanging = nextCopied && this.props.idx === nextCopied.idx || copied && this.props.idx === copied.idx;
+	      return isChanging;
+	    }
+	    return false;
+	  },
+	  isDraggedOverUpwards: function isDraggedOverUpwards() {
+	    var dragged = this.props.cellMetaData.dragged;
+	    return !this.isSelected() && this.isDraggedOver() && this.props.rowIdx < dragged.rowIdx;
+	  },
+	  isDraggedOverDownwards: function isDraggedOverDownwards() {
+	    var dragged = this.props.cellMetaData.dragged;
+	    return !this.isSelected() && this.isDraggedOver() && this.props.rowIdx > dragged.rowIdx;
+	  },
+	  isFocusedOnBody: function isFocusedOnBody() {
+	    return document.activeElement == null || document.activeElement.nodeName && typeof document.activeElement.nodeName === 'string' && document.activeElement.nodeName.toLowerCase() === 'body';
+	  },
+	  isFocusedOnCell: function isFocusedOnCell() {
+	    return document.activeElement && document.activeElement.className === 'react-grid-Cell';
+	  },
+	  checkFocus: function checkFocus() {
+	    if (this.isSelected() && !this.isActive()) {
+	      if (this.props.isScrolling && !this.props.cellMetaData.isScrollingVerticallyWithKeyboard && !this.props.cellMetaData.isScrollingHorizontallyWithKeyboard) {
+	        return;
+	      }
+	      // Only focus to the current cell if the currently active node in the document is within the data grid.
+	      // Meaning focus should not be stolen from elements that the grid doesnt control.
+	      var dataGridDOMNode = this.props.cellMetaData && this.props.cellMetaData.getDataGridDOMNode ? this.props.cellMetaData.getDataGridDOMNode() : null;
+	      if (this.isFocusedOnCell() || this.isFocusedOnBody() || dataGridDOMNode && dataGridDOMNode.contains(document.activeElement)) {
+	        var cellDOMNode = this.node;
+	        if (cellDOMNode) {
+	          cellDOMNode.focus();
+	        }
+	      }
+	    }
+	  },
+	  canEdit: function canEdit() {
+	    return this.props.column.editor != null || this.props.column.editable;
+	  },
+	  canExpand: function canExpand() {
+	    return this.props.expandableOptions && this.props.expandableOptions.canExpand;
+	  },
+	  createColumEventCallBack: function createColumEventCallBack(onColumnEvent, info) {
+	    return function (e) {
+	      onColumnEvent(e, info);
+	    };
+	  },
+	  createCellEventCallBack: function createCellEventCallBack(gridEvent, columnEvent) {
+	    return function (e) {
+	      gridEvent(e);
+	      columnEvent(e);
+	    };
+	  },
+	  createEventDTO: function createEventDTO(gridEvents, columnEvents, onColumnEvent) {
+	    var allEvents = Object.assign({}, gridEvents);
+
+	    for (var eventKey in columnEvents) {
+	      if (columnEvents.hasOwnProperty(eventKey)) {
+	        var event = columnEvents[event];
+	        var eventInfo = { idx: this.props.idx, rowIdx: this.props.rowIdx, rowId: this.props.rowData[this.props.cellMetaData.rowKey], name: eventKey };
+	        var eventCallback = this.createColumEventCallBack(onColumnEvent, eventInfo);
+
+	        if (allEvents.hasOwnProperty(eventKey)) {
+	          var currentEvent = allEvents[eventKey];
+	          allEvents[eventKey] = this.createCellEventCallBack(currentEvent, eventCallback);
+	        } else {
+	          allEvents[eventKey] = eventCallback;
+	        }
+	      }
+	    }
+
+	    return allEvents;
+	  },
+	  getEvents: function getEvents() {
+	    var columnEvents = this.props.column ? Object.assign({}, this.props.column.events) : undefined;
+	    var onColumnEvent = this.props.cellMetaData ? this.props.cellMetaData.onColumnEvent : undefined;
+	    var gridEvents = {
+	      onClick: this.onCellClick,
+	      onDoubleClick: this.onCellDoubleClick,
+	      onContextMenu: this.onCellContextMenu,
+	      onDragOver: this.onDragOver
+	    };
+
+	    if (!columnEvents || !onColumnEvent) {
+	      return gridEvents;
+	    }
+
+	    return this.createEventDTO(gridEvents, columnEvents, onColumnEvent);
+	  },
+	  getKnownDivProps: function getKnownDivProps() {
+	    return createObjectWithProperties(this.props, knownDivPropertyKeys);
+	  },
+	  renderCellContent: function renderCellContent(props) {
+	    var CellContent = void 0;
+	    var Formatter = this.getFormatter();
+	    if (React.isValidElement(Formatter)) {
+	      props.dependentValues = this.getFormatterDependencies();
+	      CellContent = React.cloneElement(Formatter, props);
+	    } else if (isFunction(Formatter)) {
+	      CellContent = React.createElement(Formatter, { value: this.props.value, dependentValues: this.getFormatterDependencies() });
+	    } else {
+	      CellContent = React.createElement(SimpleCellFormatter, { value: this.props.value });
+	    }
+	    var isExpandCell = this.props.expandableOptions ? this.props.expandableOptions.field === this.props.column.key : false;
+	    var treeDepth = this.props.expandableOptions ? this.props.expandableOptions.treeDepth : 0;
+	    var marginLeft = this.props.expandableOptions && isExpandCell ? this.props.expandableOptions.treeDepth * 30 : 0;
+	    var cellExpander = void 0;
+	    var cellDeleter = void 0;
+	    if (this.canExpand()) {
+	      cellExpander = React.createElement(_CellExpand2['default'], { expandableOptions: this.props.expandableOptions, onCellExpand: this.onCellExpand });
+	    }
+
+	    var isDeleteSubRowEnabled = this.props.cellMetaData.onDeleteSubRow ? true : false;
+
+	    if (treeDepth > 0 && isExpandCell) {
+	      cellDeleter = React.createElement(_ChildRowDeleteButton2['default'], { treeDepth: treeDepth, cellHeight: this.props.height, siblingIndex: this.props.expandableOptions.subRowDetails.siblingIndex, numberSiblings: this.props.expandableOptions.subRowDetails.numberSiblings, onDeleteSubRow: this.onDeleteSubRow, isDeleteSubRowEnabled: isDeleteSubRowEnabled });
+	    }
+	    return React.createElement(
+	      'div',
+	      { className: 'react-grid-Cell__value' },
+	      cellDeleter,
+	      React.createElement(
+	        'div',
+	        { style: { marginLeft: marginLeft } },
+	        React.createElement(
+	          'span',
+	          null,
+	          CellContent
+	        ),
+	        ' ',
+	        this.props.cellControls,
+	        ' ',
+	        cellExpander
+	      )
+	    );
+	  },
+	  render: function render() {
+	    var _this = this;
+
+	    if (this.props.column.hidden) {
+	      return null;
+	    }
+
+	    var style = this.getStyle();
+
+	    var className = this.getCellClass();
+
+	    var cellContent = this.renderCellContent({
+	      value: this.props.value,
+	      column: this.props.column,
+	      rowIdx: this.props.rowIdx,
+	      isExpanded: this.props.isExpanded
+	    });
+
+	    var dragHandle = !this.isActive() && ColumnUtils.canEdit(this.props.column, this.props.rowData, this.props.cellMetaData.enableCellSelect) ? React.createElement(
+	      'div',
+	      { className: 'drag-handle', draggable: 'true', onDoubleClick: this.onDragHandleDoubleClick },
+	      React.createElement('span', { style: { display: 'none' } })
+	    ) : null;
+	    var events = this.getEvents();
+	    var tooltip = this.props.tooltip ? React.createElement(
+	      'span',
+	      { className: 'cell-tooltip-text' },
+	      this.props.tooltip
+	    ) : null;
+
+	    var rowArrow = !!this.props.column.isIndexColumn ? React.createElement('span', { className: 'row-arrow-handle' }) : null;
+
+	    return React.createElement(
+	      'div',
+	      _extends({}, this.getKnownDivProps(), { className: className, style: style }, events, { ref: function ref(node) {
+	          _this.node = node;
+	        } }),
+	      cellContent,
+	      dragHandle,
+	      tooltip,
+	      rowArrow
+	    );
+	  }
+	});
+
+	module.exports = Cell;
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var ReactDOM = __webpack_require__(3);
+	var joinClasses = __webpack_require__(6);
+	var ExcelColumn = __webpack_require__(11);
+	var ResizeHandle = __webpack_require__(47);
+	var ContextDropDown = __webpack_require__(107);
+	__webpack_require__(12);
+
+	var PropTypes = React.PropTypes;
+
+	function simpleCellRenderer(objArgs) {
+	  var headerText = objArgs.column.rowType === 'header' ? objArgs.column.name : '';
+	  return React.createElement(
+	    'div',
+	    { className: 'widget-HeaderCell__value' },
+	    headerText
+	  );
+	}
+
+	function onArrowClick(e) {
+	  e.stopPropagation();
+
+	  // if clicked on the arrow button
+	  var headerCells = document.getElementsByClassName('is-open');
+	  for (var i = 0; i < headerCells.length; i++) {
+	    var el = headerCells[i];
+	    el.classList.remove('is-open');
+	  }
+
+	  var headerCell = e.target.closest('.react-grid-HeaderCell');
+	  headerCell.classList.add('is-open');
+	}
+
+	function bodyClickHandler(e) {
+	  var headerCells = document.getElementsByClassName('is-open');
+	  for (var i = 0; i < headerCells.length; i++) {
+	    var el = headerCells[i];
+	    el.classList.remove('is-open');
+	  }
+	}
+
+	var HeaderCell = React.createClass({
+	  displayName: 'HeaderCell',
+
+
+	  // propTypes: {
+	  //   renderer: PropTypes.oneOfType([PropTypes.func, PropTypes.element]).isRequired,
+	  //   column: PropTypes.shape(ExcelColumn).isRequired,
+	  //   onResize: PropTypes.func.isRequired,
+	  //   height: PropTypes.number.isRequired,
+	  //   onResizeEnd: PropTypes.func.isRequired,
+	  //   className: PropTypes.string
+	  // },
+
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      renderer: simpleCellRenderer
+	    };
+	  },
+	  getInitialState: function getInitialState() {
+	    return { resizing: false };
+	  },
+	  onDragStart: function onDragStart(e) {
+	    this.setState({ resizing: true });
+	    // need to set dummy data for FF
+	    if (e && e.dataTransfer && e.dataTransfer.setData) e.dataTransfer.setData('text/plain', 'dummy');
+	  },
+	  onDrag: function onDrag(e) {
+	    var resize = this.props.onResize || null; // for flows sake, doesnt recognise a null check direct
+	    if (resize) {
+	      var _width = this.getWidthFromMouseEvent(e);
+	      if (_width > 0) {
+	        resize(this.props.column, _width);
+	      }
+	    }
+	  },
+	  onDragEnd: function onDragEnd(e) {
+	    var width = this.getWidthFromMouseEvent(e);
+	    this.props.onResizeEnd(this.props.column, width);
+	    this.setState({ resizing: false });
+	  },
+	  getWidthFromMouseEvent: function getWidthFromMouseEvent(e) {
+	    var right = e.pageX || e.touches && e.touches[0] && e.touches[0].pageX || e.changedTouches && e.changedTouches[e.changedTouches.length - 1].pageX;
+	    var left = ReactDOM.findDOMNode(this).getBoundingClientRect().left;
+	    return right - left;
+	  },
+	  getCell: function getCell() {
+	    if (React.isValidElement(this.props.renderer)) {
+	      // if it is a string, it's an HTML element, and column is not a valid property, so only pass height
+	      if (typeof this.props.renderer.type === 'string') {
+	        return React.cloneElement(this.props.renderer, { height: this.props.height });
+	      }
+	      return React.cloneElement(this.props.renderer, { column: this.props.column, height: this.props.height });
+	    }
+	    return this.props.renderer({ column: this.props.column });
+	  },
+	  getStyle: function getStyle() {
+	    return {
+	      width: this.props.column.width,
+	      left: this.props.column.left,
+	      opacity: this.props.column.width === 0 ? 0 : 1,
+	      display: 'inline-block',
+	      position: 'absolute',
+	      height: this.props.height,
+	      margin: 0,
+	      textOverflow: 'ellipsis',
+	      whiteSpace: 'nowrap'
+	    };
+	  },
+	  setScrollLeft: function setScrollLeft(scrollLeft) {
+	    var node = ReactDOM.findDOMNode(this);
+	    node.style.webkitTransform = 'translate3d(' + scrollLeft + 'px, 0px, 0px)';
+	    node.style.transform = 'translate3d(' + scrollLeft + 'px, 0px, 0px)';
+	  },
+	  disableDefaultContext: function disableDefaultContext() {
+	    debugger;
+	    //bind event with arrow
+	    document.removeEventListener('click', this.handleArrowClick);
+	    document.addEventListener('click', this.handleArrowClick);
+	  },
+	  handleArrowClick: function handleArrowClick(e) {
+	    e.preventDefault();
+	    e.stopPropagation();
+
+	    var body = document.querySelector('body');
+	    body.removeEventListener('click', bodyClickHandler);
+	    body.addEventListener('click', bodyClickHandler);
+
+	    var headerCells = document.getElementsByClassName('is-open');
+	    for (var i = 0; i < headerCells.length; i++) {
+	      var el = headerCells[i];
+	      el.classList.remove('is-open');
+	    }
+
+	    var headerCell = e.target.closest('.react-grid-HeaderCell');
+	    !!headerCell ? headerCell.classList.add('is-open') : '';
+
+	    if (e.target.classList.contains('arrow-handle') || e.target.parentElement.classList.contains('arrow-handle')) {
+	      e.preventDefault();
+	      e.stopPropagation();
+
+	      //  click event handling
+	      var _headerCells = document.getElementsByClassName('is-open');
+	      for (var _i = 0; _i < _headerCells.length; _i++) {
+	        var _el = _headerCells[_i];
+	        _el.classList.remove('is-open');
+	      }
+
+	      var _headerCell = e.target.closest('.react-grid-HeaderCell');
+	      _headerCell.classList.add('is-open');
+	    }
+
+	    //bind event to the arrow
+	    // const tEl = e.target;
+	    // const arrow = tEl.querySelector('.arrow-handle');
+	    // if(!!arrow){
+	    //   arrow.removeEventListener('click', onArrowClick);
+	    //   arrow.addEventListener('click', onArrowClick);
+	    // }
+	  },
+	  removeScroll: function removeScroll() {
+	    var node = ReactDOM.findDOMNode(this);
+	    if (node) {
+	      var transform = 'none';
+	      node.style.webkitTransform = transform;
+	      node.style.transform = transform;
+	    }
+	  },
+	  render: function render() {
+	    this.disableDefaultContext();
+	    var resizeHandle = void 0;
+	    if (this.props.column.resizable) {
+	      resizeHandle = React.createElement(ResizeHandle, {
+	        onDrag: this.onDrag,
+	        onDragStart: this.onDragStart,
+	        onDragEnd: this.onDragEnd
+	      });
+	    }
+
+	    var contextDropDown = void 0;
+	    contextDropDown = React.createElement(ContextDropDown, {
+	      onDrag: this.onDrag,
+	      onDragStart: this.onDragStart,
+	      onDragEnd: this.onDragEnd,
+	      isOpen: 'isactive'
+	    });
+
+	    var className = joinClasses({
+	      'react-grid-HeaderCell': true,
+	      'react-grid-HeaderCell--resizing': this.state.resizing,
+	      'react-grid-HeaderCell--locked': this.props.column.locked
+	    });
+	    className = joinClasses(className, this.props.className, this.props.column.cellClass);
+	    var cell = this.getCell();
+	    return React.createElement(
+	      'div',
+	      { className: className, style: this.getStyle() },
+	      cell,
+	      React.createElement('span', { className: 'arrow-handle' }),
+	      resizeHandle
+	    );
+	  }
+	});
+
+	module.exports = HeaderCell;
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	var HeaderCellType = {
+	  SORTABLE: 0,
+	  FILTERABLE: 1,
+	  NONE: 2,
+	  CHECKBOX: 3
+	};
+
+	module.exports = HeaderCellType;
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	var KeyboardHandlerMixin = {
+	  onKeyDown: function onKeyDown(e) {
+	    if (this.isCtrlKeyHeldDown(e)) {
+	      this.checkAndCall('onPressKeyWithCtrl', e);
+	    } else if (this.isKeyExplicitlyHandled(e.key)) {
+	      // break up individual keyPress events to have their own specific callbacks
+	      // this allows multiple mixins to listen to onKeyDown events and somewhat reduces methodName clashing
+	      var callBack = 'onPress' + e.key;
+	      this.checkAndCall(callBack, e);
+	    } else if (this.isKeyPrintable(e.keyCode)) {
+	      this.checkAndCall('onPressChar', e);
+	    }
+
+	    // Track which keys are currently down for shift clicking etc
+	    this._keysDown = this._keysDown || {};
+	    this._keysDown[e.keyCode] = true;
+	    if (this.props.onGridKeyDown && typeof this.props.onGridKeyDown === 'function') {
+	      this.props.onGridKeyDown(e);
+	    }
+	  },
+	  onKeyUp: function onKeyUp(e) {
+	    // Track which keys are currently down for shift clicking etc
+	    this._keysDown = this._keysDown || {};
+	    delete this._keysDown[e.keyCode];
+
+	    if (this.props.onGridKeyUp && typeof this.props.onGridKeyUp === 'function') {
+	      this.props.onGridKeyUp(e);
+	    }
+	  },
+	  isKeyDown: function isKeyDown(keyCode) {
+	    if (!this._keysDown) return false;
+	    return keyCode in this._keysDown;
+	  },
+	  isSingleKeyDown: function isSingleKeyDown(keyCode) {
+	    if (!this._keysDown) return false;
+	    return keyCode in this._keysDown && Object.keys(this._keysDown).length === 1;
+	  },
+
+
+	  // taken from http://stackoverflow.com/questions/12467240/determine-if-javascript-e-keycode-is-a-printable-non-control-character
+	  isKeyPrintable: function isKeyPrintable(keycode) {
+	    var valid = keycode > 47 && keycode < 58 || // number keys
+	    keycode === 32 || keycode === 13 || // spacebar & return key(s) (if you want to allow carriage returns)
+	    keycode > 64 && keycode < 91 || // letter keys
+	    keycode > 95 && keycode < 112 || // numpad keys
+	    keycode > 185 && keycode < 193 || // ;=,-./` (in order)
+	    keycode > 218 && keycode < 223; // [\]' (in order)
+
+	    return valid;
+	  },
+	  isKeyExplicitlyHandled: function isKeyExplicitlyHandled(key) {
+	    return typeof this['onPress' + key] === 'function';
+	  },
+	  isCtrlKeyHeldDown: function isCtrlKeyHeldDown(e) {
+	    return e.ctrlKey === true && e.key !== 'Control';
+	  },
+	  checkAndCall: function checkAndCall(methodName, args) {
+	    if (typeof this[methodName] === 'function') {
+	      this[methodName](args);
+	    }
+	  }
+	};
+
+	module.exports = KeyboardHandlerMixin;
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var React = __webpack_require__(2);
+	var Draggable = __webpack_require__(108);
+	__webpack_require__(12);
+
+	var ResizeHandle = React.createClass({
+	  displayName: 'ResizeHandle',
+
+	  style: {
+	    position: 'absolute',
+	    top: 0,
+	    right: 0,
+	    width: 6,
+	    height: '100%'
+	  },
+
+	  render: function render() {
+	    return React.createElement(Draggable, _extends({}, this.props, {
+	      className: 'react-grid-HeaderCell__resizeHandle',
+	      style: this.style
+	    }));
+	  }
+	});
+
+	module.exports = ResizeHandle;
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports.shouldRowUpdate = undefined;
+
+	var _ColumnMetrics = __webpack_require__(19);
+
+	var _ColumnMetrics2 = _interopRequireDefault(_ColumnMetrics);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function doesRowContainSelectedCell(props) {
+	  var selected = props.cellMetaData.selected;
+	  if (selected && selected.rowIdx === props.idx) {
+	    return true;
+	  }
+	  return false;
+	}
+
+	function willRowBeDraggedOver(props) {
+	  var dragged = props.cellMetaData.dragged;
+	  return dragged != null && (dragged.rowIdx >= 0 || dragged.complete === true);
+	}
+
+	function hasRowBeenCopied(props) {
+	  var copied = props.cellMetaData.copied;
+	  return copied != null && copied.rowIdx === props.idx;
+	}
+
+	var shouldRowUpdate = exports.shouldRowUpdate = function shouldRowUpdate(nextProps, currentProps) {
+	  return !_ColumnMetrics2['default'].sameColumns(currentProps.columns, nextProps.columns, _ColumnMetrics2['default'].sameColumn) || doesRowContainSelectedCell(currentProps) || doesRowContainSelectedCell(nextProps) || willRowBeDraggedOver(nextProps) || nextProps.row !== currentProps.row || currentProps.colDisplayStart !== nextProps.colDisplayStart || currentProps.colDisplayEnd !== nextProps.colDisplayEnd || currentProps.colVisibleStart !== nextProps.colVisibleStart || currentProps.colVisibleEnd !== nextProps.colVisibleEnd || hasRowBeenCopied(currentProps) || currentProps.isSelected !== nextProps.isSelected || nextProps.height !== currentProps.height || currentProps.isOver !== nextProps.isOver || currentProps.expandedRows !== nextProps.expandedRows || currentProps.canDrop !== nextProps.canDrop || currentProps.forceUpdate === true;
+	};
+
+	exports['default'] = shouldRowUpdate;
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	var RowUtils = {
+	  get: function get(row, property) {
+	    if (typeof row.get === 'function') {
+	      return row.get(property);
+	    }
+
+	    return row[property];
+	  },
+	  isRowSelected: function isRowSelected(keys, indexes, isSelectedKey, rowData, rowIdx) {
+	    if (indexes && Object.prototype.toString.call(indexes) === '[object Array]') {
+	      return indexes.indexOf(rowIdx) > -1;
+	    } else if (keys && keys.rowKey && keys.values && Object.prototype.toString.call(keys.values) === '[object Array]') {
+	      return keys.values.indexOf(rowData[keys.rowKey]) > -1;
+	    } else if (isSelectedKey && rowData && typeof isSelectedKey === 'string') {
+	      return rowData[isSelectedKey];
+	    }
+	    return false;
+	  }
+	};
+
+	module.exports = RowUtils;
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports.SimpleRowsContainer = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SimpleRowsContainer = function SimpleRowsContainer(props) {
+	  return _react2['default'].createElement(
+	    'div',
+	    { key: 'rows-container' },
+	    props.rows
+	  );
+	};
+
+	SimpleRowsContainer.propTypes = {
+	  width: _react.PropTypes.number,
+	  rows: _react.PropTypes.array
+	};
+
+	var RowsContainer = function (_React$Component) {
+	  _inherits(RowsContainer, _React$Component);
+
+	  function RowsContainer(props) {
+	    _classCallCheck(this, RowsContainer);
+
+	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
+
+	    _this.plugins = props.window ? props.window.ReactDataGridPlugins : window.ReactDataGridPlugins;
+	    _this.hasContextMenu = _this.hasContextMenu.bind(_this);
+	    _this.renderRowsWithContextMenu = _this.renderRowsWithContextMenu.bind(_this);
+	    _this.getContextMenuContainer = _this.getContextMenuContainer.bind(_this);
+	    _this.state = { ContextMenuContainer: _this.getContextMenuContainer(props) };
+	    return _this;
+	  }
+
+	  RowsContainer.prototype.getContextMenuContainer = function getContextMenuContainer() {
+	    if (this.hasContextMenu()) {
+	      if (!this.plugins) {
+	        throw new Error('You need to include ReactDataGrid UiPlugins in order to initialise context menu');
+	      }
+	      return this.plugins.Menu.ContextMenuTrigger;
+	    }
+	  };
+
+	  RowsContainer.prototype.hasContextMenu = function hasContextMenu() {
+	    return this.props.contextMenu && _react2['default'].isValidElement(this.props.contextMenu);
+	  };
+
+	  RowsContainer.prototype.renderRowsWithContextMenu = function renderRowsWithContextMenu() {
+	    var ContextMenuRowsContainer = this.state.ContextMenuContainer;
+	    // Initialise the context menu if it is available
+	    return _react2['default'].createElement(
+	      'div',
+	      null,
+	      _react2['default'].createElement(
+	        ContextMenuRowsContainer,
+	        { id: 'reactDataGridContextMenu', holdToDisplay: -1 },
+	        _react2['default'].createElement(SimpleRowsContainer, this.props)
+	      )
+	    );
+	  };
+
+	  RowsContainer.prototype.render = function render() {
+	    return this.hasContextMenu() ? this.renderRowsWithContextMenu() : _react2['default'].createElement(SimpleRowsContainer, this.props);
+	  };
+
+	  return RowsContainer;
+	}(_react2['default'].Component);
+
+	RowsContainer.propTypes = {
+	  contextMenu: _react.PropTypes.element,
+	  window: _react.PropTypes.object
+	};
+
+	exports['default'] = RowsContainer;
+	exports.SimpleRowsContainer = SimpleRowsContainer;
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var ExcelColumn = __webpack_require__(11);
+
+	var FilterableHeaderCell = React.createClass({
+	  displayName: 'FilterableHeaderCell',
+
+
+	  propTypes: {
+	    onChange: React.PropTypes.func.isRequired,
+	    column: React.PropTypes.shape(ExcelColumn)
+	  },
+
+	  getInitialState: function getInitialState() {
+	    return { filterTerm: '' };
+	  },
+	  handleChange: function handleChange(e) {
+	    var val = e.target.value;
+	    this.setState({ filterTerm: val });
+	    this.props.onChange({ filterTerm: val, column: this.props.column });
+	  },
+
+
+	  renderInput: function renderInput() {
+	    if (this.props.column.filterable === false) {
+	      return React.createElement('span', null);
+	    }
+
+	    var inputKey = 'header-filter-' + this.props.column.key;
+	    return React.createElement('input', { key: inputKey, type: 'text', className: 'form-control input-sm', placeholder: 'Search', value: this.state.filterTerm, onChange: this.handleChange });
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'form-group' },
+	        this.renderInput()
+	      )
+	    );
+	  }
+	});
+
+	module.exports = FilterableHeaderCell;
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	__webpack_require__(71);
+
+	var CheckboxEditor = React.createClass({
+	  displayName: 'CheckboxEditor',
+
+
+	  propTypes: {
+	    value: React.PropTypes.bool,
+	    rowIdx: React.PropTypes.number,
+	    column: React.PropTypes.shape({
+	      key: React.PropTypes.string,
+	      onCellChange: React.PropTypes.func
+	    }),
+	    dependentValues: React.PropTypes.object
+	  },
+
+	  handleChange: function handleChange(e) {
+	    this.props.column.onCellChange(this.props.rowIdx, this.props.column.key, this.props.dependentValues, e);
+	  },
+	  render: function render() {
+	    var checked = this.props.value != null ? this.props.value : false;
+	    var checkboxName = 'checkbox' + this.props.rowIdx;
+	    return React.createElement(
+	      'div',
+	      { className: 'react-grid-checkbox-container checkbox-align', onClick: this.handleChange },
+	      React.createElement('input', { className: 'react-grid-checkbox', type: 'checkbox', name: checkboxName, checked: checked }),
+	      React.createElement('label', { htmlFor: checkboxName, className: 'react-grid-checkbox-label' })
+	    );
+	  }
+	});
+
+	module.exports = CheckboxEditor;
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(2);
+	var ReactDOM = __webpack_require__(3);
+	var ExcelColumn = __webpack_require__(11);
+
+	var EditorBase = function (_React$Component) {
+	  _inherits(EditorBase, _React$Component);
+
+	  function EditorBase() {
+	    _classCallCheck(this, EditorBase);
+
+	    return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
+	  }
+
+	  EditorBase.prototype.getStyle = function getStyle() {
+	    return {
+	      width: '100%'
+	    };
+	  };
+
+	  EditorBase.prototype.getValue = function getValue() {
+	    var updated = {};
+	    updated[this.props.column.key] = this.getInputNode().value;
+	    return updated;
+	  };
+
+	  EditorBase.prototype.getInputNode = function getInputNode() {
+	    var domNode = ReactDOM.findDOMNode(this);
+	    if (domNode.tagName === 'INPUT') {
+	      return domNode;
+	    }
+
+	    return domNode.querySelector('input:not([type=hidden])');
+	  };
+
+	  EditorBase.prototype.inheritContainerStyles = function inheritContainerStyles() {
+	    return true;
+	  };
+
+	  return EditorBase;
+	}(React.Component);
+
+	EditorBase.propTypes = {
+	  onKeyDown: React.PropTypes.func.isRequired,
+	  value: React.PropTypes.any.isRequired,
+	  onBlur: React.PropTypes.func.isRequired,
+	  column: React.PropTypes.shape(ExcelColumn).isRequired,
+	  commit: React.PropTypes.func.isRequired
+	};
+
+	module.exports = EditorBase;
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(2);
+	var EditorBase = __webpack_require__(53);
+
+	var SimpleTextEditor = function (_EditorBase) {
+	  _inherits(SimpleTextEditor, _EditorBase);
+
+	  function SimpleTextEditor() {
+	    _classCallCheck(this, SimpleTextEditor);
+
+	    return _possibleConstructorReturn(this, _EditorBase.apply(this, arguments));
+	  }
+
+	  SimpleTextEditor.prototype.render = function render() {
+	    var _this2 = this;
+
+	    return React.createElement('input', { ref: function ref(node) {
+	        return _this2.input = node;
+	      }, type: 'text', onBlur: this.props.onBlur, className: 'form-control', defaultValue: this.props.value });
+	  };
+
+	  return SimpleTextEditor;
+	}(EditorBase);
+
+	module.exports = SimpleTextEditor;
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+
+	var SimpleCellFormatter = React.createClass({
+	  displayName: 'SimpleCellFormatter',
+
+	  propTypes: {
+	    value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object, React.PropTypes.bool]).isRequired
+	  },
+
+	  shouldComponentUpdate: function shouldComponentUpdate(nextProps) {
+	    return nextProps.value !== this.props.value;
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { title: this.props.value },
+	      this.props.value
+	    );
+	  }
+	});
+
+	module.exports = SimpleCellFormatter;
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var _immutable = __webpack_require__(27);
+
+	module.exports = {
+	  isEmptyArray: __webpack_require__(135),
+	  isEmptyObject: __webpack_require__(136),
+	  isFunction: __webpack_require__(22),
+	  isImmutableCollection: __webpack_require__(137),
+	  getMixedTypeValueRetriever: __webpack_require__(139),
+	  isColumnsImmutable: __webpack_require__(57),
+	  isImmutableMap: __webpack_require__(138),
+	  last: function last(arrayOrList) {
+	    if (arrayOrList == null) {
+	      throw new Error('arrayOrCollection is null');
+	    }
+
+	    if (_immutable.List.isList(arrayOrList)) {
+	      return arrayOrList.last();
+	    }
+
+	    if (Array.isArray(arrayOrList)) {
+	      return arrayOrList[arrayOrList.length - 1];
+	    }
+
+	    throw new Error('Cant get last of: ' + (typeof arrayOrList === 'undefined' ? 'undefined' : _typeof(arrayOrList)));
+	  }
+	};
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	module.exports = function isColumnsImmutable(columns) {
+	  return typeof Immutable !== 'undefined' && columns instanceof Immutable.List;
+	};
+
+/***/ }),
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = Object.keys(Object(from));
+
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+
+		return to;
+	};
+
+
+/***/ }),
 /* 68 */,
 /* 69 */,
 /* 70 */,
-/* 71 */,
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(146);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(9)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../node_modules/css-loader/index.js!./react-data-grid-checkbox.css", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js!./react-data-grid-checkbox.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
 /* 72 */,
 /* 73 */,
 /* 74 */,
 /* 75 */,
 /* 76 */,
 /* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
-/* 84 */,
-/* 85 */,
-/* 86 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -8219,6 +9310,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */,
 /* 87 */,
 /* 88 */,
 /* 89 */,
@@ -8228,1443 +9327,42 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 93 */,
 /* 94 */,
 /* 95 */,
-/* 96 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _underscore = __webpack_require__(86);
-
-	var _underscore2 = _interopRequireDefault(_underscore);
-
-	var _CellExpand = __webpack_require__(202);
-
-	var _CellExpand2 = _interopRequireDefault(_CellExpand);
-
-	var _ChildRowDeleteButton = __webpack_require__(203);
-
-	var _ChildRowDeleteButton2 = _interopRequireDefault(_ChildRowDeleteButton);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var React = __webpack_require__(2);
-	var joinClasses = __webpack_require__(11);
-	var EditorContainer = __webpack_require__(226);
-	var ExcelColumn = __webpack_require__(13);
-	var isFunction = __webpack_require__(38);
-	var CellMetaDataShape = __webpack_require__(12);
-	var SimpleCellFormatter = __webpack_require__(108);
-	var ColumnUtils = __webpack_require__(10);
-	var createObjectWithProperties = __webpack_require__(17);
-
-	__webpack_require__(58);
-
-	// The list of the propTypes that we want to include in the Cell div
-	var knownDivPropertyKeys = ['height', 'tabIndex', 'value'];
-
-	var Cell = React.createClass({
-	  displayName: 'Cell',
-
-
-	  propTypes: {
-	    rowIdx: React.PropTypes.number.isRequired,
-	    idx: React.PropTypes.number.isRequired,
-	    selected: React.PropTypes.shape({
-	      idx: React.PropTypes.number.isRequired
-	    }),
-	    selectedColumn: React.PropTypes.object,
-	    height: React.PropTypes.number,
-	    tabIndex: React.PropTypes.number,
-	    column: React.PropTypes.shape(ExcelColumn).isRequired,
-	    value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object, React.PropTypes.bool]),
-	    isExpanded: React.PropTypes.bool,
-	    isRowSelected: React.PropTypes.bool,
-	    cellMetaData: React.PropTypes.shape(CellMetaDataShape).isRequired,
-	    handleDragStart: React.PropTypes.func,
-	    className: React.PropTypes.string,
-	    cellControls: React.PropTypes.any,
-	    rowData: React.PropTypes.object.isRequired,
-	    forceUpdate: React.PropTypes.bool,
-	    expandableOptions: React.PropTypes.object.isRequired,
-	    isScrolling: React.PropTypes.bool.isRequired,
-	    tooltip: React.PropTypes.string,
-	    isCellValueChanging: React.PropTypes.func
-	  },
-
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      tabIndex: -1,
-	      isExpanded: false,
-	      value: '',
-	      isCellValueChanging: function isCellValueChanging(value, nextValue) {
-	        return value !== nextValue;
-	      }
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      isCellValueChanging: false,
-	      isLockChanging: false
-	    };
-	  },
-	  componentDidMount: function componentDidMount() {
-	    this.checkFocus();
-	  },
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    this.setState({
-	      isCellValueChanging: this.props.isCellValueChanging(this.props.value, nextProps.value),
-	      isLockChanging: this.props.column.locked !== nextProps.column.locked
-	    });
-	  },
-	  componentDidUpdate: function componentDidUpdate() {
-	    this.checkFocus();
-	    var dragged = this.props.cellMetaData.dragged;
-	    if (dragged && dragged.complete === true) {
-	      this.props.cellMetaData.handleTerminateDrag();
-	    }
-	    if (this.state.isCellValueChanging && this.props.selectedColumn != null) {
-	      this.applyUpdateClass();
-	    }
-	    if (this.state.isLockChanging && !this.props.column.locked) {
-	      this.removeScroll();
-	    }
-	  },
-	  shouldComponentUpdate: function shouldComponentUpdate(nextProps) {
-	    var shouldUpdate = this.props.column.width !== nextProps.column.width || this.props.column.left !== nextProps.column.left || this.props.column.cellClass !== nextProps.column.cellClass || this.props.height !== nextProps.height || this.props.rowIdx !== nextProps.rowIdx || this.isCellSelectionChanging(nextProps) || this.isDraggedCellChanging(nextProps) || this.isCopyCellChanging(nextProps) || this.props.isRowSelected !== nextProps.isRowSelected || this.isSelected() || this.props.isCellValueChanging(this.props.value, nextProps.value) || this.props.forceUpdate === true || this.props.className !== nextProps.className || this.props.expandableOptions !== nextProps.expandableOptions || this.hasChangedDependentValues(nextProps) || this.props.column.locked !== nextProps.column.locked;
-	    return shouldUpdate;
-	  },
-	  onCellClick: function onCellClick(e) {
-	    var meta = this.props.cellMetaData;
-	    if (meta != null && meta.onCellClick && typeof meta.onCellClick === 'function') {
-	      meta.onCellClick({ rowIdx: this.props.rowIdx, idx: this.props.idx }, e);
-	    }
-	  },
-	  onCellContextMenu: function onCellContextMenu(e) {
-	    var isArrowElement = e.target.classList.contains('row-arrow-handle');
-	    var meta = this.props.cellMetaData;
-	    if (meta != null && meta.onCellContextMenu && typeof meta.onCellContextMenu === 'function') {
-	      meta.onCellContextMenu({ rowIdx: this.props.rowIdx, idx: this.props.idx });
-	    }
-	    if (!isArrowElement) {
-	      // setting rowIdx: -1 hides row context menu & setting idx: -1 hides header context menu.
-	      meta.onCellContextMenu({ rowIdx: this.props.rowIdx, idx: this.props.idx });
-	      e.preventDefault();
-	      e.stopPropagation();
-	    }
-	  },
-	  onCellDoubleClick: function onCellDoubleClick(e) {
-	    var meta = this.props.cellMetaData;
-	    if (meta != null && meta.onCellDoubleClick && typeof meta.onCellDoubleClick === 'function') {
-	      meta.onCellDoubleClick({ rowIdx: this.props.rowIdx, idx: this.props.idx }, e);
-	    }
-	  },
-	  onCellExpand: function onCellExpand(e) {
-	    e.stopPropagation();
-	    var meta = this.props.cellMetaData;
-	    if (meta != null && meta.onCellExpand != null) {
-	      meta.onCellExpand({ rowIdx: this.props.rowIdx, idx: this.props.idx, rowData: this.props.rowData, expandArgs: this.props.expandableOptions });
-	    }
-	  },
-	  onCellKeyDown: function onCellKeyDown(e) {
-	    if (this.canExpand() && e.key === 'Enter') {
-	      this.onCellExpand(e);
-	    }
-	  },
-	  onDeleteSubRow: function onDeleteSubRow() {
-	    var meta = this.props.cellMetaData;
-	    if (meta != null && meta.onDeleteSubRow != null) {
-	      meta.onDeleteSubRow({ rowIdx: this.props.rowIdx, idx: this.props.idx, rowData: this.props.rowData, expandArgs: this.props.expandableOptions });
-	    }
-	  },
-	  onDragHandleDoubleClick: function onDragHandleDoubleClick(e) {
-	    e.stopPropagation();
-	    var meta = this.props.cellMetaData;
-	    if (meta != null && meta.onDragHandleDoubleClick && typeof meta.onDragHandleDoubleClick === 'function') {
-	      meta.onDragHandleDoubleClick({ rowIdx: this.props.rowIdx, idx: this.props.idx, rowData: this.getRowData(), e: e });
-	    }
-	  },
-	  onDragOver: function onDragOver(e) {
-	    e.preventDefault();
-	  },
-	  getStyle: function getStyle() {
-	    var style = {
-	      position: 'absolute',
-	      width: this.props.column.width,
-	      height: this.props.height,
-	      left: this.props.column.left,
-	      contain: 'layout'
-	    };
-	    return style;
-	  },
-	  getFormatter: function getFormatter() {
-	    var col = this.props.column;
-	    if (this.isActive()) {
-	      return React.createElement(EditorContainer, { rowData: this.getRowData(), rowIdx: this.props.rowIdx, value: this.props.value, idx: this.props.idx, cellMetaData: this.props.cellMetaData, column: col, height: this.props.height });
-	    }
-
-	    return this.props.column.formatter;
-	  },
-	  getRowData: function getRowData() {
-	    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
-
-	    return props.rowData.toJSON ? props.rowData.toJSON() : props.rowData;
-	  },
-	  getFormatterDependencies: function getFormatterDependencies() {
-	    // convention based method to get corresponding Id or Name of any Name or Id property
-	    if (typeof this.props.column.getRowMetaData === 'function') {
-	      return this.props.column.getRowMetaData(this.getRowData(), this.props.column);
-	    }
-	  },
-	  getCellClass: function getCellClass() {
-	    var className = joinClasses(this.props.column.cellClass, 'react-grid-Cell', this.props.className, this.props.column.locked ? 'react-grid-Cell--locked' : null);
-	    var extraClasses = joinClasses({
-	      'row-selected': this.props.isRowSelected,
-	      editing: this.isActive(),
-	      copied: this.isCopied() || this.wasDraggedOver() || this.isDraggedOverUpwards() || this.isDraggedOverDownwards(),
-	      'is-dragged-over-up': this.isDraggedOverUpwards(),
-	      'is-dragged-over-down': this.isDraggedOverDownwards(),
-	      'was-dragged-over': this.wasDraggedOver(),
-	      'cell-tooltip': this.props.tooltip ? true : false,
-	      'rdg-child-cell': this.props.expandableOptions && this.props.expandableOptions.subRowDetails && this.props.expandableOptions.treeDepth > 0,
-	      'last-column': this.props.column.isLastColumn
-	    });
-	    return joinClasses(className, extraClasses);
-	  },
-	  getUpdateCellClass: function getUpdateCellClass() {
-	    return this.props.column.getUpdateCellClass ? this.props.column.getUpdateCellClass(this.props.selectedColumn, this.props.column, this.state.isCellValueChanging) : '';
-	  },
-	  isColumnSelected: function isColumnSelected() {
-	    var meta = this.props.cellMetaData;
-	    if (meta == null) {
-	      return false;
-	    }
-
-	    return meta.selected && meta.selected.idx === this.props.idx;
-	  },
-	  isSelected: function isSelected() {
-	    var meta = this.props.cellMetaData;
-	    if (meta == null) {
-	      return false;
-	    }
-
-	    return meta.selected && meta.selected.rowIdx === this.props.rowIdx && meta.selected.idx === this.props.idx;
-	  },
-	  isActive: function isActive() {
-	    var meta = this.props.cellMetaData;
-	    if (meta == null) {
-	      return false;
-	    }
-	    return this.isSelected() && meta.selected.active === true;
-	  },
-	  isCellSelectionChanging: function isCellSelectionChanging(nextProps) {
-	    var meta = this.props.cellMetaData;
-	    if (meta == null) {
-	      return false;
-	    }
-	    var nextSelected = nextProps.cellMetaData.selected;
-	    if (meta.selected && nextSelected) {
-	      return this.props.idx === nextSelected.idx || this.props.idx === meta.selected.idx;
-	    }
-
-	    return true;
-	  },
-	  isCellSelectEnabled: function isCellSelectEnabled() {
-	    var meta = this.props.cellMetaData;
-	    if (meta == null) {
-	      return false;
-	    }
-	    return meta.enableCellSelect;
-	  },
-	  hasChangedDependentValues: function hasChangedDependentValues(nextProps) {
-	    var currentColumn = this.props.column;
-	    var hasChangedDependentValues = false;
-
-	    if (currentColumn.getRowMetaData) {
-	      var currentRowMetaData = currentColumn.getRowMetaData(this.getRowData(), currentColumn);
-	      var nextColumn = nextProps.column;
-	      var nextRowMetaData = nextColumn.getRowMetaData(this.getRowData(nextProps), nextColumn);
-
-	      hasChangedDependentValues = !_underscore2['default'].isEqual(currentRowMetaData, nextRowMetaData);
-	    }
-
-	    return hasChangedDependentValues;
-	  },
-	  applyUpdateClass: function applyUpdateClass() {
-	    var updateCellClass = this.getUpdateCellClass();
-	    // -> removing the class
-	    if (updateCellClass != null && updateCellClass !== '') {
-	      var cellDOMNode = this.node;
-	      if (cellDOMNode.classList) {
-	        cellDOMNode.classList.remove(updateCellClass);
-	        // -> and re-adding the class
-	        cellDOMNode.classList.add(updateCellClass);
-	      } else if (cellDOMNode.className.indexOf(updateCellClass) === -1) {
-	        // IE9 doesn't support classList, nor (I think) altering element.className
-	        // without replacing it wholesale.
-	        cellDOMNode.className = cellDOMNode.className + ' ' + updateCellClass;
-	      }
-	    }
-	  },
-	  setScrollLeft: function setScrollLeft(scrollLeft) {
-	    var node = this.node;
-	    if (node) {
-	      var transform = 'translate3d(' + scrollLeft + 'px, 0px, 0px)';
-	      node.style.webkitTransform = transform;
-	      node.style.transform = transform;
-	    }
-	  },
-	  removeScroll: function removeScroll() {
-	    var node = this.node;
-	    if (node) {
-	      node.style.webkitTransform = null;
-	      node.style.transform = null;
-	    }
-	  },
-	  isCopied: function isCopied() {
-	    var copied = this.props.cellMetaData.copied;
-	    return copied && copied.rowIdx === this.props.rowIdx && copied.idx === this.props.idx;
-	  },
-	  isDraggedOver: function isDraggedOver() {
-	    var dragged = this.props.cellMetaData.dragged;
-	    return dragged && dragged.overRowIdx === this.props.rowIdx && dragged.idx === this.props.idx;
-	  },
-	  wasDraggedOver: function wasDraggedOver() {
-	    var dragged = this.props.cellMetaData.dragged;
-	    return dragged && (dragged.overRowIdx < this.props.rowIdx && this.props.rowIdx < dragged.rowIdx || dragged.overRowIdx > this.props.rowIdx && this.props.rowIdx > dragged.rowIdx) && dragged.idx === this.props.idx;
-	  },
-	  isDraggedCellChanging: function isDraggedCellChanging(nextProps) {
-	    var isChanging = void 0;
-	    var dragged = this.props.cellMetaData.dragged;
-	    var nextDragged = nextProps.cellMetaData.dragged;
-	    if (dragged) {
-	      isChanging = nextDragged && this.props.idx === nextDragged.idx || dragged && this.props.idx === dragged.idx;
-	      return isChanging;
-	    }
-
-	    return false;
-	  },
-	  isCopyCellChanging: function isCopyCellChanging(nextProps) {
-	    var isChanging = void 0;
-	    var copied = this.props.cellMetaData.copied;
-	    var nextCopied = nextProps.cellMetaData.copied;
-	    if (copied) {
-	      isChanging = nextCopied && this.props.idx === nextCopied.idx || copied && this.props.idx === copied.idx;
-	      return isChanging;
-	    }
-	    return false;
-	  },
-	  isDraggedOverUpwards: function isDraggedOverUpwards() {
-	    var dragged = this.props.cellMetaData.dragged;
-	    return !this.isSelected() && this.isDraggedOver() && this.props.rowIdx < dragged.rowIdx;
-	  },
-	  isDraggedOverDownwards: function isDraggedOverDownwards() {
-	    var dragged = this.props.cellMetaData.dragged;
-	    return !this.isSelected() && this.isDraggedOver() && this.props.rowIdx > dragged.rowIdx;
-	  },
-	  isFocusedOnBody: function isFocusedOnBody() {
-	    return document.activeElement == null || document.activeElement.nodeName && typeof document.activeElement.nodeName === 'string' && document.activeElement.nodeName.toLowerCase() === 'body';
-	  },
-	  isFocusedOnCell: function isFocusedOnCell() {
-	    return document.activeElement && document.activeElement.className === 'react-grid-Cell';
-	  },
-	  checkFocus: function checkFocus() {
-	    if (this.isSelected() && !this.isActive()) {
-	      if (this.props.isScrolling && !this.props.cellMetaData.isScrollingVerticallyWithKeyboard && !this.props.cellMetaData.isScrollingHorizontallyWithKeyboard) {
-	        return;
-	      }
-	      // Only focus to the current cell if the currently active node in the document is within the data grid.
-	      // Meaning focus should not be stolen from elements that the grid doesnt control.
-	      var dataGridDOMNode = this.props.cellMetaData && this.props.cellMetaData.getDataGridDOMNode ? this.props.cellMetaData.getDataGridDOMNode() : null;
-	      if (this.isFocusedOnCell() || this.isFocusedOnBody() || dataGridDOMNode && dataGridDOMNode.contains(document.activeElement)) {
-	        var cellDOMNode = this.node;
-	        if (cellDOMNode) {
-	          cellDOMNode.focus();
-	        }
-	      }
-	    }
-	  },
-	  canEdit: function canEdit() {
-	    return this.props.column.editor != null || this.props.column.editable;
-	  },
-	  canExpand: function canExpand() {
-	    return this.props.expandableOptions && this.props.expandableOptions.canExpand;
-	  },
-	  createColumEventCallBack: function createColumEventCallBack(onColumnEvent, info) {
-	    return function (e) {
-	      onColumnEvent(e, info);
-	    };
-	  },
-	  createCellEventCallBack: function createCellEventCallBack(gridEvent, columnEvent) {
-	    return function (e) {
-	      gridEvent(e);
-	      columnEvent(e);
-	    };
-	  },
-	  createEventDTO: function createEventDTO(gridEvents, columnEvents, onColumnEvent) {
-	    var allEvents = Object.assign({}, gridEvents);
-
-	    for (var eventKey in columnEvents) {
-	      if (columnEvents.hasOwnProperty(eventKey)) {
-	        var event = columnEvents[event];
-	        var eventInfo = { idx: this.props.idx, rowIdx: this.props.rowIdx, rowId: this.props.rowData[this.props.cellMetaData.rowKey], name: eventKey };
-	        var eventCallback = this.createColumEventCallBack(onColumnEvent, eventInfo);
-
-	        if (allEvents.hasOwnProperty(eventKey)) {
-	          var currentEvent = allEvents[eventKey];
-	          allEvents[eventKey] = this.createCellEventCallBack(currentEvent, eventCallback);
-	        } else {
-	          allEvents[eventKey] = eventCallback;
-	        }
-	      }
-	    }
-
-	    return allEvents;
-	  },
-	  getEvents: function getEvents() {
-	    var columnEvents = this.props.column ? Object.assign({}, this.props.column.events) : undefined;
-	    var onColumnEvent = this.props.cellMetaData ? this.props.cellMetaData.onColumnEvent : undefined;
-	    var gridEvents = {
-	      onClick: this.onCellClick,
-	      onDoubleClick: this.onCellDoubleClick,
-	      onContextMenu: this.onCellContextMenu,
-	      onDragOver: this.onDragOver
-	    };
-
-	    if (!columnEvents || !onColumnEvent) {
-	      return gridEvents;
-	    }
-
-	    return this.createEventDTO(gridEvents, columnEvents, onColumnEvent);
-	  },
-	  getKnownDivProps: function getKnownDivProps() {
-	    return createObjectWithProperties(this.props, knownDivPropertyKeys);
-	  },
-	  renderCellContent: function renderCellContent(props) {
-	    var CellContent = void 0;
-	    var Formatter = this.getFormatter();
-	    if (React.isValidElement(Formatter)) {
-	      props.dependentValues = this.getFormatterDependencies();
-	      CellContent = React.cloneElement(Formatter, props);
-	    } else if (isFunction(Formatter)) {
-	      CellContent = React.createElement(Formatter, { value: this.props.value, dependentValues: this.getFormatterDependencies() });
-	    } else {
-	      CellContent = React.createElement(SimpleCellFormatter, { value: this.props.value });
-	    }
-	    var isExpandCell = this.props.expandableOptions ? this.props.expandableOptions.field === this.props.column.key : false;
-	    var treeDepth = this.props.expandableOptions ? this.props.expandableOptions.treeDepth : 0;
-	    var marginLeft = this.props.expandableOptions && isExpandCell ? this.props.expandableOptions.treeDepth * 30 : 0;
-	    var cellExpander = void 0;
-	    var cellDeleter = void 0;
-	    if (this.canExpand()) {
-	      cellExpander = React.createElement(_CellExpand2['default'], { expandableOptions: this.props.expandableOptions, onCellExpand: this.onCellExpand });
-	    }
-
-	    var isDeleteSubRowEnabled = this.props.cellMetaData.onDeleteSubRow ? true : false;
-
-	    if (treeDepth > 0 && isExpandCell) {
-	      cellDeleter = React.createElement(_ChildRowDeleteButton2['default'], { treeDepth: treeDepth, cellHeight: this.props.height, siblingIndex: this.props.expandableOptions.subRowDetails.siblingIndex, numberSiblings: this.props.expandableOptions.subRowDetails.numberSiblings, onDeleteSubRow: this.onDeleteSubRow, isDeleteSubRowEnabled: isDeleteSubRowEnabled });
-	    }
-	    return React.createElement(
-	      'div',
-	      { className: 'react-grid-Cell__value' },
-	      cellDeleter,
-	      React.createElement(
-	        'div',
-	        { style: { marginLeft: marginLeft } },
-	        React.createElement(
-	          'span',
-	          null,
-	          CellContent
-	        ),
-	        ' ',
-	        this.props.cellControls,
-	        ' ',
-	        cellExpander
-	      )
-	    );
-	  },
-	  render: function render() {
-	    var _this = this;
-
-	    if (this.props.column.hidden) {
-	      return null;
-	    }
-
-	    var style = this.getStyle();
-
-	    var className = this.getCellClass();
-
-	    var cellContent = this.renderCellContent({
-	      value: this.props.value,
-	      column: this.props.column,
-	      rowIdx: this.props.rowIdx,
-	      isExpanded: this.props.isExpanded
-	    });
-
-	    var dragHandle = !this.isActive() && ColumnUtils.canEdit(this.props.column, this.props.rowData, this.props.cellMetaData.enableCellSelect) ? React.createElement(
-	      'div',
-	      { className: 'drag-handle', draggable: 'true', onDoubleClick: this.onDragHandleDoubleClick },
-	      React.createElement('span', { style: { display: 'none' } })
-	    ) : null;
-	    var events = this.getEvents();
-	    var tooltip = this.props.tooltip ? React.createElement(
-	      'span',
-	      { className: 'cell-tooltip-text' },
-	      this.props.tooltip
-	    ) : null;
-
-	    var rowArrow = !!this.props.column.isIndexColumn ? React.createElement('span', { className: 'row-arrow-handle' }) : null;
-
-	    return React.createElement(
-	      'div',
-	      _extends({}, this.getKnownDivProps(), { className: className, style: style }, events, { ref: function ref(node) {
-	          _this.node = node;
-	        } }),
-	      cellContent,
-	      dragHandle,
-	      tooltip,
-	      rowArrow
-	    );
-	  }
-	});
-
-	module.exports = Cell;
-
-/***/ }),
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(2);
-	var ReactDOM = __webpack_require__(4);
-	var joinClasses = __webpack_require__(11);
-	var ExcelColumn = __webpack_require__(13);
-	var ResizeHandle = __webpack_require__(100);
-	var ContextDropDown = __webpack_require__(206);
-	__webpack_require__(16);
-
-	var PropTypes = React.PropTypes;
-
-	function simpleCellRenderer(objArgs) {
-	  var headerText = objArgs.column.rowType === 'header' ? objArgs.column.name : '';
-	  return React.createElement(
-	    'div',
-	    { className: 'widget-HeaderCell__value' },
-	    headerText
-	  );
-	}
-
-	function onArrowClick(e) {
-	  e.stopPropagation();
-
-	  // if clicked on the arrow button
-	  var headerCells = document.getElementsByClassName('is-open');
-	  for (var i = 0; i < headerCells.length; i++) {
-	    var el = headerCells[i];
-	    el.classList.remove('is-open');
-	  }
-
-	  var headerCell = e.target.closest('.react-grid-HeaderCell');
-	  headerCell.classList.add('is-open');
-	}
-
-	function bodyClickHandler(e) {
-	  var headerCells = document.getElementsByClassName('is-open');
-	  for (var i = 0; i < headerCells.length; i++) {
-	    var el = headerCells[i];
-	    el.classList.remove('is-open');
-	  }
-	}
-
-	var HeaderCell = React.createClass({
-	  displayName: 'HeaderCell',
-
-
-	  // propTypes: {
-	  //   renderer: PropTypes.oneOfType([PropTypes.func, PropTypes.element]).isRequired,
-	  //   column: PropTypes.shape(ExcelColumn).isRequired,
-	  //   onResize: PropTypes.func.isRequired,
-	  //   height: PropTypes.number.isRequired,
-	  //   onResizeEnd: PropTypes.func.isRequired,
-	  //   className: PropTypes.string
-	  // },
-
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      renderer: simpleCellRenderer
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return { resizing: false };
-	  },
-	  onDragStart: function onDragStart(e) {
-	    this.setState({ resizing: true });
-	    // need to set dummy data for FF
-	    if (e && e.dataTransfer && e.dataTransfer.setData) e.dataTransfer.setData('text/plain', 'dummy');
-	  },
-	  onDrag: function onDrag(e) {
-	    var resize = this.props.onResize || null; // for flows sake, doesnt recognise a null check direct
-	    if (resize) {
-	      var _width = this.getWidthFromMouseEvent(e);
-	      if (_width > 0) {
-	        resize(this.props.column, _width);
-	      }
-	    }
-	  },
-	  onDragEnd: function onDragEnd(e) {
-	    var width = this.getWidthFromMouseEvent(e);
-	    this.props.onResizeEnd(this.props.column, width);
-	    this.setState({ resizing: false });
-	  },
-	  getWidthFromMouseEvent: function getWidthFromMouseEvent(e) {
-	    var right = e.pageX || e.touches && e.touches[0] && e.touches[0].pageX || e.changedTouches && e.changedTouches[e.changedTouches.length - 1].pageX;
-	    var left = ReactDOM.findDOMNode(this).getBoundingClientRect().left;
-	    return right - left;
-	  },
-	  getCell: function getCell() {
-	    if (React.isValidElement(this.props.renderer)) {
-	      // if it is a string, it's an HTML element, and column is not a valid property, so only pass height
-	      if (typeof this.props.renderer.type === 'string') {
-	        return React.cloneElement(this.props.renderer, { height: this.props.height });
-	      }
-	      return React.cloneElement(this.props.renderer, { column: this.props.column, height: this.props.height });
-	    }
-	    return this.props.renderer({ column: this.props.column });
-	  },
-	  getStyle: function getStyle() {
-	    return {
-	      width: this.props.column.width,
-	      left: this.props.column.left,
-	      opacity: this.props.column.width === 0 ? 0 : 1,
-	      display: 'inline-block',
-	      position: 'absolute',
-	      height: this.props.height,
-	      margin: 0,
-	      textOverflow: 'ellipsis',
-	      whiteSpace: 'nowrap'
-	    };
-	  },
-	  setScrollLeft: function setScrollLeft(scrollLeft) {
-	    var node = ReactDOM.findDOMNode(this);
-	    node.style.webkitTransform = 'translate3d(' + scrollLeft + 'px, 0px, 0px)';
-	    node.style.transform = 'translate3d(' + scrollLeft + 'px, 0px, 0px)';
-	  },
-	  disableDefaultContext: function disableDefaultContext() {
-	    debugger;
-	    //bind event with arrow
-	    document.removeEventListener('click', this.handleArrowClick);
-	    document.addEventListener('click', this.handleArrowClick);
-	  },
-	  handleArrowClick: function handleArrowClick(e) {
-	    e.preventDefault();
-	    e.stopPropagation();
-
-	    var body = document.querySelector('body');
-	    body.removeEventListener('click', bodyClickHandler);
-	    body.addEventListener('click', bodyClickHandler);
-
-	    var headerCells = document.getElementsByClassName('is-open');
-	    for (var i = 0; i < headerCells.length; i++) {
-	      var el = headerCells[i];
-	      el.classList.remove('is-open');
-	    }
-
-	    var headerCell = e.target.closest('.react-grid-HeaderCell');
-	    !!headerCell ? headerCell.classList.add('is-open') : '';
-
-	    if (e.target.classList.contains('arrow-handle') || e.target.parentElement.classList.contains('arrow-handle')) {
-	      e.preventDefault();
-	      e.stopPropagation();
-
-	      //  click event handling
-	      var _headerCells = document.getElementsByClassName('is-open');
-	      for (var _i = 0; _i < _headerCells.length; _i++) {
-	        var _el = _headerCells[_i];
-	        _el.classList.remove('is-open');
-	      }
-
-	      var _headerCell = e.target.closest('.react-grid-HeaderCell');
-	      _headerCell.classList.add('is-open');
-	    }
-
-	    //bind event to the arrow
-	    // const tEl = e.target;
-	    // const arrow = tEl.querySelector('.arrow-handle');
-	    // if(!!arrow){
-	    //   arrow.removeEventListener('click', onArrowClick);
-	    //   arrow.addEventListener('click', onArrowClick);
-	    // }
-	  },
-	  removeScroll: function removeScroll() {
-	    var node = ReactDOM.findDOMNode(this);
-	    if (node) {
-	      var transform = 'none';
-	      node.style.webkitTransform = transform;
-	      node.style.transform = transform;
-	    }
-	  },
-	  render: function render() {
-	    this.disableDefaultContext();
-	    var resizeHandle = void 0;
-	    if (this.props.column.resizable) {
-	      resizeHandle = React.createElement(ResizeHandle, {
-	        onDrag: this.onDrag,
-	        onDragStart: this.onDragStart,
-	        onDragEnd: this.onDragEnd
-	      });
-	    }
-
-	    var contextDropDown = void 0;
-	    contextDropDown = React.createElement(ContextDropDown, {
-	      onDrag: this.onDrag,
-	      onDragStart: this.onDragStart,
-	      onDragEnd: this.onDragEnd,
-	      isOpen: 'isactive'
-	    });
-
-	    var className = joinClasses({
-	      'react-grid-HeaderCell': true,
-	      'react-grid-HeaderCell--resizing': this.state.resizing,
-	      'react-grid-HeaderCell--locked': this.props.column.locked
-	    });
-	    className = joinClasses(className, this.props.className, this.props.column.cellClass);
-	    var cell = this.getCell();
-	    return React.createElement(
-	      'div',
-	      { className: className, style: this.getStyle() },
-	      cell,
-	      React.createElement('span', { className: 'arrow-handle' }),
-	      resizeHandle
-	    );
-	  }
-	});
-
-	module.exports = HeaderCell;
-
-/***/ }),
-/* 98 */
-/***/ (function(module, exports) {
-
-	"use strict";
-
-	var HeaderCellType = {
-	  SORTABLE: 0,
-	  FILTERABLE: 1,
-	  NONE: 2,
-	  CHECKBOX: 3
-	};
-
-	module.exports = HeaderCellType;
-
-/***/ }),
-/* 99 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	var KeyboardHandlerMixin = {
-	  onKeyDown: function onKeyDown(e) {
-	    if (this.isCtrlKeyHeldDown(e)) {
-	      this.checkAndCall('onPressKeyWithCtrl', e);
-	    } else if (this.isKeyExplicitlyHandled(e.key)) {
-	      // break up individual keyPress events to have their own specific callbacks
-	      // this allows multiple mixins to listen to onKeyDown events and somewhat reduces methodName clashing
-	      var callBack = 'onPress' + e.key;
-	      this.checkAndCall(callBack, e);
-	    } else if (this.isKeyPrintable(e.keyCode)) {
-	      this.checkAndCall('onPressChar', e);
-	    }
-
-	    // Track which keys are currently down for shift clicking etc
-	    this._keysDown = this._keysDown || {};
-	    this._keysDown[e.keyCode] = true;
-	    if (this.props.onGridKeyDown && typeof this.props.onGridKeyDown === 'function') {
-	      this.props.onGridKeyDown(e);
-	    }
-	  },
-	  onKeyUp: function onKeyUp(e) {
-	    // Track which keys are currently down for shift clicking etc
-	    this._keysDown = this._keysDown || {};
-	    delete this._keysDown[e.keyCode];
-
-	    if (this.props.onGridKeyUp && typeof this.props.onGridKeyUp === 'function') {
-	      this.props.onGridKeyUp(e);
-	    }
-	  },
-	  isKeyDown: function isKeyDown(keyCode) {
-	    if (!this._keysDown) return false;
-	    return keyCode in this._keysDown;
-	  },
-	  isSingleKeyDown: function isSingleKeyDown(keyCode) {
-	    if (!this._keysDown) return false;
-	    return keyCode in this._keysDown && Object.keys(this._keysDown).length === 1;
-	  },
-
-
-	  // taken from http://stackoverflow.com/questions/12467240/determine-if-javascript-e-keycode-is-a-printable-non-control-character
-	  isKeyPrintable: function isKeyPrintable(keycode) {
-	    var valid = keycode > 47 && keycode < 58 || // number keys
-	    keycode === 32 || keycode === 13 || // spacebar & return key(s) (if you want to allow carriage returns)
-	    keycode > 64 && keycode < 91 || // letter keys
-	    keycode > 95 && keycode < 112 || // numpad keys
-	    keycode > 185 && keycode < 193 || // ;=,-./` (in order)
-	    keycode > 218 && keycode < 223; // [\]' (in order)
-
-	    return valid;
-	  },
-	  isKeyExplicitlyHandled: function isKeyExplicitlyHandled(key) {
-	    return typeof this['onPress' + key] === 'function';
-	  },
-	  isCtrlKeyHeldDown: function isCtrlKeyHeldDown(e) {
-	    return e.ctrlKey === true && e.key !== 'Control';
-	  },
-	  checkAndCall: function checkAndCall(methodName, args) {
-	    if (typeof this[methodName] === 'function') {
-	      this[methodName](args);
-	    }
-	  }
-	};
-
-	module.exports = KeyboardHandlerMixin;
-
-/***/ }),
-/* 100 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var React = __webpack_require__(2);
-	var Draggable = __webpack_require__(207);
-	__webpack_require__(16);
-
-	var ResizeHandle = React.createClass({
-	  displayName: 'ResizeHandle',
-
-	  style: {
-	    position: 'absolute',
-	    top: 0,
-	    right: 0,
-	    width: 6,
-	    height: '100%'
-	  },
-
-	  render: function render() {
-	    return React.createElement(Draggable, _extends({}, this.props, {
-	      className: 'react-grid-HeaderCell__resizeHandle',
-	      style: this.style
-	    }));
-	  }
-	});
-
-	module.exports = ResizeHandle;
-
-/***/ }),
-/* 101 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-	exports.shouldRowUpdate = undefined;
-
-	var _ColumnMetrics = __webpack_require__(35);
-
-	var _ColumnMetrics2 = _interopRequireDefault(_ColumnMetrics);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function doesRowContainSelectedCell(props) {
-	  var selected = props.cellMetaData.selected;
-	  if (selected && selected.rowIdx === props.idx) {
-	    return true;
-	  }
-	  return false;
-	}
-
-	function willRowBeDraggedOver(props) {
-	  var dragged = props.cellMetaData.dragged;
-	  return dragged != null && (dragged.rowIdx >= 0 || dragged.complete === true);
-	}
-
-	function hasRowBeenCopied(props) {
-	  var copied = props.cellMetaData.copied;
-	  return copied != null && copied.rowIdx === props.idx;
-	}
-
-	var shouldRowUpdate = exports.shouldRowUpdate = function shouldRowUpdate(nextProps, currentProps) {
-	  return !_ColumnMetrics2['default'].sameColumns(currentProps.columns, nextProps.columns, _ColumnMetrics2['default'].sameColumn) || doesRowContainSelectedCell(currentProps) || doesRowContainSelectedCell(nextProps) || willRowBeDraggedOver(nextProps) || nextProps.row !== currentProps.row || currentProps.colDisplayStart !== nextProps.colDisplayStart || currentProps.colDisplayEnd !== nextProps.colDisplayEnd || currentProps.colVisibleStart !== nextProps.colVisibleStart || currentProps.colVisibleEnd !== nextProps.colVisibleEnd || hasRowBeenCopied(currentProps) || currentProps.isSelected !== nextProps.isSelected || nextProps.height !== currentProps.height || currentProps.isOver !== nextProps.isOver || currentProps.expandedRows !== nextProps.expandedRows || currentProps.canDrop !== nextProps.canDrop || currentProps.forceUpdate === true;
-	};
-
-	exports['default'] = shouldRowUpdate;
-
-/***/ }),
+/* 96 */,
+/* 97 */,
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */,
 /* 102 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	var RowUtils = {
-	  get: function get(row, property) {
-	    if (typeof row.get === 'function') {
-	      return row.get(property);
-	    }
-
-	    return row[property];
-	  },
-	  isRowSelected: function isRowSelected(keys, indexes, isSelectedKey, rowData, rowIdx) {
-	    if (indexes && Object.prototype.toString.call(indexes) === '[object Array]') {
-	      return indexes.indexOf(rowIdx) > -1;
-	    } else if (keys && keys.rowKey && keys.values && Object.prototype.toString.call(keys.values) === '[object Array]') {
-	      return keys.values.indexOf(rowData[keys.rowKey]) > -1;
-	    } else if (isSelectedKey && rowData && typeof isSelectedKey === 'string') {
-	      return rowData[isSelectedKey];
-	    }
-	    return false;
-	  }
-	};
-
-	module.exports = RowUtils;
-
-/***/ }),
-/* 103 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-	exports.SimpleRowsContainer = undefined;
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var SimpleRowsContainer = function SimpleRowsContainer(props) {
-	  return _react2['default'].createElement(
-	    'div',
-	    { key: 'rows-container' },
-	    props.rows
-	  );
-	};
-
-	SimpleRowsContainer.propTypes = {
-	  width: _react.PropTypes.number,
-	  rows: _react.PropTypes.array
-	};
-
-	var RowsContainer = function (_React$Component) {
-	  _inherits(RowsContainer, _React$Component);
-
-	  function RowsContainer(props) {
-	    _classCallCheck(this, RowsContainer);
-
-	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
-
-	    _this.plugins = props.window ? props.window.ReactDataGridPlugins : window.ReactDataGridPlugins;
-	    _this.hasContextMenu = _this.hasContextMenu.bind(_this);
-	    _this.renderRowsWithContextMenu = _this.renderRowsWithContextMenu.bind(_this);
-	    _this.getContextMenuContainer = _this.getContextMenuContainer.bind(_this);
-	    _this.state = { ContextMenuContainer: _this.getContextMenuContainer(props) };
-	    return _this;
-	  }
-
-	  RowsContainer.prototype.getContextMenuContainer = function getContextMenuContainer() {
-	    if (this.hasContextMenu()) {
-	      if (!this.plugins) {
-	        throw new Error('You need to include ReactDataGrid UiPlugins in order to initialise context menu');
-	      }
-	      return this.plugins.Menu.ContextMenuTrigger;
-	    }
-	  };
-
-	  RowsContainer.prototype.hasContextMenu = function hasContextMenu() {
-	    return this.props.contextMenu && _react2['default'].isValidElement(this.props.contextMenu);
-	  };
-
-	  RowsContainer.prototype.renderRowsWithContextMenu = function renderRowsWithContextMenu() {
-	    var ContextMenuRowsContainer = this.state.ContextMenuContainer;
-	    // Initialise the context menu if it is available
-	    return _react2['default'].createElement(
-	      'div',
-	      null,
-	      _react2['default'].createElement(
-	        ContextMenuRowsContainer,
-	        { id: 'reactDataGridContextMenu', holdToDisplay: -1 },
-	        _react2['default'].createElement(SimpleRowsContainer, this.props)
-	      )
-	    );
-	  };
-
-	  RowsContainer.prototype.render = function render() {
-	    return this.hasContextMenu() ? this.renderRowsWithContextMenu() : _react2['default'].createElement(SimpleRowsContainer, this.props);
-	  };
-
-	  return RowsContainer;
-	}(_react2['default'].Component);
-
-	RowsContainer.propTypes = {
-	  contextMenu: _react.PropTypes.element,
-	  window: _react.PropTypes.object
-	};
-
-	exports['default'] = RowsContainer;
-	exports.SimpleRowsContainer = SimpleRowsContainer;
-
-/***/ }),
-/* 104 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(2);
-	var ExcelColumn = __webpack_require__(13);
-
-	var FilterableHeaderCell = React.createClass({
-	  displayName: 'FilterableHeaderCell',
-
-
-	  propTypes: {
-	    onChange: React.PropTypes.func.isRequired,
-	    column: React.PropTypes.shape(ExcelColumn)
-	  },
-
-	  getInitialState: function getInitialState() {
-	    return { filterTerm: '' };
-	  },
-	  handleChange: function handleChange(e) {
-	    var val = e.target.value;
-	    this.setState({ filterTerm: val });
-	    this.props.onChange({ filterTerm: val, column: this.props.column });
-	  },
-
-
-	  renderInput: function renderInput() {
-	    if (this.props.column.filterable === false) {
-	      return React.createElement('span', null);
-	    }
-
-	    var inputKey = 'header-filter-' + this.props.column.key;
-	    return React.createElement('input', { key: inputKey, type: 'text', className: 'form-control input-sm', placeholder: 'Search', value: this.state.filterTerm, onChange: this.handleChange });
-	  },
-
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { className: 'form-group' },
-	        this.renderInput()
-	      )
-	    );
-	  }
-	});
-
-	module.exports = FilterableHeaderCell;
-
-/***/ }),
-/* 105 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(2);
-	__webpack_require__(157);
-
-	var CheckboxEditor = React.createClass({
-	  displayName: 'CheckboxEditor',
-
-
-	  propTypes: {
-	    value: React.PropTypes.bool,
-	    rowIdx: React.PropTypes.number,
-	    column: React.PropTypes.shape({
-	      key: React.PropTypes.string,
-	      onCellChange: React.PropTypes.func
-	    }),
-	    dependentValues: React.PropTypes.object
-	  },
-
-	  handleChange: function handleChange(e) {
-	    this.props.column.onCellChange(this.props.rowIdx, this.props.column.key, this.props.dependentValues, e);
-	  },
-	  render: function render() {
-	    var checked = this.props.value != null ? this.props.value : false;
-	    var checkboxName = 'checkbox' + this.props.rowIdx;
-	    return React.createElement(
-	      'div',
-	      { className: 'react-grid-checkbox-container checkbox-align', onClick: this.handleChange },
-	      React.createElement('input', { className: 'react-grid-checkbox', type: 'checkbox', name: checkboxName, onChange: this.handleChange, checked: checked }),
-	      React.createElement('label', { htmlFor: checkboxName, className: 'react-grid-checkbox-label' })
-	    );
-	  }
-	});
-
-	module.exports = CheckboxEditor;
-
-/***/ }),
-/* 106 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(2);
-	var ReactDOM = __webpack_require__(4);
-	var ExcelColumn = __webpack_require__(13);
-
-	var EditorBase = function (_React$Component) {
-	  _inherits(EditorBase, _React$Component);
-
-	  function EditorBase() {
-	    _classCallCheck(this, EditorBase);
-
-	    return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
-	  }
-
-	  EditorBase.prototype.getStyle = function getStyle() {
-	    return {
-	      width: '100%'
-	    };
-	  };
-
-	  EditorBase.prototype.getValue = function getValue() {
-	    var updated = {};
-	    updated[this.props.column.key] = this.getInputNode().value;
-	    return updated;
-	  };
-
-	  EditorBase.prototype.getInputNode = function getInputNode() {
-	    var domNode = ReactDOM.findDOMNode(this);
-	    if (domNode.tagName === 'INPUT') {
-	      return domNode;
-	    }
-
-	    return domNode.querySelector('input:not([type=hidden])');
-	  };
-
-	  EditorBase.prototype.inheritContainerStyles = function inheritContainerStyles() {
-	    return true;
-	  };
-
-	  return EditorBase;
-	}(React.Component);
-
-	EditorBase.propTypes = {
-	  onKeyDown: React.PropTypes.func.isRequired,
-	  value: React.PropTypes.any.isRequired,
-	  onBlur: React.PropTypes.func.isRequired,
-	  column: React.PropTypes.shape(ExcelColumn).isRequired,
-	  commit: React.PropTypes.func.isRequired
-	};
-
-	module.exports = EditorBase;
-
-/***/ }),
-/* 107 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(2);
-	var EditorBase = __webpack_require__(106);
-
-	var SimpleTextEditor = function (_EditorBase) {
-	  _inherits(SimpleTextEditor, _EditorBase);
-
-	  function SimpleTextEditor() {
-	    _classCallCheck(this, SimpleTextEditor);
-
-	    return _possibleConstructorReturn(this, _EditorBase.apply(this, arguments));
-	  }
-
-	  SimpleTextEditor.prototype.render = function render() {
-	    var _this2 = this;
-
-	    return React.createElement('input', { ref: function ref(node) {
-	        return _this2.input = node;
-	      }, type: 'text', onBlur: this.props.onBlur, className: 'form-control', defaultValue: this.props.value });
-	  };
-
-	  return SimpleTextEditor;
-	}(EditorBase);
-
-	module.exports = SimpleTextEditor;
-
-/***/ }),
-/* 108 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(2);
-
-	var SimpleCellFormatter = React.createClass({
-	  displayName: 'SimpleCellFormatter',
-
-	  propTypes: {
-	    value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object, React.PropTypes.bool]).isRequired
-	  },
-
-	  shouldComponentUpdate: function shouldComponentUpdate(nextProps) {
-	    return nextProps.value !== this.props.value;
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { title: this.props.value },
-	      this.props.value
-	    );
-	  }
-	});
-
-	module.exports = SimpleCellFormatter;
-
-/***/ }),
-/* 109 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	var _immutable = __webpack_require__(28);
-
-	module.exports = {
-	  isEmptyArray: __webpack_require__(234),
-	  isEmptyObject: __webpack_require__(235),
-	  isFunction: __webpack_require__(38),
-	  isImmutableCollection: __webpack_require__(236),
-	  getMixedTypeValueRetriever: __webpack_require__(238),
-	  isColumnsImmutable: __webpack_require__(110),
-	  isImmutableMap: __webpack_require__(237),
-	  last: function last(arrayOrList) {
-	    if (arrayOrList == null) {
-	      throw new Error('arrayOrCollection is null');
-	    }
-
-	    if (_immutable.List.isList(arrayOrList)) {
-	      return arrayOrList.last();
-	    }
-
-	    if (Array.isArray(arrayOrList)) {
-	      return arrayOrList[arrayOrList.length - 1];
-	    }
-
-	    throw new Error('Cant get last of: ' + (typeof arrayOrList === 'undefined' ? 'undefined' : _typeof(arrayOrList)));
-	  }
-	};
-
-/***/ }),
-/* 110 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	module.exports = function isColumnsImmutable(columns) {
-	  return typeof Immutable !== 'undefined' && columns instanceof Immutable.List;
-	};
-
-/***/ }),
-/* 111 */,
-/* 112 */,
-/* 113 */,
-/* 114 */,
-/* 115 */,
-/* 116 */,
-/* 117 */,
-/* 118 */,
-/* 119 */,
-/* 120 */,
-/* 121 */,
-/* 122 */,
-/* 123 */,
-/* 124 */,
-/* 125 */,
-/* 126 */,
-/* 127 */,
-/* 128 */,
-/* 129 */,
-/* 130 */,
-/* 131 */,
-/* 132 */,
-/* 133 */,
-/* 134 */,
-/* 135 */,
-/* 136 */,
-/* 137 */,
-/* 138 */,
-/* 139 */,
-/* 140 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-
-		return to;
-	};
-
-
-/***/ }),
-/* 141 */,
-/* 142 */,
-/* 143 */,
-/* 144 */,
-/* 145 */,
-/* 146 */,
-/* 147 */,
-/* 148 */,
-/* 149 */,
-/* 150 */,
-/* 151 */,
-/* 152 */,
-/* 153 */,
-/* 154 */,
-/* 155 */,
-/* 156 */,
-/* 157 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(245);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js!./react-data-grid-checkbox.css", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js!./react-data-grid-checkbox.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ }),
-/* 158 */,
-/* 159 */,
-/* 160 */,
-/* 161 */,
-/* 162 */,
-/* 163 */,
-/* 164 */,
-/* 165 */,
-/* 166 */,
-/* 167 */,
-/* 168 */,
-/* 169 */,
-/* 170 */,
-/* 171 */,
-/* 172 */,
-/* 173 */,
-/* 174 */,
-/* 175 */,
-/* 176 */,
-/* 177 */,
-/* 178 */,
-/* 179 */,
-/* 180 */,
-/* 181 */,
-/* 182 */,
-/* 183 */,
-/* 184 */,
-/* 185 */,
-/* 186 */,
-/* 187 */,
-/* 188 */,
-/* 189 */,
-/* 190 */,
-/* 191 */,
-/* 192 */,
-/* 193 */,
-/* 194 */,
-/* 195 */,
-/* 196 */,
-/* 197 */,
-/* 198 */,
-/* 199 */,
-/* 200 */,
-/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _shallowEqual = __webpack_require__(67);
+	var _shallowEqual = __webpack_require__(34);
 
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
-	var _RowsContainer = __webpack_require__(103);
+	var _RowsContainer = __webpack_require__(50);
 
 	var _RowsContainer2 = _interopRequireDefault(_RowsContainer);
 
-	var _RowGroup = __webpack_require__(220);
+	var _RowGroup = __webpack_require__(121);
 
 	var _RowGroup2 = _interopRequireDefault(_RowGroup);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var React = __webpack_require__(2);
-	var ReactDOM = __webpack_require__(4);
-	var joinClasses = __webpack_require__(11);
+	var ReactDOM = __webpack_require__(3);
+	var joinClasses = __webpack_require__(6);
 	var PropTypes = React.PropTypes;
-	var ScrollShim = __webpack_require__(221);
-	var Row = __webpack_require__(63);
-	var cellMetaDataShape = __webpack_require__(12);
-	var RowUtils = __webpack_require__(102);
-	__webpack_require__(59);
+	var ScrollShim = __webpack_require__(122);
+	var Row = __webpack_require__(33);
+	var cellMetaDataShape = __webpack_require__(10);
+	var RowUtils = __webpack_require__(49);
+	__webpack_require__(23);
 
 	var Canvas = React.createClass({
 	  displayName: 'Canvas',
@@ -9962,7 +9660,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Canvas;
 
 /***/ }),
-/* 202 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9973,7 +9671,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _AppConstants = __webpack_require__(62);
+	var _AppConstants = __webpack_require__(32);
 
 	var _AppConstants2 = _interopRequireDefault(_AppConstants);
 
@@ -10012,7 +9710,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = CellExpand;
 
 /***/ }),
-/* 203 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10023,7 +9721,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(11);
+	var _classnames = __webpack_require__(6);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -10060,7 +9758,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = ChildRowDeleteButton;
 
 /***/ }),
-/* 204 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10091,12 +9789,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ }),
-/* 205 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _reactDom = __webpack_require__(4);
+	var _reactDom = __webpack_require__(3);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -10104,11 +9802,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var ColumnMetrics = __webpack_require__(35);
-	var DOMMetrics = __webpack_require__(36);
-	Object.assign = __webpack_require__(140);
+	var ColumnMetrics = __webpack_require__(19);
+	var DOMMetrics = __webpack_require__(20);
+	Object.assign = __webpack_require__(67);
 	var PropTypes = __webpack_require__(2).PropTypes;
-	var ColumnUtils = __webpack_require__(10);
+	var ColumnUtils = __webpack_require__(5);
 
 	var Column = function Column() {
 	  _classCallCheck(this, Column);
@@ -10206,13 +9904,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ }),
-/* 206 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(2);
-	__webpack_require__(16);
+	__webpack_require__(12);
 
 	var ContextDropDown = React.createClass({
 	  displayName: 'ContextDropDown',
@@ -10241,7 +9939,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ContextDropDown;
 
 /***/ }),
-/* 207 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10250,8 +9948,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var React = __webpack_require__(2);
 	var PropTypes = React.PropTypes;
-	var createObjectWithProperties = __webpack_require__(17);
-	__webpack_require__(16);
+	var createObjectWithProperties = __webpack_require__(14);
+	__webpack_require__(12);
 
 	// The list of the propTypes that we want to include in the Draggable div
 	var knownDivPropertyKeys = ['onDragStart', 'onDragEnd', 'onDrag', 'style'];
@@ -10334,7 +10032,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Draggable;
 
 /***/ }),
-/* 208 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10345,7 +10043,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ColumnUtils = __webpack_require__(10);
+	var _ColumnUtils = __webpack_require__(5);
 
 	var _ColumnUtils2 = _interopRequireDefault(_ColumnUtils);
 
@@ -10442,7 +10140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = EmptyChildRow;
 
 /***/ }),
-/* 209 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10450,17 +10148,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var React = __webpack_require__(2);
-	var ReactDOM = __webpack_require__(4);
-	var joinClasses = __webpack_require__(11);
-	var shallowCloneObject = __webpack_require__(37);
-	var ColumnMetrics = __webpack_require__(35);
-	var ColumnUtils = __webpack_require__(10);
-	var FooterRow = __webpack_require__(211);
-	var getScrollbarSize = __webpack_require__(27);
+	var ReactDOM = __webpack_require__(3);
+	var joinClasses = __webpack_require__(6);
+	var shallowCloneObject = __webpack_require__(21);
+	var ColumnMetrics = __webpack_require__(19);
+	var ColumnUtils = __webpack_require__(5);
+	var FooterRow = __webpack_require__(112);
+	var getScrollbarSize = __webpack_require__(15);
 	var PropTypes = React.PropTypes;
-	var createObjectWithProperties = __webpack_require__(17);
-	var cellMetaDataShape = __webpack_require__(12);
-	__webpack_require__(408);
+	var createObjectWithProperties = __webpack_require__(14);
+	var cellMetaDataShape = __webpack_require__(10);
+	__webpack_require__(157);
 
 	// The list of the propTypes that we want to include in the Footer div
 	var knownDivPropertyKeys = ['height', 'onScroll'];
@@ -10650,17 +10348,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Footer;
 
 /***/ }),
-/* 210 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var ReactDOM = __webpack_require__(4);
-	var joinClasses = __webpack_require__(11);
-	var ExcelColumn = __webpack_require__(13);
-	var ResizeHandle = __webpack_require__(100);
-	__webpack_require__(16);
+	var ReactDOM = __webpack_require__(3);
+	var joinClasses = __webpack_require__(6);
+	var ExcelColumn = __webpack_require__(11);
+	var ResizeHandle = __webpack_require__(47);
+	__webpack_require__(12);
 
 	var PropTypes = React.PropTypes;
 
@@ -10781,7 +10479,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = HeaderCell;
 
 /***/ }),
-/* 211 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10789,16 +10487,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var React = __webpack_require__(2);
-	var shallowEqual = __webpack_require__(67);
-	var BaseHeaderCell = __webpack_require__(210);
-	var getScrollbarSize = __webpack_require__(27);
-	var ExcelColumn = __webpack_require__(13);
-	var ColumnUtilsMixin = __webpack_require__(10);
-	var SortableFooterCell = __webpack_require__(224);
-	var FilterableHeaderCell = __webpack_require__(104);
-	var HeaderCellType = __webpack_require__(98);
-	var createObjectWithProperties = __webpack_require__(17);
-	__webpack_require__(16);
+	var shallowEqual = __webpack_require__(34);
+	var BaseHeaderCell = __webpack_require__(111);
+	var getScrollbarSize = __webpack_require__(15);
+	var ExcelColumn = __webpack_require__(11);
+	var ColumnUtilsMixin = __webpack_require__(5);
+	var SortableFooterCell = __webpack_require__(125);
+	var FilterableHeaderCell = __webpack_require__(51);
+	var HeaderCellType = __webpack_require__(45);
+	var createObjectWithProperties = __webpack_require__(14);
+	__webpack_require__(12);
 
 	var PropTypes = React.PropTypes;
 
@@ -10971,20 +10669,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FooterRow;
 
 /***/ }),
-/* 212 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(2);
 	var PropTypes = React.PropTypes;
-	var Header = __webpack_require__(214);
-	var Footer = __webpack_require__(209);
-	var Viewport = __webpack_require__(222);
-	var GridScrollMixin = __webpack_require__(213);
-	var DOMMetrics = __webpack_require__(36);
-	var cellMetaDataShape = __webpack_require__(12);
-	__webpack_require__(59);
+	var Header = __webpack_require__(115);
+	var Footer = __webpack_require__(110);
+	var Viewport = __webpack_require__(123);
+	var GridScrollMixin = __webpack_require__(114);
+	var DOMMetrics = __webpack_require__(20);
+	var cellMetaDataShape = __webpack_require__(10);
+	__webpack_require__(23);
 
 	var Grid = React.createClass({
 	  displayName: 'Grid',
@@ -11198,12 +10896,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Grid;
 
 /***/ }),
-/* 213 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var ReactDOM = __webpack_require__(4);
+	var ReactDOM = __webpack_require__(3);
 
 	module.exports = {
 	  componentDidMount: function componentDidMount() {
@@ -11212,7 +10910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._onScroll();
 	  },
 	  componentDidUpdate: function componentDidUpdate() {
-	    //this._onScroll();
+	    this._onScroll();
 	  },
 	  componentWillMount: function componentWillMount() {
 	    this._scrollLeft = undefined;
@@ -11266,7 +10964,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ }),
-/* 214 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11274,17 +10972,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var React = __webpack_require__(2);
-	var ReactDOM = __webpack_require__(4);
-	var joinClasses = __webpack_require__(11);
-	var shallowCloneObject = __webpack_require__(37);
-	var ColumnMetrics = __webpack_require__(35);
-	var ColumnUtils = __webpack_require__(10);
-	var HeaderRow = __webpack_require__(215);
-	var getScrollbarSize = __webpack_require__(27);
+	var ReactDOM = __webpack_require__(3);
+	var joinClasses = __webpack_require__(6);
+	var shallowCloneObject = __webpack_require__(21);
+	var ColumnMetrics = __webpack_require__(19);
+	var ColumnUtils = __webpack_require__(5);
+	var HeaderRow = __webpack_require__(116);
+	var getScrollbarSize = __webpack_require__(15);
 	var PropTypes = React.PropTypes;
-	var createObjectWithProperties = __webpack_require__(17);
-	var cellMetaDataShape = __webpack_require__(12);
-	__webpack_require__(16);
+	var createObjectWithProperties = __webpack_require__(14);
+	var cellMetaDataShape = __webpack_require__(10);
+	__webpack_require__(12);
 
 	// The list of the propTypes that we want to include in the Header div
 	var knownDivPropertyKeys = ['height', 'onScroll'];
@@ -11500,33 +11198,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Header;
 
 /***/ }),
-/* 215 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _propTypes = __webpack_require__(3);
+	var _propTypes = __webpack_require__(4);
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var React = __webpack_require__(2);
-	var createReactClass = __webpack_require__(240);
-	var shallowEqual = __webpack_require__(67);
-	var BaseHeaderCell = __webpack_require__(97);
-	var getScrollbarSize = __webpack_require__(27);
-	var ExcelColumn = __webpack_require__(13);
-	var ColumnUtilsMixin = __webpack_require__(10);
-	var SortableHeaderCell = __webpack_require__(225);
-	var FilterableHeaderCell = __webpack_require__(104);
-	var HeaderCellType = __webpack_require__(98);
-	var createObjectWithProperties = __webpack_require__(17);
-	var getInnermostDecoratedInstance = __webpack_require__(230);
-	var cellMetaDataShape = __webpack_require__(12);
-	__webpack_require__(16);
+	var createReactClass = __webpack_require__(141);
+	var shallowEqual = __webpack_require__(34);
+	var BaseHeaderCell = __webpack_require__(44);
+	var getScrollbarSize = __webpack_require__(15);
+	var ExcelColumn = __webpack_require__(11);
+	var ColumnUtilsMixin = __webpack_require__(5);
+	var SortableHeaderCell = __webpack_require__(126);
+	var FilterableHeaderCell = __webpack_require__(51);
+	var HeaderCellType = __webpack_require__(45);
+	var createObjectWithProperties = __webpack_require__(14);
+	var getInnermostDecoratedInstance = __webpack_require__(131);
+	var cellMetaDataShape = __webpack_require__(10);
+	__webpack_require__(12);
 
 	var HeaderRowStyle = {
 	  overflow: _propTypes2['default'].string,
@@ -11712,7 +11410,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = HeaderRow;
 
 /***/ }),
-/* 216 */
+/* 117 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -11818,7 +11516,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ }),
-/* 217 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11830,11 +11528,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _focusableComponentWrapper = __webpack_require__(228);
+	var _focusableComponentWrapper = __webpack_require__(129);
 
 	var _focusableComponentWrapper2 = _interopRequireDefault(_focusableComponentWrapper);
 
-	__webpack_require__(58);
+	__webpack_require__(39);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -11905,14 +11603,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.OverflowCellComponent = OverflowCellComponent;
 
 /***/ }),
-/* 218 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _ExcelColumn = __webpack_require__(13);
+	var _ExcelColumn = __webpack_require__(11);
 
 	var _ExcelColumn2 = _interopRequireDefault(_ExcelColumn);
 
@@ -11921,38 +11619,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = { ExcelColumn: _ExcelColumn2['default'] };
 
 /***/ }),
-/* 219 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _AppConstants = __webpack_require__(62);
+	var _AppConstants = __webpack_require__(32);
 
 	var _AppConstants2 = _interopRequireDefault(_AppConstants);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var React = __webpack_require__(2);
-	var ReactDOM = __webpack_require__(4);
-	var BaseGrid = __webpack_require__(212);
-	var Row = __webpack_require__(63);
-	var ExcelColumn = __webpack_require__(13);
-	var KeyboardHandlerMixin = __webpack_require__(99);
-	var CheckboxEditor = __webpack_require__(105);
-	var DOMMetrics = __webpack_require__(36);
-	var ColumnMetricsMixin = __webpack_require__(205);
-	var RowUtils = __webpack_require__(102);
-	var ColumnUtils = __webpack_require__(10);
-	var KeyCodes = __webpack_require__(216);
-	var isFunction = __webpack_require__(38);
+	var ReactDOM = __webpack_require__(3);
+	var BaseGrid = __webpack_require__(113);
+	var Row = __webpack_require__(33);
+	var ExcelColumn = __webpack_require__(11);
+	var KeyboardHandlerMixin = __webpack_require__(46);
+	var CheckboxEditor = __webpack_require__(52);
+	var DOMMetrics = __webpack_require__(20);
+	var ColumnMetricsMixin = __webpack_require__(106);
+	var RowUtils = __webpack_require__(49);
+	var ColumnUtils = __webpack_require__(5);
+	var KeyCodes = __webpack_require__(117);
+	var isFunction = __webpack_require__(22);
 
-	__webpack_require__(59);
-	__webpack_require__(157);
+	__webpack_require__(23);
+	__webpack_require__(71);
 
 	if (!Object.assign) {
-	  Object.assign = __webpack_require__(140);
+	  Object.assign = __webpack_require__(67);
 	}
 
 	var ReactDataGrid = React.createClass({
@@ -12935,7 +12633,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ReactDataGrid;
 
 /***/ }),
-/* 220 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12948,11 +12646,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _utils = __webpack_require__(109);
+	var _utils = __webpack_require__(56);
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	__webpack_require__(32);
+	__webpack_require__(31);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -12962,7 +12660,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var cellMetaDataShape = __webpack_require__(12);
+	var cellMetaDataShape = __webpack_require__(10);
 
 	var RowGroup = function (_Component) {
 	  _inherits(RowGroup, _Component);
@@ -13097,12 +12795,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = RowGroup;
 
 /***/ }),
-/* 221 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _reactDom = __webpack_require__(4);
+	var _reactDom = __webpack_require__(3);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -13151,15 +12849,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ScrollShim;
 
 /***/ }),
-/* 222 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var Canvas = __webpack_require__(201);
-	var ViewportScroll = __webpack_require__(223);
-	var cellMetaDataShape = __webpack_require__(12);
+	var Canvas = __webpack_require__(102);
+	var ViewportScroll = __webpack_require__(124);
+	var cellMetaDataShape = __webpack_require__(10);
 	var PropTypes = React.PropTypes;
 
 	var Viewport = React.createClass({
@@ -13268,20 +12966,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Viewport;
 
 /***/ }),
-/* 223 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ColumnUtils = __webpack_require__(10);
+	var _ColumnUtils = __webpack_require__(5);
 
 	var _ColumnUtils2 = _interopRequireDefault(_ColumnUtils);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var React = __webpack_require__(2);
-	var ReactDOM = __webpack_require__(4);
-	var DOMMetrics = __webpack_require__(36);
+	var ReactDOM = __webpack_require__(3);
+	var DOMMetrics = __webpack_require__(20);
 	var min = Math.min;
 	var max = Math.max;
 	var floor = Math.floor;
@@ -13437,13 +13135,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ }),
-/* 224 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var joinClasses = __webpack_require__(11);
+	var joinClasses = __webpack_require__(6);
 	var DEFINE_SORT = {
 	  ASC: 'ASC',
 	  DESC: 'DESC',
@@ -13513,13 +13211,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports.DEFINE_SORT = DEFINE_SORT;
 
 /***/ }),
-/* 225 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var joinClasses = __webpack_require__(11);
+	var joinClasses = __webpack_require__(6);
 	var DEFINE_SORT = {
 	  ASC: 'ASC',
 	  DESC: 'DESC',
@@ -13589,7 +13287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports.DEFINE_SORT = DEFINE_SORT;
 
 /***/ }),
-/* 226 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13597,11 +13295,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var React = __webpack_require__(2);
-	var joinClasses = __webpack_require__(11);
-	var keyboardHandlerMixin = __webpack_require__(99);
-	var SimpleTextEditor = __webpack_require__(107);
-	var isFunction = __webpack_require__(38);
-	__webpack_require__(59);
+	var joinClasses = __webpack_require__(6);
+	var keyboardHandlerMixin = __webpack_require__(46);
+	var SimpleTextEditor = __webpack_require__(54);
+	var isFunction = __webpack_require__(22);
+	__webpack_require__(23);
 
 	var EditorContainer = React.createClass({
 	  displayName: 'EditorContainer',
@@ -13876,19 +13574,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EditorContainer;
 
 /***/ }),
-/* 227 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	module.exports = {
-	  CheckboxEditor: __webpack_require__(105),
-	  EditorBase: __webpack_require__(106),
-	  SimpleTextEditor: __webpack_require__(107)
+	  CheckboxEditor: __webpack_require__(52),
+	  EditorBase: __webpack_require__(53),
+	  SimpleTextEditor: __webpack_require__(54)
 	};
 
 /***/ }),
-/* 228 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13901,7 +13599,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDom = __webpack_require__(4);
+	var _reactDom = __webpack_require__(3);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -13969,17 +13667,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = focusableComponentWrapper;
 
 /***/ }),
-/* 229 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	module.exports = {
-	  SimpleCellFormatter: __webpack_require__(108)
+	  SimpleCellFormatter: __webpack_require__(55)
 	};
 
 /***/ }),
-/* 230 */
+/* 131 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -13998,12 +13696,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getInnermostDecoratedInstance;
 
 /***/ }),
-/* 231 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _GridPropHelpers = __webpack_require__(232);
+	var _GridPropHelpers = __webpack_require__(133);
 
 	var _GridPropHelpers2 = _interopRequireDefault(_GridPropHelpers);
 
@@ -14014,7 +13712,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ }),
-/* 232 */
+/* 133 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -14055,39 +13753,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ }),
-/* 233 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _RowComparer = __webpack_require__(101);
+	var _RowComparer = __webpack_require__(48);
 
 	var _RowComparer2 = _interopRequireDefault(_RowComparer);
 
-	var _RowsContainer = __webpack_require__(103);
+	var _RowsContainer = __webpack_require__(50);
 
 	var _RowsContainer2 = _interopRequireDefault(_RowsContainer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var Grid = __webpack_require__(219);
+	var Grid = __webpack_require__(120);
 
 	module.exports = Grid;
-	module.exports.Row = __webpack_require__(63);
-	module.exports.Cell = __webpack_require__(96);
-	module.exports.HeaderCell = __webpack_require__(97);
+	module.exports.Row = __webpack_require__(33);
+	module.exports.Cell = __webpack_require__(43);
+	module.exports.HeaderCell = __webpack_require__(44);
 	module.exports.RowComparer = _RowComparer2['default'];
-	module.exports.EmptyChildRow = __webpack_require__(208);
+	module.exports.EmptyChildRow = __webpack_require__(109);
 	module.exports.RowsContainer = _RowsContainer2['default'];
-	module.exports.editors = __webpack_require__(227);
-	module.exports.formatters = __webpack_require__(229);
-	module.exports.utils = __webpack_require__(109);
-	module.exports.shapes = __webpack_require__(218);
-	module.exports._constants = __webpack_require__(62);
-	module.exports._helpers = __webpack_require__(231);
+	module.exports.editors = __webpack_require__(128);
+	module.exports.formatters = __webpack_require__(130);
+	module.exports.utils = __webpack_require__(56);
+	module.exports.shapes = __webpack_require__(119);
+	module.exports._constants = __webpack_require__(32);
+	module.exports._helpers = __webpack_require__(132);
 
 /***/ }),
-/* 234 */
+/* 135 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -14099,7 +13797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isEmptyArray;
 
 /***/ }),
-/* 235 */
+/* 136 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -14111,12 +13809,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isEmpty;
 
 /***/ }),
-/* 236 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _immutable = __webpack_require__(28);
+	var _immutable = __webpack_require__(27);
 
 	var isImmutableCollection = function isImmutableCollection(objToVerify) {
 	  return _immutable.Iterable.isIterable(objToVerify);
@@ -14125,17 +13823,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isImmutableCollection;
 
 /***/ }),
-/* 237 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _immutable = __webpack_require__(28);
+	var _immutable = __webpack_require__(27);
 
 	module.exports = _immutable.Map.isMap;
 
 /***/ }),
-/* 238 */
+/* 139 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -14157,7 +13855,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getMixedTypeValueRetriever;
 
 /***/ }),
-/* 239 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -14170,10 +13868,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _assign = __webpack_require__(243);
+	var _assign = __webpack_require__(144);
 
-	var emptyObject = __webpack_require__(241);
-	var _invariant = __webpack_require__(242);
+	var emptyObject = __webpack_require__(142);
+	var _invariant = __webpack_require__(143);
 
 	if (false) {
 	  var warning = require('fbjs/lib/warning');
@@ -15033,7 +14731,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 240 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -15047,7 +14745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var factory = __webpack_require__(239);
+	var factory = __webpack_require__(140);
 
 	if (typeof React === 'undefined') {
 	  throw Error(
@@ -15067,7 +14765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 241 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -15089,9 +14787,65 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = emptyObject;
 
 /***/ }),
-/* 242 */
-54,
-/* 243 */
+/* 143 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 *
+	 */
+
+	'use strict';
+
+	/**
+	 * Use invariant() to assert state which your program assumes to be true.
+	 *
+	 * Provide sprintf-style format (only %s is supported) and arguments
+	 * to provide information about what broke and what you were
+	 * expecting.
+	 *
+	 * The invariant message will be stripped in production, but the invariant
+	 * will remain to ensure logic does not differ in production.
+	 */
+
+	var validateFormat = function validateFormat(format) {};
+
+	if (false) {
+	  validateFormat = function validateFormat(format) {
+	    if (format === undefined) {
+	      throw new Error('invariant requires an error message argument');
+	    }
+	  };
+	}
+
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
+
+	  if (!condition) {
+	    var error;
+	    if (format === undefined) {
+	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	    } else {
+	      var args = [a, b, c, d, e, f];
+	      var argIndex = 0;
+	      error = new Error(format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      }));
+	      error.name = 'Invariant Violation';
+	    }
+
+	    error.framesToPop = 1; // we don't care about invariant's own frame
+	    throw error;
+	  }
+	}
+
+	module.exports = invariant;
+
+/***/ }),
+/* 144 */
 /***/ (function(module, exports) {
 
 	/*
@@ -15187,11 +14941,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 244 */,
-/* 245 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(7)();
+	exports = module.exports = __webpack_require__(8)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".react-grid-Cell{background-color:#fff;padding-left:8px;padding-right:8px;border-right:1px solid #eee;border-bottom:1px solid #ddd}.react-grid-Cell:focus{outline:2px solid #66afe9;outline-offset:-2px}.react-grid-Cell--locked:focus{z-index:100}.react-grid-Cell:focus .drag-handle{position:absolute;bottom:-5px;right:-4px;background:#66afe9;width:8px;height:8px;border:1px solid #fff;border-right:0;border-bottom:0;z-index:8;cursor:crosshair;cursor:-webkit-grab}.react-grid-Cell:not(.editing) .react-grid-Cell__value{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.react-grid-Cell:not(.editing):not(.rdg-child-cell) .react-grid-Cell__value{position:relative;top:50%;transform:translateY(-50%)}.react-grid-Cell .row-arrow-handle{position:absolute;border-radius:2px;z-index:10;width:12px;height:12px;background-size:7px 4px;right:5px;top:19px;border:1px solid #666;cursor:pointer;display:none}.react-grid-Cell .row-arrow-handle:after{content:\"\";border-left:3px solid transparent;border-right:3px solid transparent;border-top:4px solid #2f2f2f;border-bottom:none;width:0;height:0;position:absolute;top:3px;left:2px}.react-grid-Cell:hover .react-grid-Cell .row-arrow-handle,.react-grid-Cell:hover .row-arrow-handle{display:block}.rdg-child-cell .react-grid-Cell__value{line-height:35px}.react-grid-Cell.readonly{background-color:#000}.react-grid-Cell.copied{background:rgba(0,0,255,.2)!important}.react-grid-Cell--locked:last-of-type{border-right:1px solid #ddd;box-shadow:none}.react-grid-Cell:hover:focus .drag-handle .glyphicon-arrow-down{display:\"block\"}.react-grid-Cell.is-dragged-over-down{border-right:1px dashed #000;border-left:1px dashed #000;border-bottom:1px dashed #000}.react-grid-Cell.is-dragged-over-up{border-right:1px dashed #000;border-left:1px dashed #000;border-top:1px dashed #000}.react-grid-Cell.is-dragged-over-up .drag-handle{top:-5px}.react-grid-Cell:hover{background:#eee}.react-grid-cell .form-control-feedback{color:#a94442;position:absolute;top:0;right:10px;z-index:1000000;display:block;width:34px;height:34px}.react-grid-Cell.was-dragged-over{border-right:1px dashed #000;border-left:1px dashed #000}.react-grid-Cell:hover:focus .drag-handle{position:absolute;bottom:-8px;right:-7px;background:#fff;width:16px;height:16px;border:1px solid #66afe9;z-index:8;cursor:crosshair;cursor:-webkit-grab}.react-grid-Row.row-selected .react-grid-Cell{background-color:#dbecfa}.react-grid-Cell.editing{padding:0;overflow:visible!important}.react-grid-Cell--locked.editing{z-index:100}.react-grid-Cell.editing .has-error input{border:2px solid red!important;border-radius:2px!important}.react-grid-Cell__value ul{margin-top:0;margin-bottom:0;display:inline-block}.react-grid-Cell__value .btn-sm{padding:0}.cell-tooltip{position:relative;display:inline-block}.cell-tooltip .cell-tooltip-text{visibility:hidden;width:150px;background-color:#000;color:#fff;text-align:center;border-radius:6px;padding:5px 0;position:absolute;z-index:1;bottom:-150%;left:50%;margin-left:-60px;opacity:1s}.cell-tooltip:hover .cell-tooltip-text{visibility:visible;opacity:.8}.cell-tooltip .cell-tooltip-text:after{content:\" \";position:absolute;bottom:100%;left:50%;margin-left:-5px;border-width:5px;border-style:solid;border-color:transparent transparent #000}.react-grid-Canvas.opaque .react-grid-Cell.cell-tooltip:hover .cell-tooltip-text{visibility:hidden}.rdg-cell-expand{top:0;right:20px;position:absolute;cursor:pointer}.rdg-child-row-action-cross-last:before,.rdg-child-row-action-cross:before,rdg-child-row-action-cross-last:after,rdg-child-row-action-cross:after{content:\"\";position:absolute;background:grey;height:50%}.rdg-child-row-action-cross:before{left:21px;width:1px;height:35px}.rdg-child-row-action-cross-last:before{left:21px;width:1px}.rdg-child-row-action-cross-last:after,.rdg-child-row-action-cross:after{top:50%;left:20px;height:1px;width:15px;content:\"\";position:absolute;background:grey}.rdg-child-row-action-cross:hover{background:red}.rdg-child-row-btn{position:absolute;cursor:pointer;border:1px solid grey;border-radius:14px;z-index:3;background:#fff}.rdg-child-row-btn div{font-size:12px;text-align:center;line-height:19px;color:grey;height:20px;width:20px;position:absolute;top:60%;left:53%;margin-top:-10px;margin-left:-10px}.rdg-empty-child-row:hover .glyphicon-plus-sign,.rdg-empty-child-row:hover a{color:green}.rdg-child-row-btn .glyphicon-remove-sign:hover{color:red}.last-column .cell-tooltip-text{right:100%;left:0!important}.react-grid-Main .fixed-grid-rows{display:block;background-color:#c5c;z-index:10;position:absolute;left:0;right:15px;top:0;height:200px}.react-grid-Viewport{outline:none}.react-grid-Main .fixed-grid-rows .react-grid-Viewport{height:auto;overflow:hidden}.react-grid-Main .fixed-grid-rows .react-grid-Canvas{height:auto;overflow:hidden!important}.react-grid-Main .fixed-grid-rows .react-grid-Row{background:#f7f7f7}.react-grid-Main .fixed-grid-rows .grid-rows{position:relative;padding-top:1px;outline:none}.react-grid-Main .fixed-grid-rows .react-grid-Cell{background-color:#f7f7f7}.react-grid-Main .grid-rows .react-grid-Viewport{height:600px!important;overflow:visible!important;padding-bottom:80px}.react-grid-Main .grid-rows .react-grid-Viewport .react-grid-Canvas{height:600px!important}.react-grid-Header{box-shadow:0 0 4px 0 #ddd;background:#f9f9f9;z-index:11}", ""]);
+
+	// exports
+
+
+/***/ }),
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(8)();
 	// imports
 
 
@@ -15202,10 +14969,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 246 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(7)();
+	exports = module.exports = __webpack_require__(8)();
 	// imports
 
 
@@ -15216,11 +14983,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 247 */,
-/* 248 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(7)();
+	exports = module.exports = __webpack_require__(8)();
 	// imports
 
 
@@ -15231,10 +14997,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 249 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(7)();
+	exports = module.exports = __webpack_require__(8)();
 	// imports
 
 
@@ -15245,26 +15011,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 250 */,
-/* 251 */,
-/* 252 */,
-/* 253 */,
-/* 254 */,
-/* 255 */,
-/* 256 */,
-/* 257 */,
-/* 258 */,
-/* 259 */,
-/* 260 */,
-/* 261 */,
-/* 262 */,
-/* 263 */,
-/* 264 */,
-/* 265 */,
-/* 266 */,
-/* 267 */,
-/* 268 */,
-/* 269 */
+/* 150 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(8)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".react-grid-Row .react-grid-Cell--locked,.react-grid-Row.row-context-menu .react-grid-Cell,.react-grid-Row:hover .react-grid-Cell{background-color:#f9f9f9}.react-grid-Row:hover .rdg-row-index{display:none}.react-grid-Row:hover .rdg-actions-checkbox{display:block}.react-grid-Row:hover .rdg-drag-row-handle{cursor:move;cursor:grab;cursor:-moz-grab;cursor:-webkit-grab;width:12px;height:30px;margin-left:0;background-image:url(\"data:image/svg+xml;base64, PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjlweCIgaGVpZ2h0PSIyOXB4IiB2aWV3Qm94PSIwIDAgOSAyOSIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMzkgKDMxNjY3KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5kcmFnIGljb248L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZGVmcz48L2RlZnM+CiAgICA8ZyBpZD0iQWN0dWFsaXNhdGlvbi12MiIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPGcgaWQ9IkRlc2t0b3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xNS4wMDAwMDAsIC0yNjIuMDAwMDAwKSIgZmlsbD0iI0Q4RDhEOCI+CiAgICAgICAgICAgIDxnIGlkPSJJbnRlcmFjdGlvbnMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE1LjAwMDAwMCwgMjU4LjAwMDAwMCkiPgogICAgICAgICAgICAgICAgPGcgaWQ9IlJvdy1Db250cm9scyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsIDIuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICAgICAgPGcgaWQ9ImRyYWctaWNvbiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsIDIuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSIyIiBjeT0iMiIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSI3IiBjeT0iMiIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSIyIiBjeT0iNyIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSI3IiBjeT0iNyIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSIyIiBjeT0iMTIiIHI9IjIiPjwvY2lyY2xlPgogICAgICAgICAgICAgICAgICAgICAgICA8Y2lyY2xlIGlkPSJPdmFsLTMwIiBjeD0iNyIgY3k9IjEyIiByPSIyIj48L2NpcmNsZT4KICAgICAgICAgICAgICAgICAgICAgICAgPGNpcmNsZSBpZD0iT3ZhbC0zMCIgY3g9IjIiIGN5PSIxNyIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSI3IiBjeT0iMTciIHI9IjIiPjwvY2lyY2xlPgogICAgICAgICAgICAgICAgICAgICAgICA8Y2lyY2xlIGlkPSJPdmFsLTMwIiBjeD0iMiIgY3k9IjIyIiByPSIyIj48L2NpcmNsZT4KICAgICAgICAgICAgICAgICAgICAgICAgPGNpcmNsZSBpZD0iT3ZhbC0zMCIgY3g9IjciIGN5PSIyMiIgcj0iMiI+PC9jaXJjbGU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwtMzAiIGN4PSIyIiBjeT0iMjciIHI9IjIiPjwvY2lyY2xlPgogICAgICAgICAgICAgICAgICAgICAgICA8Y2lyY2xlIGlkPSJPdmFsLTMwIiBjeD0iNyIgY3k9IjI3IiByPSIyIj48L2NpcmNsZT4KICAgICAgICAgICAgICAgICAgICA8L2c+CiAgICAgICAgICAgICAgICA8L2c+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==\");background-repeat:no-repeat}.react-grid-Row.row-selected,.react-grid-Row .row-selected{background-color:#dbecfa}.react-grid-row-group .row-expand-icon:hover{color:#777}.react-grid-row-index{padding:0 18px}.rdg-row-index{display:block;text-align:center}.rdg-row-actions-cell{padding:0}.rdg-actions-checkbox{display:none;text-align:center}.rdg-actions-checkbox.selected{display:block}.rdg-dragging{cursor:-webkit-grabbing;cursor:-moz-grabbing;cursor:grabbing}.rdg-dragged-row{border-bottom:1px solid #000}", ""]);
+
+	// exports
+
+
+/***/ }),
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -15319,7 +15080,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = invariant;
 
 /***/ }),
-/* 270 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -15336,7 +15097,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var invariant = __webpack_require__(269);
+	var invariant = __webpack_require__(151);
 
 	/**
 	 * Constructs an enumeration with keys equal to their value.
@@ -15372,153 +15133,141 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = keyMirror;
 
 /***/ }),
-/* 271 */,
-/* 272 */,
-/* 273 */,
-/* 274 */,
-/* 275 */,
-/* 276 */,
-/* 277 */,
-/* 278 */,
-/* 279 */,
-/* 280 */,
-/* 281 */,
-/* 282 */,
-/* 283 */,
-/* 284 */,
-/* 285 */,
-/* 286 */,
-/* 287 */,
-/* 288 */,
-/* 289 */,
-/* 290 */,
-/* 291 */,
-/* 292 */,
-/* 293 */,
-/* 294 */,
-/* 295 */,
-/* 296 */,
-/* 297 */,
-/* 298 */,
-/* 299 */,
-/* 300 */,
-/* 301 */,
-/* 302 */,
-/* 303 */,
-/* 304 */,
-/* 305 */,
-/* 306 */,
-/* 307 */,
-/* 308 */,
-/* 309 */,
-/* 310 */,
-/* 311 */,
-/* 312 */,
-/* 313 */,
-/* 314 */,
-/* 315 */,
-/* 316 */,
-/* 317 */,
-/* 318 */,
-/* 319 */,
-/* 320 */,
-/* 321 */,
-/* 322 */,
-/* 323 */,
-/* 324 */,
-/* 325 */,
-/* 326 */,
-/* 327 */,
-/* 328 */,
-/* 329 */,
-/* 330 */,
-/* 331 */,
-/* 332 */,
-/* 333 */,
-/* 334 */,
-/* 335 */,
-/* 336 */,
-/* 337 */,
-/* 338 */,
-/* 339 */,
-/* 340 */,
-/* 341 */,
-/* 342 */,
-/* 343 */,
-/* 344 */,
-/* 345 */,
-/* 346 */,
-/* 347 */,
-/* 348 */,
-/* 349 */,
-/* 350 */,
-/* 351 */,
-/* 352 */,
-/* 353 */,
-/* 354 */,
-/* 355 */,
-/* 356 */,
-/* 357 */,
-/* 358 */,
-/* 359 */,
-/* 360 */,
-/* 361 */,
-/* 362 */,
-/* 363 */,
-/* 364 */,
-/* 365 */,
-/* 366 */,
-/* 367 */,
-/* 368 */,
-/* 369 */,
-/* 370 */,
-/* 371 */,
-/* 372 */,
-/* 373 */,
-/* 374 */,
-/* 375 */,
-/* 376 */,
-/* 377 */,
-/* 378 */,
-/* 379 */,
-/* 380 */,
-/* 381 */,
-/* 382 */,
-/* 383 */,
-/* 384 */,
-/* 385 */,
-/* 386 */,
-/* 387 */,
-/* 388 */,
-/* 389 */,
-/* 390 */,
-/* 391 */,
-/* 392 */,
-/* 393 */,
-/* 394 */,
-/* 395 */,
-/* 396 */,
-/* 397 */,
-/* 398 */,
-/* 399 */,
-/* 400 */,
-/* 401 */,
-/* 402 */,
-/* 403 */,
-/* 404 */,
-/* 405 */,
-/* 406 */,
-/* 407 */,
-/* 408 */
+/* 153 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 */
+
+	'use strict';
+
+	var emptyFunction = __webpack_require__(155);
+	var invariant = __webpack_require__(156);
+	var ReactPropTypesSecret = __webpack_require__(154);
+
+	module.exports = function() {
+	  function shim(props, propName, componentName, location, propFullName, secret) {
+	    if (secret === ReactPropTypesSecret) {
+	      // It is still safe when called from React.
+	      return;
+	    }
+	    invariant(
+	      false,
+	      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+	      'Use PropTypes.checkPropTypes() to call them. ' +
+	      'Read more at http://fb.me/use-check-prop-types'
+	    );
+	  };
+	  shim.isRequired = shim;
+	  function getShim() {
+	    return shim;
+	  };
+	  // Important!
+	  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+	  var ReactPropTypes = {
+	    array: shim,
+	    bool: shim,
+	    func: shim,
+	    number: shim,
+	    object: shim,
+	    string: shim,
+	    symbol: shim,
+
+	    any: shim,
+	    arrayOf: getShim,
+	    element: shim,
+	    instanceOf: getShim,
+	    node: shim,
+	    objectOf: getShim,
+	    oneOf: getShim,
+	    oneOfType: getShim,
+	    shape: getShim,
+	    exact: getShim
+	  };
+
+	  ReactPropTypes.checkPropTypes = emptyFunction;
+	  ReactPropTypes.PropTypes = ReactPropTypes;
+
+	  return ReactPropTypes;
+	};
+
+
+/***/ }),
+/* 154 */
+/***/ (function(module, exports) {
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 */
+
+	'use strict';
+
+	var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+	module.exports = ReactPropTypesSecret;
+
+
+/***/ }),
+/* 155 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 *
+	 * 
+	 */
+
+	function makeEmptyFunction(arg) {
+	  return function () {
+	    return arg;
+	  };
+	}
+
+	/**
+	 * This function accepts and discards inputs; it has no side effects. This is
+	 * primarily useful idiomatically for overridable function endpoints which
+	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+	 */
+	var emptyFunction = function emptyFunction() {};
+
+	emptyFunction.thatReturns = makeEmptyFunction;
+	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+	emptyFunction.thatReturnsThis = function () {
+	  return this;
+	};
+	emptyFunction.thatReturnsArgument = function (arg) {
+	  return arg;
+	};
+
+	module.exports = emptyFunction;
+
+/***/ }),
+/* 156 */
+143,
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(248);
+	var content = __webpack_require__(148);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
+	var update = __webpack_require__(9)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
