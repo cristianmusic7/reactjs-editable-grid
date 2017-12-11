@@ -26,6 +26,7 @@
     "react-dom": "^15.4.2"
   },
   "dependencies": {
+    "@sans/react-contextmenu": "^1.0.1",
     "classnames": "^1.2.0",
     "create-react-class": "^15.6.2",
     "es5-shim": "^4.0.3",
