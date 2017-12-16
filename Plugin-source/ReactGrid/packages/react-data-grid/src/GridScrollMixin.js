@@ -9,7 +9,7 @@ module.exports = {
   },
 
   componentDidUpdate() {
-    //This line generates an scroll problem, when editing bottom rows
+    //This line generates a scroll problem, when editing bottom rows
     //this._onScroll();
   },
 
