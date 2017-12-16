@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-const { Menu: { ContextMenu, MenuItem } } = require('@sans/react-data-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
+const { Menu: { ContextMenu, MenuItem } } = require('@lunarkid/react-data-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
 
 export default class GridContextMenu extends React.Component {
   static propTypes = {
@@ -11,10 +11,10 @@ export default class GridContextMenu extends React.Component {
     rowIdx: PropTypes.number,
     idx: PropTypes.number
   };
-  
+
   constructor(props) {
     super(props);
-    
+
     this.onFreezeColumn = this.onFreezeColumn.bind(this);
     this.onFreezeRows = this.onFreezeRows.bind(this);
     this.onSetColumnDraggable = this.onSetColumnDraggable.bind(this);
@@ -44,15 +44,15 @@ export default class GridContextMenu extends React.Component {
     const showRowMenu = this.props.idx === 0 && this.props.rowIdx >= 0;
     const isColumnDraggable = !!this.props.columnGetter(this.props.idx).draggable;
     const isColumnFrozen = !!this.props.columnGetter(this.props.idx).locked;
-    
+
     return ((showColumnMenu || showRowMenu) &&
       <ContextMenu>
-        { showColumnMenu && 
+        { showColumnMenu &&
           <MenuItem data={{idx: this.props.idx, value: !isColumnFrozen}} onClick={this.onFreezeColumn}>
             <input type="checkbox" checked={isColumnFrozen} readOnly={true}/>
             Frozen column
           </MenuItem> }
-        { showColumnMenu && 
+        { showColumnMenu &&
           <MenuItem data={{idx: this.props.idx, value: !isColumnDraggable}} onClick={this.onSetColumnDraggable}>
             <input type="checkbox" checked={isColumnDraggable} readOnly={true}/>
             Draggable column

@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-const { editors: { EditorBase } } = require('@knd/react-grid/packages/react-data-grid/dist/react-data-grid');
+const { editors: { EditorBase } } = require('@lunarkid/react-data-grid/packages/react-data-grid/dist/react-data-grid');
 
 //Custom styles of your component
 require('../assets/css/react-data-grid-custom.css');
@@ -46,11 +46,11 @@ export default class CheckboxEditor extends EditorBase {
     //Here goes the custom html needed to create your custom edit type.
     //In this case goes the select for the dropdown and the input text for the text field.
     return (
-      <div className="react-grid-checkbox-custom" onBlur={this.props.onBlur}>     
+      <div className="react-grid-checkbox-custom" onBlur={this.props.onBlur}>
         <select ref={(node) => this.select = node} defaultValue={this.props.value.option} onChange={this.onChange} >
           {this.renderOptions()}
-        </select>  
-        <input ref={(node) => this.input = node} type="text" className="form-control" defaultValue={this.props.value.name} />        
+        </select>
+        <input ref={(node) => this.input = node} type="text" className="form-control" defaultValue={this.props.value.name} />
       </div>);
   }
 

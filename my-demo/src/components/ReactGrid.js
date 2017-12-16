@@ -9,8 +9,8 @@ import PropTypes from 'prop-types';
 
 import faker from 'faker';
 import update from 'immutability-helper';
-import  ReactDataGrid from '@sans/react-data-grid/packages/react-data-grid/dist/react-data-grid';
-const { DraggableHeader: { DraggableContainer},Editors,Formatters} = require('@sans/react-data-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
+import  ReactDataGrid from '@lunarkid/react-data-grid/packages/react-data-grid/dist/react-data-grid';
+const { DraggableHeader: { DraggableContainer},Editors,Formatters} = require('@lunarkid/react-data-grid/packages/react-data-grid-addons/dist/react-data-grid-addons');
 const { DropDownEditor,CheckboxEditor } = Editors;
 const { DropDownFormatter } = Formatters;
 require('../assets/css/ReactGrid.css');
@@ -59,7 +59,7 @@ export default class ReactGrid extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.getColumns = this.getColumns.bind(this);
     this.handleGridRowsUpdated = this.handleGridRowsUpdated.bind(this);
     this.handleAddRow = this.handleAddRow.bind(this);
@@ -90,7 +90,7 @@ export default class ReactGrid extends Component {
 
   componentWillMount() {
     const config = Object.assign(gridConfig, this.props.config);
-    
+
     this.initFreeze(config);
     this.initColVisibility(config);
     this.initClasses(config);
@@ -112,7 +112,7 @@ export default class ReactGrid extends Component {
   // inits Freeze
   initFreeze(config) {
 
-    const {freeze} = config; 
+    const {freeze} = config;
 
     // handling column freeze
     if(freeze.allowedFreezing){
@@ -136,7 +136,7 @@ export default class ReactGrid extends Component {
   // inits Visible
   initColVisibility(config) {
 
-    const {columnArray} = config; 
+    const {columnArray} = config;
 
     // handling column visibility
      columnArray.map((item,i)=>{
@@ -148,10 +148,10 @@ export default class ReactGrid extends Component {
       }
      })
   }
-  
+
   // inits Visible
   initClasses(config) {
-    const {values, columnArray} = config; 
+    const {values, columnArray} = config;
 
     // handling column visibility
      values.map((item,i)=>{
@@ -227,7 +227,7 @@ export default class ReactGrid extends Component {
     }
 
 
-    this.setState({ 
+    this.setState({
       rows: rows,
       dynamicRows: dynamicRows
     });
@@ -407,7 +407,7 @@ export default class ReactGrid extends Component {
     const {columns} = this.state;
     return 0 <= i && i < columns.length ? columns[i] : {};
   }
-  
+
   rowsUpdated = ({ fromRow, toRow, updated }) => {
     let dynamicRows = this.state.dynamicRows.slice();
 
@@ -425,7 +425,7 @@ export default class ReactGrid extends Component {
       rows[i+currentPageStartIndex] = updatedRow;
     }
 
-    this.setState({ 
+    this.setState({
       rows: rows,
       dynamicRows: dynamicRows
     });
@@ -436,7 +436,7 @@ export default class ReactGrid extends Component {
 
     let {config} = this.state;
       return (
-        <div className={"datagrid-wrap " 
+        <div className={"datagrid-wrap "
         + ((config.pagination.pageControlLocation === 'left' || config.pagination.pageControlLocation === 'right')?'inline-view':'')}
 
           style={{
@@ -448,7 +448,7 @@ export default class ReactGrid extends Component {
             config.pagination.allowPaging ?
             (
               <div className={"pagination-wrap " + config.pagination.pageControlLocation}>
-                <ReactPaginate 
+                <ReactPaginate
                   pageCount={this.getPageCount(config)}
 
                   previousLabel={"prev"}
@@ -460,7 +460,7 @@ export default class ReactGrid extends Component {
                   onPageChange={this.handlePaginationChange}
                   containerClassName={"pagination " + this.getPageCssClasses(config)}
                   subContainerClassName={"pages pagination "}
-                  activeClassName={"active"} 
+                  activeClassName={"active"}
                 />
               </div>
             )
