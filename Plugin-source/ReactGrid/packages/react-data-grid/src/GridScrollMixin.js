@@ -9,7 +9,8 @@ module.exports = {
   },
 
   componentDidUpdate() {
-    this._onScroll();
+    //This line generates an scroll problem, when editing bottom rows
+    //this._onScroll();
   },
 
   componentWillMount() {
