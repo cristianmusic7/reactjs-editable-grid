@@ -53,3 +53,11 @@ Both are imported on the ReactGrid component and are added to all the columns wi
 
 In order to create your own custom edit type you can use this file as a template and edit the code and the render function to include your html and returning values.
 
+
+## React​ ​JS​ ​Grid​ Fixes
+
+Header sorting fixed.
+Grid context functionality improved.
+Save and cancel buttons added.
+
+Please test the local plugin source with the `npm link ../Plugin-source/ReactGrid` and other neccesary steps indicated above.

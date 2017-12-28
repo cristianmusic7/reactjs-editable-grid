@@ -1,5 +1,14 @@
-
 .react-grid-checkbox-custom{
   display: flex;
   align-items:center;
+}
+
+.react-grid-checkbox-custom select{
+	width: 55px;
+	margin-right: 5px;
+}
+
+.react-grid-checkbox-custom input{
+	width: calc(100% - 65px);
+	margin-right: 5px;
 }

@@ -1,4 +1,5 @@
 import React, { Component, onInit } from 'react';
+import ReactDOM from 'react-dom';
 import ReactPaginate from 'react-paginate';
 import RowRenderer from './RowRenderer';
 import HeaderRenderer from './HeaderRenderer';
@@ -30,7 +31,7 @@ const gridConfig = {
     "pageChangeCallback": "callbackFunction" //pass page changed event / callback.
   },
   "sorting": {
-    "allowStorting": true //If set to true, user should be able to toggle sort by clicking on header
+    "allowSorting": true //If set to true, user should be able to toggle sort by clicking on header
   },
   "readOnly": false,  // If set to true, user should be able to sort the grid by clicking on header, Clicking twice should toggle the sort.
   "values": [], //JSON records to be disapled on the table
@@ -191,7 +192,7 @@ export default class ReactGrid extends Component {
 
 
     clonedColumns.map((item,i)=>{
-      item.sortable = !!config.sorting.allowStorting? true : false;
+      item.sortable = !!config.sorting.allowSorting? true : false;
       item.editable = !!config.readOnly ? false : !!item.editable;
       //Set colums data values depending of the itemType defined on the config file.
       if(item.itemType === "Combo"){
@@ -431,6 +432,21 @@ export default class ReactGrid extends Component {
     });
   };
 
+  saveData = () => {
+    console.log("Updated Data:",this.state.dynamicRows);
+  }
+
+  resetData = () => {
+    const columns = this.state.columns.splice(0);
+    let canvas = ReactDOM.findDOMNode(this).querySelector('.react-grid-Canvas');
+    canvas.scrollLeft = 0;
+    this.setState({
+      columns: this.getColumns(this.props.config),
+      rows: this.props.config.values,
+      dynamicRows: this.props.config.values,
+    });
+  }
+
 
   render() {
 
@@ -489,6 +505,11 @@ export default class ReactGrid extends Component {
               onGridRowsUpdated = {this.rowsUpdated}
             />
           </DraggableContainer>
+
+          <div className="data-saving">
+            <button onClick={this.saveData}>Save</button>
+            <button onClick={this.resetData}>Cancel</button>
+          </div>
         </div>
       );
   }

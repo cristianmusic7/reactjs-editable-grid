@@ -122,3 +122,13 @@
 .state-info{
   padding-left: 15px;
 }
+
+.data-saving{
+    flex: 0 1 100%;
+    order: 3;
+    margin: 15px 0 0 15px;
+}
+
+.data-saving button{
+  margin-right: 15px;
+}

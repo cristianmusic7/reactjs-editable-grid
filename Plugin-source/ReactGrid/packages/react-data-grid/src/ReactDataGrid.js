@@ -208,11 +208,12 @@ const ReactDataGrid = React.createClass({
   },
 
   onCellContextMenu: function(cell: SelectedType) {
-    // debugger;
+    // debugger;    
     this.onSelect({rowIdx: cell.rowIdx, idx: cell.idx, contextMenuDisplayed: this.props.contextMenu});
     if (this.props.contextMenu) {
       document.addEventListener('click', this.onContextMenuHide);
     }
+    this.state.contextMenu = this.renderContextMenu(cell);
   },
 
   onCellDoubleClick: function(cell: SelectedType) {
@@ -889,9 +890,9 @@ const ReactDataGrid = React.createClass({
     }
   },
 
-  renderContextMenu(): ReactElement {
+  renderContextMenu(cell): ReactElement {
     const {contextMenu} = this.props;
-    const contextMenuProps = {rowIdx: this.state.selected.rowIdx, idx: this.state.selected.idx};
+    const contextMenuProps = {rowIdx: cell.rowIdx, idx: cell.idx};
     if (React.isValidElement(contextMenu)) {
       return React.cloneElement(contextMenu, contextMenuProps);
     } else if (isFunction(contextMenu)) {
@@ -928,7 +929,6 @@ const ReactDataGrid = React.createClass({
     };
 
     let toolbar = this.renderToolbar();
-    let contextMenu = this.renderContextMenu();
     let containerWidth = this.props.minWidth || this.DOMMetrics.gridWidth();
     let gridWidth = containerWidth - this.state.scrollOffset;
 
@@ -974,7 +974,7 @@ const ReactDataGrid = React.createClass({
             contextMenu={this.props.contextMenu}
             overScan={this.props.overScan} />
         </div>
-        {contextMenu}
+        {this.state.contextMenu || this.renderContextMenu({rowIdx:0, idx: 0})}
       </div>
     );
   }

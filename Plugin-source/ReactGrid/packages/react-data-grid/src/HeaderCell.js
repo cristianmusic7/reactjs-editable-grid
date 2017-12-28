@@ -117,7 +117,7 @@ const HeaderCell = React.createClass({
     node.style.transform = `translate3d(${scrollLeft}px, 0px, 0px)`;
   },
   disableDefaultContext() {
-debugger;
+//debugger;
     //bind event with arrow
     document.removeEventListener('click', this.handleArrowClick);
     document.addEventListener('click', this.handleArrowClick);

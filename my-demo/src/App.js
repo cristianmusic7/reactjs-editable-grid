@@ -288,6 +288,7 @@ export default class ReactGridDemo extends Component{
           :(<div></div>)
         }
       </div>
+      
     </div>
     );
   }

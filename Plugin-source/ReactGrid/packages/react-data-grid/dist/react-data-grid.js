@@ -640,31 +640,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	var size = void 0;
 
 	function getScrollbarSize() {
-	  if (size === undefined) {
-	    var outer = document.createElement('div');
-	    outer.style.width = '50px';
-	    outer.style.height = '50px';
-	    outer.style.position = 'absolute';
-	    outer.style.top = '-200px';
-	    outer.style.left = '-200px';
+	    if (size === undefined) {
+	        var outer = document.createElement('div');
+	        outer.style.width = '50px';
+	        outer.style.height = '50px';
+	        outer.style.position = 'absolute';
+	        outer.style.top = '-200px';
+	        outer.style.left = '-200px';
 
-	    var inner = document.createElement('div');
-	    inner.style.height = '100px';
-	    inner.style.width = '100%';
+	        var inner = document.createElement('div');
+	        inner.style.height = '100px';
+	        inner.style.width = '100%';
 
-	    outer.appendChild(inner);
-	    document.body.appendChild(outer);
+	        outer.appendChild(inner);
+	        document.body.appendChild(outer);
 
-	    var outerWidth = outer.clientWidth;
-	    outer.style.overflowY = 'scroll';
-	    var innerWidth = inner.clientWidth;
+	        var outerWidth = outer.clientWidth;
+	        outer.style.overflowY = 'scroll';
+	        var innerWidth = inner.clientWidth;
 
-	    document.body.removeChild(outer);
+	        document.body.removeChild(outer);
 
-	    size = outerWidth - innerWidth;
-	  }
+	        size = outerWidth - innerWidth;
+	    }
 
-	  return size;
+	    return size;
 	}
 
 	module.exports = getScrollbarSize;
@@ -7044,7 +7044,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    node.style.transform = 'translate3d(' + scrollLeft + 'px, 0px, 0px)';
 	  },
 	  disableDefaultContext: function disableDefaultContext() {
-	    debugger;
+	    //debugger;
 	    //bind event with arrow
 	    document.removeEventListener('click', this.handleArrowClick);
 	    document.addEventListener('click', this.handleArrowClick);
@@ -7497,7 +7497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return React.createElement(
 	      'div',
 	      { className: 'react-grid-checkbox-container checkbox-align', onClick: this.handleChange },
-	      React.createElement('input', { className: 'react-grid-checkbox', type: 'checkbox', name: checkboxName, checked: checked }),
+	      React.createElement('input', { className: 'react-grid-checkbox', type: 'checkbox', name: checkboxName, onChange: this.handleChange, checked: checked }),
 	      React.createElement('label', { htmlFor: checkboxName, className: 'react-grid-checkbox-label' })
 	    );
 	  }
@@ -10910,7 +10910,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._onScroll();
 	  },
 	  componentDidUpdate: function componentDidUpdate() {
-	    this._onScroll();
+	    //This line generates a scroll problem, when editing bottom rows
+	    //this._onScroll();
 	  },
 	  componentWillMount: function componentWillMount() {
 	    this._scrollLeft = undefined;
@@ -11816,11 +11817,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  onCellContextMenu: function onCellContextMenu(cell) {
-	    // debugger;
+	    // debugger;    
 	    this.onSelect({ rowIdx: cell.rowIdx, idx: cell.idx, contextMenuDisplayed: this.props.contextMenu });
 	    if (this.props.contextMenu) {
 	      document.addEventListener('click', this.onContextMenuHide);
 	    }
+	    this.state.contextMenu = this.renderContextMenu(cell);
 	  },
 
 	  onCellDoubleClick: function onCellDoubleClick(cell) {
@@ -12533,10 +12535,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return React.createElement(Toolbar, toolBarProps);
 	    }
 	  },
-	  renderContextMenu: function renderContextMenu() {
+	  renderContextMenu: function renderContextMenu(cell) {
 	    var contextMenu = this.props.contextMenu;
 
-	    var contextMenuProps = { rowIdx: this.state.selected.rowIdx, idx: this.state.selected.idx };
+	    var contextMenuProps = { rowIdx: cell.rowIdx, idx: cell.idx };
 	    if (React.isValidElement(contextMenu)) {
 	      return React.cloneElement(contextMenu, contextMenuProps);
 	    } else if (isFunction(contextMenu)) {
@@ -12574,7 +12576,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    var toolbar = this.renderToolbar();
-	    var contextMenu = this.renderContextMenu();
 	    var containerWidth = this.props.minWidth || this.DOMMetrics.gridWidth();
 	    var gridWidth = containerWidth - this.state.scrollOffset;
 
@@ -12625,7 +12626,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          contextMenu: this.props.contextMenu,
 	          overScan: this.props.overScan }))
 	      ),
-	      contextMenu
+	      this.state.contextMenu || this.renderContextMenu({ rowIdx: 0, idx: 0 })
 	    );
 	  }
 	});
@@ -13275,7 +13276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        style: { cursor: 'pointer' } },
 	      React.createElement(
 	        'span',
-	        { className: 'pull-right' },
+	        { className: 'pull-left' },
 	        this.getSortByText()
 	      ),
 	      this.props.column.name
