@@ -22064,7 +22064,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 
 	        _this.handleOutsideClick = function (e) {
-	            if (!_this.menu.contains(e.target) && !e.target.classList.contains('arrow-handle')) (0, _actions.hideMenu)();
+	            if (!_this.menu.contains(e.target)) (0, _actions.hideMenu)();
 	        };
 
 	        _this.handleMouseLeave = function (event) {

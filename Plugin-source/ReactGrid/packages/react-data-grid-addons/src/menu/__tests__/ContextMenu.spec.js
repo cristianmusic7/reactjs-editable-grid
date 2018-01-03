@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDataGridContextMenu from '../ContextMenu';
-import {ContextMenu} from 'react-contextmenu';
+import {ContextMenu} from '@cristian77/react-contextmenu';
 
 describe('Context Menu', () => {
   let component = {};

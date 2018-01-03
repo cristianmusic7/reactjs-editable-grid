@@ -6,7 +6,7 @@ const TestUtils     = require('react-addons-test-utils');
 const helpers       = require('../helpers/test/GridPropHelpers');
 const rewireModule = require('../../../../test/rewireModule');
 import { shallow } from 'enzyme';
-import { ContextMenu } from '@sans/react-contextmenu';
+import { ContextMenu } from '@cristian77/react-contextmenu';
 
 let testElement;
 let HeaderStub = React.createClass({
